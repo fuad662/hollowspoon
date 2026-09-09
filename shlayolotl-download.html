@@ -2,15 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Zweite Adresse fuer dieselbe Seite: hollowspoon.app/shlayolotl-download
-         landet auf hollowspoon.app/get. Kein Duplikat, damit es nur eine Seite
-         zu pflegen gibt — und damit /shlayolotl unangetastet bleibt, das bei
-         Apple als Datenschutz- und Support-Adresse hinterlegt ist. -->
-    <meta http-equiv="refresh" content="0; url=get.html">
-    <link rel="canonical" href="https://hollowspoon.app/get">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shlayolotl — Download</title>
+    <style>
+        /* Sniglet, mitgeliefert wie in der App selbst — nicht von Google
+           nachgeladen, damit kein Besucher unbemerkt dort landet. SIL OFL,
+           Lizenz liegt in assets/fonts/OFL.txt daneben. */
+        @font-face {
+            font-family: 'Sniglet';
+            src: url('assets/fonts/Sniglet-ExtraBold.ttf') format('truetype');
+            font-display: block;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 40px 24px 32px;
+            line-height: 1.5;
+            color: #9aa6c4;
+            background: #080d20;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .axos { display: flex; justify-content: center; gap: 4px; margin-bottom: 2px; }
+        .axos img { width: 82px; height: auto; }
+
+        h1 {
+            font-family: 'Sniglet', -apple-system, sans-serif;
+            font-weight: normal;
+            font-size: 46px;
+            line-height: 1.05;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            margin: 0 0 6px;
+            text-shadow:
+                0 0 12px rgba(255, 61, 154, 0.55),
+                0 0 26px rgba(61, 255, 110, 0.35),
+                0 0 46px rgba(255, 255, 255, 0.25);
+        }
+
+        .tagline {
+            font-family: 'Sniglet', -apple-system, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 15px;
+            color: #ff3d9a;
+            margin: 0 0 30px;
+            text-shadow: 0 0 14px rgba(255, 61, 154, 0.6);
+        }
+
+        .card {
+            background: #0d1430;
+            border: 1px solid #1b2650;
+            border-radius: 22px;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .card p { margin: 0 0 10px; }
+        .card p:last-child { margin: 0; }
+
+        .download {
+            display: block;
+            font-family: 'Sniglet', -apple-system, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 19px;
+            color: #fff;
+            background: rgba(79, 227, 247, 0.08);
+            border: 2px solid #4fe3f7;
+            border-radius: 22px;
+            padding: 18px 20px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 22px rgba(79, 227, 247, 0.35);
+        }
+        .download:hover {
+            background: rgba(79, 227, 247, 0.16);
+            box-shadow: 0 0 32px rgba(79, 227, 247, 0.55);
+        }
+
+        .note { color: #5d6890; font-size: 12px; margin: 0 0 26px; }
+
+        footer { color: #4a5478; font-size: 12px; line-height: 1.8; }
+        footer a { color: #6d7aa4; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-  <p>Weiter zu <a href="get.html">hollowspoon.app/get</a> …</p>
+  <div class="axos">
+    <img src="assets/img/pink_calm.png" alt="" width="82">
+    <img src="assets/img/green_panic.png" alt="" width="82">
+  </div>
+
+  <h1>Shlay<br>olotl</h1>
+  <p class="tagline">Tic tac toe, but cuter</p>
+
+  <a class="download" href="https://apps.apple.com/de/app/shlayolotl/id6805653548">Download</a>
+  <p class="note">Free on iPhone · offers in-app purchases</p>
+
+  <div class="card">
+    <p>Quick rounds against the computer, against someone sitting next to you, or online.</p>
+    <p>No account, no sign-up. Everything the game remembers stays on your device.</p>
+  </div>
+
+  <footer>
+    &copy; 2026 Hollow Spoon UG (haftungsbeschränkt)<br>
+    <a href="impressum.html">Impressum</a> · <a href="shlayolotl.html">Privacy &amp; Support</a>
+  </footer>
 </body>
 </html>
