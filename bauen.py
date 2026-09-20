@@ -28,6 +28,8 @@ SHLAY_URL = {
 T = {
     'de': dict(
         titel='Hollow Spoon',
+        support_zeile='Schreib uns:',
+        support_recht='Support und Datenschutzerkl&auml;rung',
         beschreibung='Hollow Spoon baut kleine Apps, die eine Sache koennen. '
                      'Shlayolotl im App Store, Wheresome in Vorbereitung.',
         nav_apps='Apps', nav_support='Support',
@@ -57,6 +59,8 @@ T = {
     ),
     'en': dict(
         titel='Hollow Spoon',
+        support_zeile='Just write to us:',
+        support_recht='Support and privacy policy',
         beschreibung='Hollow Spoon builds small apps that do one thing. '
                      'Shlayolotl on the App Store, Wheresome in preparation.',
         nav_apps='Apps', nav_support='Support',
@@ -85,6 +89,8 @@ T = {
     ),
     'fr': dict(
         titel='Hollow Spoon',
+        support_zeile='&Eacute;cris-nous&nbsp;:',
+        support_recht='Assistance et politique de confidentialit&eacute;',
         beschreibung='Hollow Spoon cr&eacute;e de petites applications qui '
                      'font une chose. Shlayolotl sur l&rsquo;App Store, '
                      'Wheresome en pr&eacute;paration.',
@@ -119,6 +125,8 @@ T = {
     ),
     'es': dict(
         titel='Hollow Spoon',
+        support_zeile='Escr&iacute;benos:',
+        support_recht='Soporte y pol&iacute;tica de privacidad',
         beschreibung='Hollow Spoon crea apps peque&ntilde;as que hacen una '
                      'cosa. Shlayolotl en el App Store, Wheresome en '
                      'preparaci&oacute;n.',
@@ -285,7 +293,7 @@ def seite(sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="/support">%(nav_support)s</a></span>
+    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="%(pfad)ssupport">%(nav_support)s</a></span>
   </nav>
   <div class="hero">
     <h1>%(h1)s</h1>
@@ -347,10 +355,103 @@ def seite(sprache):
            sprachen=sprachen, shots=shots, stil=STIL, shlay_url=SHLAY_URL[sprache])
 
 
+
+SUPPORT_STIL = """  body { margin: 0; background: #fff; color: #14161A;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  img { display: block; max-width: 100%; }
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 20px;
+        padding: 26px 0; font-size: 14px; }
+  nav .mark { flex: 0 0 auto; }
+  nav .mark img { height: 22px; width: auto; max-width: none; display: block; }
+  nav .rechts a { color: #5C6270; text-decoration: none; margin-left: 24px; white-space: nowrap; }
+  h1 { font-size: 40px; letter-spacing: -.03em; margin: 56px 0 16px; }
+  .zeile { font-size: 19px; line-height: 1.6; margin: 0 0 56px; }
+  h2 { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E;
+       margin: 32px 0 6px; }
+  p { margin: 0; }
+  a { color: #0F6E78; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid #E7E9ED;
+           font-size: 13px; color: #8A909E; display: flex; gap: 20px; flex-wrap: wrap; }
+  footer a { color: #5C6270; text-decoration: none; }
+  .sprachen { padding: 22px 0 64px; font-size: 13px; color: #8A909E;
+              display: flex; gap: 16px; flex-wrap: wrap; }
+  .sprachen a { color: #5C6270; text-decoration: none; }
+  .sprachen .hier { color: #14161A; font-weight: 600; }"""
+
+NAMEN = {'de': 'Deutsch', 'en': 'English', 'fr': 'Fran&ccedil;ais', 'es': 'Espa&ntilde;ol'}
+
+
+def support_seite(sprache):
+    """Support je Sprache statt einer Seite, auf der dieselbe Adresse viermal
+    untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
+    t = T[sprache]
+    hreflang = '\n'.join(
+        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%ssupport">' % (x, PFAD[x])
+        for x in SPRACHEN)
+    hreflang += ('\n<link rel="alternate" hreflang="x-default" '
+                 'href="https://hollowspoon.app/en/support">')
+    sprachen = ''.join(
+        '<span class="hier">%s</span>' % NAMEN[x] if x == sprache
+        else '<a href="%ssupport" hreflang="%s">%s</a>' % (PFAD[x], x, NAMEN[x])
+        for x in SPRACHEN)
+
+    return VORLAGE_SUPPORT % dict(
+        t, sprache=sprache, pfad=PFAD[sprache] + 'support', startpfad=PFAD[sprache],
+        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL)
+
+
+VORLAGE_SUPPORT = """<!DOCTYPE html>
+<html lang="%(sprache)s">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>%(nav_support)s</title>
+<meta name="description" content="%(nav_support)s: Hollow Spoon, Shlayolotl, Wheresome.">
+<link rel="canonical" href="https://hollowspoon.app%(pfad)s">
+%(hreflang)s
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+%(stil)s
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158"></a></span>
+    <span class="rechts"><a href="%(startpfad)s#apps">%(nav_apps)s</a></span>
+  </nav>
+
+  <h1>%(nav_support)s</h1>
+  <p class="zeile">%(support_zeile)s <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a></p>
+
+  <h2>Shlayolotl</h2>
+  <p><a href="/shlayolotl">%(support_recht)s</a></p>
+
+  <h2>Wheresome</h2>
+  <p><a href="/wheresome">%(support_recht)s</a></p>
+
+  <footer>
+    <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
+    <a href="/impressum">%(impressum)s</a>
+    <a href="/datenschutz">%(datenschutz)s</a>
+  </footer>
+  <p class="sprachen">%(sprachen)s</p>
+</div>
+</body>
+</html>
+"""
+
+
 for s in SPRACHEN:
-    ziel = os.path.join(ROOT, 'index.html' if s == 'de' else '%s/index.html' % s)
-    os.makedirs(os.path.dirname(ziel), exist_ok=True)
-    html = seite(s)
-    assert not [c for c in html if c in '–—−'], 'Gedankenstrich in ' + s
-    io.open(ziel, 'w', encoding='utf-8').write(html)
-    print('%-20s %6.1f KB' % (os.path.relpath(ziel, ROOT), len(html) / 1024))
+    for ziel, html in (
+        (os.path.join(ROOT, 'index.html' if s == 'de' else '%s/index.html' % s), seite(s)),
+        (os.path.join(ROOT, ('' if s == 'de' else s + '/') + 'support/index.html'),
+         support_seite(s)),
+    ):
+        os.makedirs(os.path.dirname(ziel), exist_ok=True)
+        assert not [c for c in html if c in '\u2013\u2014\u2212'], 'Gedankenstrich in ' + s
+        io.open(ziel, 'w', encoding='utf-8').write(html)
+        print('%-28s %6.1f KB' % (os.path.relpath(ziel, ROOT), len(html) / 1024))
