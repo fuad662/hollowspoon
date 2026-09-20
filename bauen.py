@@ -645,13 +645,13 @@ DS = {
             'sitio. Se aplica la versi&oacute;n vigente en el momento de tu visita.'),
 }
 
-ANSCHRIFT = ('Hollow Spoon UG (haftungsbeschr&auml;nkt)<br>\n'
-             'Gravensteiner Stra&szlig;e 33<br>\n28219 Bremen<br>\n'
+ANSCHRIFT = ('Hollow Spoon UG (haftungsbeschränkt)<br>\n'
+             'Gravensteiner Straße 33<br>\n28219 Bremen<br>\n'
              'E-Mail: <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>')
 
-BEHOERDE = ('Die Landesbeauftragte f&uuml;r Datenschutz und Informationsfreiheit<br>\n'
+BEHOERDE = ('Die Landesbeauftragte für Datenschutz und Informationsfreiheit<br>\n'
             'der Freien Hansestadt Bremen<br>\n'
-            'Georgstra&szlig;e 122-124<br>\n27570 Bremerhaven')
+            'Georgstraße 122-124<br>\n27570 Bremerhaven')
 
 
 def datenschutz_seite(sprache):
