@@ -204,27 +204,16 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .badge img { height: 44px; width: auto; }
   .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
 
-  /* Wischbar ohne Skript: die Leiste scrollt waagerecht und rastet ein. */
+  /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
+     Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
   .carousel { display: flex; gap: 14px; margin-top: 30px; padding-bottom: 14px;
               overflow-x: auto; scroll-snap-type: x mandatory;
               -webkit-overflow-scrolling: touch;
               scrollbar-color: rgba(255,255,255,.35) transparent; scrollbar-width: thin; }
   .carousel::-webkit-scrollbar { height: 6px; }
   .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 99px; }
-  .carousel img { flex: 0 0 auto; scroll-snap-align: center; width: 212px; height: auto;
-                  border-radius: 18px; }
-
-  /* Die Punkte unter der Reihe. Der Browser setzt sie selbst und hebt den
-     hervor, bei dem die Reihe gerade steht; anklicken springt dorthin. Kein
-     Skript noetig. Browser, die das nicht koennen, zeigen keine Punkte, und
-     das Wischen funktioniert trotzdem. */
-  .carousel { scroll-marker-group: after; }
-  .carousel::scroll-marker-group { display: flex; gap: 9px; justify-content: center;
-                                   padding-top: 18px; }
-  .carousel picture::scroll-marker { content: ''; width: 8px; height: 8px;
-                                     border-radius: 50%; border: 0;
-                                     background: rgba(255,255,255,.28); cursor: pointer; }
-  .carousel picture::scroll-marker:target-current { background: #fff; }
+  .carousel picture { flex: 0 0 auto; scroll-snap-align: center; }
+  .carousel img { width: 212px; height: auto; border-radius: 18px; }
 
   .about { padding: 76px 0; }
   .about h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E; margin: 0 0 16px; }
@@ -238,7 +227,22 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   @media (max-width: 720px) {
     .band .inner { grid-template-columns: 1fr; gap: 20px; }
     .band .icon { width: 132px; justify-self: start; }
-    .carousel img { width: 168px; }
+    /* Auf dem Telefon passt ohnehin nur eines nebeneinander. Also gleich
+       eines je Seite, und darunter die drei Punkte: der Browser setzt sie
+       selbst, hebt den hervor, bei dem die Reihe steht, und springt beim
+       Antippen dorthin. Ohne Skript. Wer einen Browser ohne diese
+       Faehigkeit hat, sieht keine Punkte und kann trotzdem wischen. */
+    .carousel { gap: 0; scroll-marker-group: after;
+                scrollbar-width: none; padding-bottom: 0; }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel picture { flex: 0 0 100%; display: flex; justify-content: center; }
+    .carousel img { width: auto; height: 62vh; max-width: 100%; }
+    .carousel::scroll-marker-group { display: flex; gap: 9px; justify-content: center;
+                                     padding-top: 18px; }
+    .carousel picture::scroll-marker { content: ''; width: 8px; height: 8px;
+                                       border-radius: 50%; border: 0;
+                                       background: rgba(255,255,255,.28); cursor: pointer; }
+    .carousel picture::scroll-marker:target-current { background: #fff; }
   }'''
 
 
