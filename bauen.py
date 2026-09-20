@@ -42,7 +42,6 @@ T = {
         nav_apps='Apps', nav_support='Support',
         h1='Ein L&ouml;ffel reicht.',
         lead='Wir bauen Apps, die eine Sache k&ouml;nnen. Und die richtig.',
-        shlay_tag='Im App Store, kostenlos',
         shlay_text='Tic Tac Toe mit Axolotln. Schnelle Runden gegen den '
                    'Computer, gegen jemanden neben dir oder online.',
         badge_alt='Laden im App Store',
@@ -51,9 +50,6 @@ T = {
                    'Natur, Ruhe, ein Monat. Wheresome zeigt dir einen Ort, '
                    'mit der Begr&uuml;ndung daneben.',
         where_bald='Bald im App Store und bei Google Play.',
-        ueber_titel='Wer dahintersteckt',
-        ueber_text='Hollow Spoon ist eine kleine Firma. Wir bauen Apps, die '
-                   'eine Sache richtig machen, statt vieler Dinge halb.',
         impressum='Impressum', datenschutz='Datenschutz',
         marken='Apple und das Apple-Logo sind Marken von Apple Inc., '
                'eingetragen in den USA und anderen L&auml;ndern. App Store '
@@ -73,7 +69,6 @@ T = {
         nav_apps='Apps', nav_support='Support',
         h1='One spoon is enough.',
         lead='We build apps that do one thing. And do it properly.',
-        shlay_tag='On the App Store, free',
         shlay_text='Tic tac toe with axolotls. Quick rounds against the '
                    'computer, against someone sitting next to you, or online.',
         badge_alt='Download on the App Store',
@@ -82,9 +77,6 @@ T = {
                    'month. Wheresome shows you one place, with the reasoning '
                    'right next to it.',
         where_bald='Coming soon to the App Store and Google Play.',
-        ueber_titel='Who is behind this',
-        ueber_text='Hollow Spoon is a small company. We build apps that do '
-                   'one thing properly, rather than many things halfway.',
         impressum='Legal notice', datenschutz='Privacy',
         marken='Apple and the Apple logo are trademarks of Apple Inc., '
                'registered in the U.S. and other countries. App Store is a '
@@ -105,7 +97,6 @@ T = {
         h1='Une cuill&egrave;re suffit.',
         lead='Nous cr&eacute;ons des applications qui font une chose. Et qui '
              'la font bien.',
-        shlay_tag='Sur l&rsquo;App Store, gratuit',
         shlay_text='Le morpion avec des axolotls. Des parties rapides contre '
                    'l&rsquo;ordinateur, contre quelqu&rsquo;un &agrave; '
                    'c&ocirc;t&eacute; de toi, ou en ligne.',
@@ -115,10 +106,6 @@ T = {
                    'la nature, le calme, un mois. Wheresome te montre un '
                    'lieu, avec la raison juste &agrave; c&ocirc;t&eacute;.',
         where_bald='Bient&ocirc;t sur l&rsquo;App Store et Google Play.',
-        ueber_titel='Qui est derri&egrave;re',
-        ueber_text='Hollow Spoon est une petite entreprise. Nous cr&eacute;ons '
-                   'des applications qui font bien une chose, plut&ocirc;t '
-                   'que beaucoup de choses &agrave; moiti&eacute;.',
         impressum='Mentions l&eacute;gales', datenschutz='Confidentialit&eacute;',
         marken='Apple et le logo Apple sont des marques d&rsquo;Apple Inc., '
                'd&eacute;pos&eacute;es aux &Eacute;tats-Unis et dans '
@@ -140,7 +127,6 @@ T = {
         nav_apps='Apps', nav_support='Soporte',
         h1='Basta una cuchara.',
         lead='Creamos apps que hacen una cosa. Y la hacen bien.',
-        shlay_tag='En el App Store, gratis',
         shlay_text='Tres en raya con ajolotes. Partidas r&aacute;pidas contra '
                    'el ordenador, contra alguien a tu lado o en l&iacute;nea.',
         badge_alt='Consíguelo en el App Store',
@@ -149,9 +135,6 @@ T = {
                    'naturaleza, calma, un mes. Wheresome te ense&ntilde;a un '
                    'lugar, con el motivo al lado.',
         where_bald='Pronto en el App Store y en Google Play.',
-        ueber_titel='Qui&eacute;n est&aacute; detr&aacute;s',
-        ueber_text='Hollow Spoon es una empresa peque&ntilde;a. Creamos apps '
-                   'que hacen bien una cosa, en lugar de muchas a medias.',
         impressum='Aviso legal', datenschutz='Privacidad',
         marken='Apple y el logotipo de Apple son marcas comerciales de Apple '
                'Inc., registradas en EE.&nbsp;UU. y en otros pa&iacute;ses. '
@@ -233,9 +216,6 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
                    background: rgba(255,255,255,.28); cursor: pointer; }
   .punkte button[aria-current="true"] { background: #fff; }
 
-  .about { padding: 76px 0; }
-  .about h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E; margin: 0 0 16px; }
-  .about p { font-size: 19px; line-height: 1.65; max-width: 34em; margin: 0; }
 
   footer { padding: 34px 0 14px; font-size: 13px; color: #8A909E;
            display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid #E7E9ED; }
@@ -322,7 +302,6 @@ def seite(sprache):
     <div class="kopf">
       <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
       <div>
-        <p class="tag">%(shlay_tag)s</p>
         <h2>Shlayolotl</h2>
       </div>
     </div>
@@ -352,10 +331,6 @@ def seite(sprache):
 </div>
 
 <div class="wrap">
-  <div class="about">
-    <h3>%(ueber_titel)s</h3>
-    <p>%(ueber_text)s</p>
-  </div>
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
     <a href="/impressum">%(impressum)s</a>
