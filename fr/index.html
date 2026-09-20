@@ -60,7 +60,18 @@
   .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 99px; }
   .carousel img { flex: 0 0 auto; scroll-snap-align: center; width: 212px; height: auto;
                   border-radius: 18px; }
-  .hint { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .5; margin: 4px 0 0; }
+
+  /* Die Punkte unter der Reihe. Der Browser setzt sie selbst und hebt den
+     hervor, bei dem die Reihe gerade steht; anklicken springt dorthin. Kein
+     Skript noetig. Browser, die das nicht koennen, zeigen keine Punkte, und
+     das Wischen funktioniert trotzdem. */
+  .carousel { scroll-marker-group: after; }
+  .carousel::scroll-marker-group { display: flex; gap: 9px; justify-content: center;
+                                   padding-top: 18px; }
+  .carousel picture::scroll-marker { content: ''; width: 8px; height: 8px;
+                                     border-radius: 50%; border: 0;
+                                     background: rgba(255,255,255,.28); cursor: pointer; }
+  .carousel picture::scroll-marker:target-current { background: #fff; }
 
   .about { padding: 76px 0; }
   .about h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E; margin: 0 0 16px; }
@@ -121,7 +132,6 @@
           <img src="/assets/shots/shlayolotl-fr-3-420.webp" width="420" height="910" alt="Shlayolotl&nbsp;: l&rsquo;&eacute;cran apr&egrave;s une partie gagn&eacute;e" loading="lazy" decoding="async">
         </picture>
     </div>
-    <p class="hint">Balayer pour parcourir</p>
   </div>
 </div>
 

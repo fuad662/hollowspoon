@@ -42,7 +42,6 @@ T = {
                    'Natur, Ruhe, ein Monat. Wheresome zeigt dir einen Ort, '
                    'mit der Begr&uuml;ndung daneben.',
         where_bald='Bald im App Store und bei Google Play.',
-        wischen='Zum Bl&auml;ttern wischen',
         ueber_titel='Wer dahintersteckt',
         ueber_text='Hollow Spoon ist eine kleine Firma. Wir bauen Apps, die '
                    'eine Sache richtig machen, statt vieler Dinge halb.',
@@ -72,7 +71,6 @@ T = {
                    'month. Wheresome shows you one place, with the reasoning '
                    'right next to it.',
         where_bald='Coming soon to the App Store and Google Play.',
-        wischen='Swipe to browse',
         ueber_titel='Who is behind this',
         ueber_text='Hollow Spoon is a small company. We build apps that do '
                    'one thing properly, rather than many things halfway.',
@@ -104,7 +102,6 @@ T = {
                    'la nature, le calme, un mois. Wheresome te montre un '
                    'lieu, avec la raison juste &agrave; c&ocirc;t&eacute;.',
         where_bald='Bient&ocirc;t sur l&rsquo;App Store et Google Play.',
-        wischen='Balayer pour parcourir',
         ueber_titel='Qui est derri&egrave;re',
         ueber_text='Hollow Spoon est une petite entreprise. Nous cr&eacute;ons '
                    'des applications qui font bien une chose, plut&ocirc;t '
@@ -137,7 +134,6 @@ T = {
                    'naturaleza, calma, un mes. Wheresome te ense&ntilde;a un '
                    'lugar, con el motivo al lado.',
         where_bald='Pronto en el App Store y en Google Play.',
-        wischen='Desliza para ver m&aacute;s',
         ueber_titel='Qui&eacute;n est&aacute; detr&aacute;s',
         ueber_text='Hollow Spoon es una empresa peque&ntilde;a. Creamos apps '
                    'que hacen bien una cosa, en lugar de muchas a medias.',
@@ -196,7 +192,18 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 99px; }
   .carousel img { flex: 0 0 auto; scroll-snap-align: center; width: 212px; height: auto;
                   border-radius: 18px; }
-  .hint { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .5; margin: 4px 0 0; }
+
+  /* Die Punkte unter der Reihe. Der Browser setzt sie selbst und hebt den
+     hervor, bei dem die Reihe gerade steht; anklicken springt dorthin. Kein
+     Skript noetig. Browser, die das nicht koennen, zeigen keine Punkte, und
+     das Wischen funktioniert trotzdem. */
+  .carousel { scroll-marker-group: after; }
+  .carousel::scroll-marker-group { display: flex; gap: 9px; justify-content: center;
+                                   padding-top: 18px; }
+  .carousel picture::scroll-marker { content: ''; width: 8px; height: 8px;
+                                     border-radius: 50%; border: 0;
+                                     background: rgba(255,255,255,.28); cursor: pointer; }
+  .carousel picture::scroll-marker:target-current { background: #fff; }
 
   .about { padding: 76px 0; }
   .about h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E; margin: 0 0 16px; }
@@ -286,7 +293,6 @@ def seite(sprache):
     <div class="carousel">
 %(shots)s
     </div>
-    <p class="hint">%(wischen)s</p>
   </div>
 </div>
 
