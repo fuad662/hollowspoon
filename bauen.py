@@ -293,7 +293,7 @@ def seite(sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="%(pfad)ssupport">%(nav_support)s</a></span>
+    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="%(pfad)ssupport/">%(nav_support)s</a></span>
   </nav>
   <div class="hero">
     <h1>%(h1)s</h1>
@@ -387,17 +387,17 @@ def support_seite(sprache):
     untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
     t = T[sprache]
     hreflang = '\n'.join(
-        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%ssupport">' % (x, PFAD[x])
+        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%ssupport/">' % (x, PFAD[x])
         for x in SPRACHEN)
     hreflang += ('\n<link rel="alternate" hreflang="x-default" '
-                 'href="https://hollowspoon.app/en/support">')
+                 'href="https://hollowspoon.app/en/support/">')
     sprachen = ''.join(
         '<span class="hier">%s</span>' % NAMEN[x] if x == sprache
-        else '<a href="%ssupport" hreflang="%s">%s</a>' % (PFAD[x], x, NAMEN[x])
+        else '<a href="%ssupport/" hreflang="%s">%s</a>' % (PFAD[x], x, NAMEN[x])
         for x in SPRACHEN)
 
     return VORLAGE_SUPPORT % dict(
-        t, sprache=sprache, pfad=PFAD[sprache] + 'support', startpfad=PFAD[sprache],
+        t, sprache=sprache, pfad=PFAD[sprache] + 'support/', startpfad=PFAD[sprache],
         hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL)
 
 
