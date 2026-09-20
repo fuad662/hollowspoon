@@ -428,10 +428,10 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
   <p class="zeile">%(support_zeile)s <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a></p>
 
   <h2>Shlayolotl</h2>
-  <p><a href="/shlayolotl">%(support_recht)s</a></p>
+  <p><a href="/shlayolotl#%(sprache)s">%(support_recht)s</a></p>
 
   <h2>Wheresome</h2>
-  <p><a href="/wheresome">%(support_recht)s</a></p>
+  <p><a href="/wheresome#%(sprache)s">%(support_recht)s</a></p>
 
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
