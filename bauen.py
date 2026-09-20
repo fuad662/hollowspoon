@@ -18,6 +18,13 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SPRACHEN = ['de', 'en', 'fr', 'es']
 PFAD = {'de': '/', 'en': '/en/', 'fr': '/fr/', 'es': '/es/'}
 
+# Die Datenschutzerklaerung der WEBSITE (nicht die der Apps, die stehen auf
+# /shlayolotl und /wheresome). Deutsch behaelt seine alte Adresse.
+DS_PFAD = {'de': '/datenschutz', 'en': '/en/privacy/',
+           'fr': '/fr/confidentialite/', 'es': '/es/privacidad/'}
+DS_DATEI = {'de': 'datenschutz.html', 'en': 'en/privacy/index.html',
+            'fr': 'fr/confidentialite/index.html', 'es': 'es/privacidad/index.html'}
+
 SHLAY_URL = {
     'de': 'https://apps.apple.com/de/app/shlayolotl/id6805653548',
     'en': 'https://apps.apple.com/app/shlayolotl/id6805653548',
@@ -346,7 +353,7 @@ def seite(sprache):
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
     <a href="/impressum">%(impressum)s</a>
-    <a href="/datenschutz">%(datenschutz)s</a>
+    <a href="%(ds_pfad)s">%(datenschutz)s</a>
     <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
   </footer>
   <p class="sprachen">%(sprachen)s</p>
@@ -356,7 +363,8 @@ def seite(sprache):
 </body>
 </html>
 ''' % dict(t, sprache=sprache, pfad=PFAD[sprache], hreflang=hreflang,
-           sprachen=sprachen, shots=shots, stil=STIL, shlay_url=SHLAY_URL[sprache])
+           sprachen=sprachen, shots=shots, stil=STIL,
+           ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache])
 
 
 
@@ -402,7 +410,8 @@ def support_seite(sprache):
 
     return VORLAGE_SUPPORT % dict(
         t, sprache=sprache, pfad=PFAD[sprache] + 'support/', startpfad=PFAD[sprache],
-        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL)
+        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL,
+        ds_pfad=DS_PFAD[sprache])
 
 
 VORLAGE_SUPPORT = """<!DOCTYPE html>
@@ -440,7 +449,290 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
     <a href="/impressum">%(impressum)s</a>
-    <a href="/datenschutz">%(datenschutz)s</a>
+    <a href="%(ds_pfad)s">%(datenschutz)s</a>
+  </footer>
+  <p class="sprachen">%(sprachen)s</p>
+</div>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Datenschutzerklaerung der Website
+#
+# Sie stand bis zum 20.9. nur auf Deutsch und nannte GitHub Pages als Hoster.
+# Beides war ueberholt: die Seite wird von Cloudflare ausgeliefert, und sie
+# wird in vier Sprachen angeboten. Wer Leute auf Franzoesisch anspricht, muss
+# ihnen auch auf Franzoesisch sagen, was mit ihren Daten geschieht.
+# ---------------------------------------------------------------------------
+
+DS_STAND = {'de': 'Stand: 20. September 2026', 'en': 'Last updated: 20 September 2026',
+            'fr': 'Mise &agrave; jour&nbsp;: 20 septembre 2026',
+            'es': 'Actualizado: 20 de septiembre de 2026'}
+
+DS = {
+ 'de': dict(
+  titel='Datenschutzerkl&auml;rung',
+  intro='Diese Datenschutzerkl&auml;rung gilt f&uuml;r diese Website. F&uuml;r die Apps '
+        'von Hollow Spoon gelten eigene Erkl&auml;rungen, die auf den jeweiligen '
+        'Seiten verlinkt sind.',
+  h_verantwortlich='1. Verantwortlicher',
+  h_hosting='2. Auslieferung &uuml;ber Cloudflare',
+  hosting='Diese Website wird von Cloudflare Pages ausgeliefert, einem Dienst der '
+          'Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA. Beim '
+          'Aufruf erfasst Cloudflare technische Daten in Server-Protokollen, '
+          'insbesondere die IP-Adresse, Datum und Uhrzeit, die aufgerufene Seite, den '
+          'Browser und das Betriebssystem. Diese Daten dienen der Bereitstellung und '
+          'der Sicherheit des Dienstes. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f '
+          'DSGVO; unser berechtigtes Interesse liegt darin, diese Website sicher und '
+          'zuverl&auml;ssig bereitzustellen, ohne eigene Server zu betreiben.',
+  hosting2='Dabei k&ouml;nnen Daten in die USA gelangen. Cloudflare ist nach dem EU-US '
+           'Data Privacy Framework zertifiziert (nachgesehen am 20. September 2026) '
+           'und st&uuml;tzt sich erg&auml;nzend auf die Standardvertragsklauseln der '
+           'Europ&auml;ischen Kommission. N&auml;heres in Cloudflares '
+           'Datenschutzerkl&auml;rung unter cloudflare.com/privacypolicy.',
+  h_cookies='3. Keine Cookies, keine Analyse',
+  cookies='Diese Website setzt keine Cookies, verwendet keine Analyse-Werkzeuge und '
+          'keine Werbedienste. Wir selbst erheben und speichern keine '
+          'personenbezogenen Daten von Besuchern.',
+  cookies2='Cloudflare ersetzt E-Mail-Adressen im Seitentext durch ein kleines Skript, '
+           'damit sie nicht automatisch eingesammelt werden k&ouml;nnen. Das Skript '
+           'kommt von dieser Website selbst und setzt keine Cookies.',
+  h_kontakt='4. Kontaktaufnahme per E-Mail',
+  kontakt='Wenn Sie uns schreiben, speichern wir Ihre Angaben, um die Anfrage zu '
+          'bearbeiten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, sofern die '
+          'Anfrage mit einem Vertrag zusammenh&auml;ngt, sonst Art. 6 Abs. 1 lit. f '
+          'DSGVO. Wir l&ouml;schen die Daten, sobald sie nicht mehr erforderlich sind '
+          'und keine Aufbewahrungspflichten entgegenstehen.',
+  h_rechte='5. Ihre Rechte',
+  rechte='Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), '
+         'L&ouml;schung (Art. 17), Einschr&auml;nkung der Verarbeitung (Art. 18), '
+         'Daten&uuml;bertragbarkeit (Art. 20) und Widerspruch (Art. 21).',
+  rechte2='Au&szlig;erdem k&ouml;nnen Sie sich bei einer Aufsichtsbeh&ouml;rde '
+          'beschweren. F&uuml;r uns zust&auml;ndig ist:',
+  h_aenderung='6. &Auml;nderungen',
+  aenderung='Wir passen diese Erkl&auml;rung an, wenn sich die rechtlichen '
+            'Anforderungen oder die Website &auml;ndern. F&uuml;r Ihren erneuten '
+            'Besuch gilt die dann aktuelle Fassung.'),
+ 'en': dict(
+  titel='Privacy policy',
+  intro='This privacy policy covers this website. The Hollow Spoon apps have their '
+        'own policies, linked from their pages.',
+  h_verantwortlich='1. Controller',
+  h_hosting='2. Delivery via Cloudflare',
+  hosting='This website is delivered by Cloudflare Pages, a service of Cloudflare, '
+          'Inc., 101 Townsend Street, San Francisco, CA 94107, USA. When you open it, '
+          'Cloudflare records technical data in server logs, in particular the IP '
+          'address, date and time, the page requested, the browser and the operating '
+          'system. That data serves the provision and the security of the service. '
+          'The legal basis is Art. 6(1)(f) GDPR; our legitimate interest is providing '
+          'this website securely and reliably without running servers of our own.',
+  hosting2='Data can reach the United States in the process. Cloudflare is certified '
+           'under the EU-U.S. Data Privacy Framework (checked on 20 September 2026) '
+           'and additionally relies on the European Commission\'s standard '
+           'contractual clauses. See Cloudflare\'s privacy policy at '
+           'cloudflare.com/privacypolicy.',
+  h_cookies='3. No cookies, no analytics',
+  cookies='This website sets no cookies, uses no analytics tools and no advertising '
+          'services. We ourselves collect and store no personal data about visitors.',
+  cookies2='Cloudflare replaces e-mail addresses in the page text with a small script '
+           'so they cannot be harvested automatically. The script comes from this '
+           'website itself and sets no cookies.',
+  h_kontakt='4. Contacting us by e-mail',
+  kontakt='If you write to us, we store what you send in order to handle the request. '
+          'The legal basis is Art. 6(1)(b) GDPR where the request relates to a '
+          'contract, otherwise Art. 6(1)(f) GDPR. We delete the data once it is no '
+          'longer needed and no retention duty stands in the way.',
+  h_rechte='5. Your rights',
+  rechte='You have the rights of access (Art. 15 GDPR), rectification (Art. 16), '
+         'erasure (Art. 17), restriction of processing (Art. 18), data portability '
+         '(Art. 20) and objection (Art. 21).',
+  rechte2='You may also lodge a complaint with a supervisory authority. The one '
+          'responsible for us is:',
+  h_aenderung='6. Changes',
+  aenderung='We adapt this policy when the legal requirements or the website change. '
+            'The version current at the time of your visit applies.'),
+ 'fr': dict(
+  titel='Politique de confidentialit&eacute;',
+  intro='Cette politique concerne ce site. Les applications Hollow Spoon ont leurs '
+        'propres politiques, li&eacute;es depuis leurs pages.',
+  h_verantwortlich='1. Responsable du traitement',
+  h_hosting='2. Diffusion par Cloudflare',
+  hosting='Ce site est diffus&eacute; par Cloudflare Pages, un service de Cloudflare, '
+          'Inc., 101 Townsend Street, San Francisco, CA 94107, &Eacute;tats-Unis. Lors '
+          'de la consultation, Cloudflare enregistre des donn&eacute;es techniques '
+          'dans des journaux de serveur, notamment l\'adresse IP, la date et '
+          'l\'heure, la page demand&eacute;e, le navigateur et le syst&egrave;me '
+          'd\'exploitation. Ces donn&eacute;es servent &agrave; fournir et &agrave; '
+          's&eacute;curiser le service. La base juridique est l\'art. 6, par. 1, '
+          'point f du RGPD&nbsp;; notre int&eacute;r&ecirc;t l&eacute;gitime est de '
+          'fournir ce site de mani&egrave;re s&ucirc;re et fiable sans exploiter nos '
+          'propres serveurs.',
+  hosting2='Des donn&eacute;es peuvent ainsi parvenir aux &Eacute;tats-Unis. '
+           'Cloudflare est certifi&eacute; au titre du cadre de protection des '
+           'donn&eacute;es UE-&Eacute;tats-Unis (v&eacute;rifi&eacute; le 20 septembre '
+           '2026) et s\'appuie en outre sur les clauses contractuelles types de la '
+           'Commission europ&eacute;enne. Voir la politique de Cloudflare sur '
+           'cloudflare.com/privacypolicy.',
+  h_cookies='3. Aucun cookie, aucune mesure d\'audience',
+  cookies='Ce site ne d&eacute;pose aucun cookie, n\'utilise aucun outil de mesure '
+          'd\'audience et aucun service publicitaire. Nous ne collectons et ne '
+          'conservons nous-m&ecirc;mes aucune donn&eacute;e personnelle des '
+          'visiteurs.',
+  cookies2='Cloudflare remplace les adresses e-mail dans le texte par un petit script, '
+           'afin qu\'elles ne puissent pas &ecirc;tre collect&eacute;es '
+           'automatiquement. Ce script provient de ce site lui-m&ecirc;me et ne '
+           'd&eacute;pose aucun cookie.',
+  h_kontakt='4. Nous &eacute;crire',
+  kontakt='Si tu nous &eacute;cris, nous conservons ce que tu envoies pour traiter la '
+          'demande. La base juridique est l\'art. 6, par. 1, point b du RGPD lorsque '
+          'la demande se rapporte &agrave; un contrat, sinon l\'art. 6, par. 1, point '
+          'f. Nous supprimons ces donn&eacute;es d&egrave;s qu\'elles ne sont plus '
+          'n&eacute;cessaires et qu\'aucune obligation de conservation ne s\'y '
+          'oppose.',
+  h_rechte='5. Tes droits',
+  rechte='Tu disposes des droits d\'acc&egrave;s (art. 15 du RGPD), de rectification '
+         '(art. 16), d\'effacement (art. 17), de limitation du traitement (art. 18), '
+         'de portabilit&eacute; (art. 20) et d\'opposition (art. 21).',
+  rechte2='Tu peux &eacute;galement introduire une r&eacute;clamation aupr&egrave;s '
+          'd\'une autorit&eacute; de contr&ocirc;le. Celle dont nous relevons '
+          'est&nbsp;:',
+  h_aenderung='6. Modifications',
+  aenderung='Nous adaptons cette politique lorsque les exigences l&eacute;gales ou le '
+            'site changent. La version en vigueur lors de ta visite s\'applique.'),
+ 'es': dict(
+  titel='Pol&iacute;tica de privacidad',
+  intro='Esta pol&iacute;tica se refiere a este sitio web. Las apps de Hollow Spoon '
+        'tienen sus propias pol&iacute;ticas, enlazadas desde sus p&aacute;ginas.',
+  h_verantwortlich='1. Responsable del tratamiento',
+  h_hosting='2. Entrega a trav&eacute;s de Cloudflare',
+  hosting='Este sitio lo sirve Cloudflare Pages, un servicio de Cloudflare, Inc., 101 '
+          'Townsend Street, San Francisco, CA 94107, EE.&nbsp;UU. Al abrirlo, '
+          'Cloudflare registra datos t&eacute;cnicos en los registros del servidor, en '
+          'particular la direcci&oacute;n IP, la fecha y la hora, la p&aacute;gina '
+          'solicitada, el navegador y el sistema operativo. Esos datos sirven para '
+          'prestar y asegurar el servicio. La base jur&iacute;dica es el art. 6, apdo. '
+          '1, letra f del RGPD; nuestro inter&eacute;s leg&iacute;timo es ofrecer este '
+          'sitio de forma segura y fiable sin operar servidores propios.',
+  hosting2='En ese proceso los datos pueden llegar a Estados Unidos. Cloudflare '
+           'est&aacute; certificada conforme al Marco de Privacidad de Datos '
+           'UE-EE.&nbsp;UU. (consultado el 20 de septiembre de 2026) y se apoya '
+           'adem&aacute;s en las cl&aacute;usulas contractuales tipo de la '
+           'Comisi&oacute;n Europea. M&aacute;s informaci&oacute;n en la '
+           'pol&iacute;tica de Cloudflare en cloudflare.com/privacypolicy.',
+  h_cookies='3. Sin cookies, sin anal&iacute;tica',
+  cookies='Este sitio no utiliza cookies, ni herramientas de anal&iacute;tica, ni '
+          'servicios publicitarios. Nosotros mismos no recogemos ni guardamos datos '
+          'personales de los visitantes.',
+  cookies2='Cloudflare sustituye las direcciones de correo del texto por un peque&ntilde;o '
+           'script para que no puedan recogerse autom&aacute;ticamente. El script '
+           'procede de este mismo sitio y no utiliza cookies.',
+  h_kontakt='4. Escribirnos por correo',
+  kontakt='Si nos escribes, guardamos lo que env&iacute;as para atender la solicitud. '
+          'La base jur&iacute;dica es el art. 6, apdo. 1, letra b del RGPD cuando la '
+          'solicitud guarda relaci&oacute;n con un contrato, y en los dem&aacute;s '
+          'casos la letra f. Borramos los datos en cuanto dejan de ser necesarios y no '
+          'existe obligaci&oacute;n de conservarlos.',
+  h_rechte='5. Tus derechos',
+  rechte='Tienes derecho de acceso (art. 15 del RGPD), rectificaci&oacute;n (art. 16), '
+         'supresi&oacute;n (art. 17), limitaci&oacute;n del tratamiento (art. 18), '
+         'portabilidad (art. 20) y oposici&oacute;n (art. 21).',
+  rechte2='Adem&aacute;s puedes presentar una reclamaci&oacute;n ante una autoridad de '
+          'control. La competente para nosotros es:',
+  h_aenderung='6. Cambios',
+  aenderung='Adaptamos esta pol&iacute;tica cuando cambian los requisitos legales o el '
+            'sitio. Se aplica la versi&oacute;n vigente en el momento de tu visita.'),
+}
+
+ANSCHRIFT = ('Hollow Spoon UG (haftungsbeschr&auml;nkt)<br>\n'
+             'Gravensteiner Stra&szlig;e 33<br>\n28219 Bremen<br>\n'
+             'E-Mail: <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>')
+
+BEHOERDE = ('Die Landesbeauftragte f&uuml;r Datenschutz und Informationsfreiheit<br>\n'
+            'der Freien Hansestadt Bremen<br>\n'
+            'Georgstra&szlig;e 122-124<br>\n27570 Bremerhaven')
+
+
+def datenschutz_seite(sprache):
+    t = T[sprache]
+    d = DS[sprache]
+    hreflang = '\n'.join(
+        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%s">' % (x, DS_PFAD[x])
+        for x in SPRACHEN)
+    hreflang += ('\n<link rel="alternate" hreflang="x-default" '
+                 'href="https://hollowspoon.app/en/privacy/">')
+    sprachen = ''.join(
+        '<span class="hier">%s</span>' % NAMEN[x] if x == sprache
+        else '<a href="%s" hreflang="%s">%s</a>' % (DS_PFAD[x], x, NAMEN[x])
+        for x in SPRACHEN)
+    zusammen = dict(t)
+    zusammen.update(d)
+    return VORLAGE_DS % dict(
+        zusammen, sprache=sprache, pfad=DS_PFAD[sprache], startpfad=PFAD[sprache],
+        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL,
+        stand=DS_STAND[sprache], anschrift=ANSCHRIFT, behoerde=BEHOERDE)
+
+
+VORLAGE_DS = """<!DOCTYPE html>
+<html lang="%(sprache)s">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>%(titel)s</title>
+<link rel="canonical" href="https://hollowspoon.app%(pfad)s">
+%(hreflang)s
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+%(stil)s
+  h1 { font-size: 34px; margin: 48px 0 6px; }
+  h2 { font-size: 13px; margin: 34px 0 8px; }
+  .zeile { font-size: 15px; color: #8A909E; margin: 0 0 32px; }
+  .text p { font-size: 16px; line-height: 1.7; margin: 0 0 12px; max-width: 42em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158"></a></span>
+    <span class="rechts"><a href="%(startpfad)ssupport/">%(nav_support)s</a></span>
+  </nav>
+
+  <h1>%(titel)s</h1>
+  <p class="zeile">%(stand)s</p>
+
+  <div class="text">
+    <p>%(intro)s</p>
+
+    <h2>%(h_verantwortlich)s</h2>
+    <p>%(anschrift)s</p>
+
+    <h2>%(h_hosting)s</h2>
+    <p>%(hosting)s</p>
+    <p>%(hosting2)s</p>
+
+    <h2>%(h_cookies)s</h2>
+    <p>%(cookies)s</p>
+    <p>%(cookies2)s</p>
+
+    <h2>%(h_kontakt)s</h2>
+    <p>%(kontakt)s</p>
+
+    <h2>%(h_rechte)s</h2>
+    <p>%(rechte)s</p>
+    <p>%(rechte2)s</p>
+    <p>%(behoerde)s</p>
+
+    <h2>%(h_aenderung)s</h2>
+    <p>%(aenderung)s</p>
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
+    <a href="/impressum">%(impressum)s</a>
+    <a href="%(startpfad)ssupport/">%(nav_support)s</a>
   </footer>
   <p class="sprachen">%(sprachen)s</p>
 </div>
@@ -454,6 +746,7 @@ for s in SPRACHEN:
         (os.path.join(ROOT, 'index.html' if s == 'de' else '%s/index.html' % s), seite(s)),
         (os.path.join(ROOT, ('' if s == 'de' else s + '/') + 'support/index.html'),
          support_seite(s)),
+        (os.path.join(ROOT, DS_DATEI[s]), datenschutz_seite(s)),
     ):
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         assert not [c for c in html if c in '\u2013\u2014\u2212'], 'Gedankenstrich in ' + s
