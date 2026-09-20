@@ -154,10 +154,23 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   img { display: block; max-width: 100%; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-  nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; font-size: 14px; }
-  nav .mark img { height: 22px; width: auto; display: block; }
-  nav .rechts a { color: #5C6270; text-decoration: none; margin-left: 24px; }
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 20px;
+        padding: 26px 0; font-size: 14px; }
+  /* flex-shrink 0 und max-width none: sonst quetscht der Kopf den Schriftzug
+     schmal, waehrend die feste Hoehe stehen bleibt. Auf dem Telefon sah er
+     deshalb zusammengedrueckt aus. */
+  nav .mark { flex: 0 0 auto; }
+  nav .mark img { height: 22px; width: auto; max-width: none; display: block; }
+  nav .rechts a { color: #5C6270; text-decoration: none; margin-left: 24px; white-space: nowrap; }
   nav .rechts a:hover { color: #14161A; }
+
+  /* Die Sprachen stehen unten, nicht oben. Vier Kuerzel neben Apps und
+     Support waren auf dem Telefon nicht zu verstehen und brachen um. */
+  .sprachen { padding: 22px 0 0; font-size: 13px; color: #8A909E;
+              display: flex; gap: 16px; flex-wrap: wrap; }
+  .sprachen a { color: #5C6270; text-decoration: none; }
+  .sprachen a:hover { color: #14161A; }
+  .sprachen .hier { color: #14161A; font-weight: 600; }
 
   .hero { padding: 84px 0 68px; }
   h1 { font-size: clamp(52px, 12vw, 132px); line-height: .92; letter-spacing: -.05em;
@@ -242,8 +255,11 @@ def seite(sprache):
         for s in SPRACHEN)
     hreflang += '\n<link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/">'
 
-    andere = ' '.join(
-        '<a href="%s">%s</a>' % (PFAD[s], s.upper()) for s in SPRACHEN if s != sprache)
+    namen = {'de': 'Deutsch', 'en': 'English', 'fr': 'Fran&ccedil;ais', 'es': 'Espa&ntilde;ol'}
+    sprachen = ''.join(
+        '<span class="hier">%s</span>' % namen[s] if s == sprache
+        else '<a href="%s" hreflang="%s">%s</a>' % (PFAD[s], s, namen[s])
+        for s in SPRACHEN)
 
     shots = '\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3))
 
@@ -269,7 +285,7 @@ def seite(sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="/support">%(nav_support)s</a>%(andere)s</span>
+    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="/support">%(nav_support)s</a></span>
   </nav>
   <div class="hero">
     <h1>%(h1)s</h1>
@@ -321,13 +337,14 @@ def seite(sprache):
     <a href="/datenschutz">%(datenschutz)s</a>
     <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
   </footer>
+  <p class="sprachen">%(sprachen)s</p>
   <p class="marken">%(marken)s</p>
 </div>
 
 </body>
 </html>
 ''' % dict(t, sprache=sprache, pfad=PFAD[sprache], hreflang=hreflang,
-           andere=andere, shots=shots, stil=STIL, shlay_url=SHLAY_URL[sprache])
+           sprachen=sprachen, shots=shots, stil=STIL, shlay_url=SHLAY_URL[sprache])
 
 
 for s in SPRACHEN:
