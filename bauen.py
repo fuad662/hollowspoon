@@ -172,7 +172,10 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .band.shlay { background: #0A0E24; color: #E7EAF6; }
   .band.where { background: #176F7A; color: #F0EDE4; }
   .band .inner { display: grid; grid-template-columns: 1fr 260px; gap: 46px; align-items: center; }
-  .band .icon { width: 200px; border-radius: 44px; justify-self: end; }
+  /* height:auto ist nicht kosmetisch: ohne sie gewinnt das height-Attribut
+     aus dem Markup, und das Symbol steht gequetscht da (132 breit, 256
+     hoch statt quadratisch). Genau das ist am 20.9. live gegangen. */
+  .band .icon { width: 200px; height: auto; border-radius: 44px; justify-self: end; }
   .band .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; margin: 0 0 14px; }
   .band h2 { font-size: clamp(32px, 5vw, 50px); letter-spacing: -.025em; margin: 0 0 16px; font-weight: 800; }
   .band p { font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 30em; opacity: .88; }
