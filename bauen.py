@@ -195,11 +195,14 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .band { padding: 74px 0; }
   .band.shlay { background: #0A0E24; color: #E7EAF6; }
   .band.where { background: #176F7A; color: #F0EDE4; }
-  .band .inner { display: grid; grid-template-columns: 1fr 260px; gap: 46px; align-items: center; }
-  /* height:auto ist nicht kosmetisch: ohne sie gewinnt das height-Attribut
-     aus dem Markup, und das Symbol steht gequetscht da (132 breit, 256
-     hoch statt quadratisch). Genau das ist am 20.9. live gegangen. */
-  .band .icon { width: 200px; height: auto; border-radius: 44px; justify-self: end; }
+  /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
+     App Store, und es sieht auf jeder Breite gleich gewollt aus.
+     height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
+     height-Attribut aus dem Markup und das Symbol steht gequetscht da. */
+  .band .kopf { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .band .icon { width: 112px; height: auto; border-radius: 25px; flex: 0 0 auto; }
+  .band .kopf .tag { margin: 0 0 6px; }
+  .band .kopf h2 { margin: 0; }
   .band .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; margin: 0 0 14px; }
   .band h2 { font-size: clamp(32px, 5vw, 50px); letter-spacing: -.025em; margin: 0 0 16px; font-weight: 800; }
   .band p { font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 30em; opacity: .88; }
@@ -207,7 +210,8 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   /* Der Knopf von Apple, unveraendert. Apples Richtlinien: nicht umfaerben,
      nicht drehen, nicht animieren, mindestens 40 px hoch, ringsum ein
      Viertel der Hoehe frei. */
-  .badge { display: inline-block; line-height: 0; padding: 12px; margin: 0 0 0 -12px; }
+  /* Der Knopf steht unter den Bildern: erst sehen, was es ist, dann laden. */
+  .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
   .badge img { height: 44px; width: auto; }
   .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
 
@@ -222,6 +226,13 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .carousel picture { flex: 0 0 auto; scroll-snap-align: center; }
   .carousel img { width: 212px; height: auto; border-radius: 18px; }
 
+  /* Die Punkte zeichnen wir selbst. ::scroll-marker waere schoener, aber
+     Safari auf dem iPhone kennt es noch nicht, und dort fehlten sie ganz. */
+  .punkte { display: none; }
+  .punkte button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%;
+                   background: rgba(255,255,255,.28); cursor: pointer; }
+  .punkte button[aria-current="true"] { background: #fff; }
+
   .about { padding: 76px 0; }
   .about h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8A909E; margin: 0 0 16px; }
   .about p { font-size: 19px; line-height: 1.65; max-width: 34em; margin: 0; }
@@ -235,21 +246,15 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
     .band .inner { grid-template-columns: 1fr; gap: 20px; }
     .band .icon { width: 132px; justify-self: start; }
     /* Auf dem Telefon passt ohnehin nur eines nebeneinander. Also gleich
-       eines je Seite, und darunter die drei Punkte: der Browser setzt sie
-       selbst, hebt den hervor, bei dem die Reihe steht, und springt beim
-       Antippen dorthin. Ohne Skript. Wer einen Browser ohne diese
-       Faehigkeit hat, sieht keine Punkte und kann trotzdem wischen. */
-    .carousel { gap: 0; scroll-marker-group: after;
-                scrollbar-width: none; padding-bottom: 0; }
+       eines je Seite, mit den Punkten darunter. */
+    .carousel { gap: 0; scrollbar-width: none; padding-bottom: 0; }
     .carousel::-webkit-scrollbar { display: none; }
     .carousel picture { flex: 0 0 100%; display: flex; justify-content: center; }
-    .carousel img { width: auto; height: 62vh; max-width: 100%; }
-    .carousel::scroll-marker-group { display: flex; gap: 9px; justify-content: center;
-                                     padding-top: 18px; }
-    .carousel picture::scroll-marker { content: ''; width: 8px; height: 8px;
-                                       border-radius: 50%; border: 0;
-                                       background: rgba(255,255,255,.28); cursor: pointer; }
-    .carousel picture::scroll-marker:target-current { background: #fff; }
+    .carousel img { width: auto; height: 58vh; max-width: 100%; }
+    .punkte { display: flex; gap: 9px; justify-content: center; padding-top: 18px; }
+    .band .icon { width: 84px; border-radius: 19px; }
+    .band .kopf { gap: 16px; }
+    nav .rechts a { margin-left: 18px; font-size: 13px; }
   }'''
 
 
@@ -314,34 +319,35 @@ def seite(sprache):
 
 <div class="band shlay" id="apps">
   <div class="wrap">
-    <div class="inner">
+    <div class="kopf">
+      <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
       <div>
         <p class="tag">%(shlay_tag)s</p>
         <h2>Shlayolotl</h2>
-        <p>%(shlay_text)s</p>
-        <a class="badge" href="%(shlay_url)s">
-          <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
-        </a>
       </div>
-      <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
     </div>
-    <div class="carousel">
+    <p>%(shlay_text)s</p>
+    <div class="carousel" id="shots">
 %(shots)s
     </div>
+    <div class="punkte" data-fuer="shots"></div>
+    <a class="badge" href="%(shlay_url)s">
+      <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
+    </a>
   </div>
 </div>
 
 <div class="band where">
   <div class="wrap">
-    <div class="inner">
+    <div class="kopf">
+      <img class="icon" src="/assets/img/wheresome.png" alt="" width="256" height="256">
       <div>
         <p class="tag">%(where_tag)s</p>
         <h2>Wheresome</h2>
-        <p>%(where_text)s</p>
-        <p class="soon">%(where_bald)s</p>
       </div>
-      <img class="icon" src="/assets/img/wheresome.png" alt="" width="256" height="256">
     </div>
+    <p>%(where_text)s</p>
+    <p class="soon">%(where_bald)s</p>
   </div>
 </div>
 
@@ -360,6 +366,37 @@ def seite(sprache):
   <p class="marken">%(marken)s</p>
 </div>
 
+<script>
+  // Die Punkte unter der Bilderreihe. Anklicken springt zum Bild, beim
+  // Wischen wandert der helle Punkt mit. Faellt das Skript aus, bleibt die
+  // Leiste leer und gewischt werden kann trotzdem.
+  document.querySelectorAll('.punkte').forEach(function (leiste) {
+    var reihe = document.getElementById(leiste.dataset.fuer);
+    if (!reihe) return;
+    var bilder = Array.prototype.slice.call(reihe.children);
+    var knoepfe = bilder.map(function (bild, i) {
+      var k = document.createElement('button');
+      k.type = 'button';
+      k.setAttribute('aria-label', String(i + 1));
+      k.addEventListener('click', function () {
+        reihe.scrollTo({ left: bild.offsetLeft - reihe.offsetLeft, behavior: 'smooth' });
+      });
+      leiste.appendChild(k);
+      return k;
+    });
+    function markiere() {
+      var mitte = reihe.scrollLeft + reihe.clientWidth / 2;
+      var naechster = 0, kleinster = Infinity;
+      bilder.forEach(function (bild, i) {
+        var d = Math.abs(bild.offsetLeft - reihe.offsetLeft + bild.offsetWidth / 2 - mitte);
+        if (d < kleinster) { kleinster = d; naechster = i; }
+      });
+      knoepfe.forEach(function (k, i) { k.setAttribute('aria-current', String(i === naechster)); });
+    }
+    reihe.addEventListener('scroll', markiere, { passive: true });
+    markiere();
+  });
+</script>
 </body>
 </html>
 ''' % dict(t, sprache=sprache, pfad=PFAD[sprache], hreflang=hreflang,
