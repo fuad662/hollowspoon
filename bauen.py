@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Baut die Startseite in allen vier Sprachen.
+"""Baut die Website in allen vier Sprachen.
 
     python3 bauen.py
 
@@ -7,7 +7,11 @@ Eine Vorlage, ein Wortschatz je Sprache. Vier gleich aussehende Seiten von
 Hand zu pflegen geht genau so lange gut, bis eine davon vergessen wird; die
 Rechtsseite wird aus demselben Grund erzeugt und nicht getippt.
 
-Deutsch liegt auf /, die anderen unter /en/, /fr/ und /es/.
+Erzeugt werden die Startseite, je eine Seite fuer Shlayolotl und Wheresome,
+Support, die Datenschutzerklaerung der Website und die sitemap.xml. Deutsch
+liegt auf /, die anderen unter /en/, /fr/ und /es/. Die Rechtsseiten der
+Apps (/shlayolotl und /wheresome, ohne Schraegstrich) kommen NICHT von hier,
+sondern aus den App-Repositories (tool/make_legal_page.py --site).
 """
 
 import io
@@ -32,16 +36,52 @@ SHLAY_URL = {
     'es': 'https://apps.apple.com/es/app/shlayolotl/id6805653548',
 }
 
+SITE = 'https://hollowspoon.app'
+
+# Die Produktseiten liegen MIT Schraegstrich: /shlayolotl/ ist die Seite ueber
+# das Spiel, /shlayolotl (ohne) bleibt die Rechtsseite der App. Die ist bei
+# Apple als Datenschutz- und Support-Adresse hinterlegt und wird aus dem
+# App-Repository erzeugt, also nicht hier. Cloudflare haelt beide auseinander:
+# shlayolotl.html bedient die kurze Adresse, shlayolotl/index.html die mit
+# Schraegstrich, ohne Umleitung dazwischen (nachgelesen im Asset-Server).
+APPS = ['shlayolotl', 'wheresome']
+RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome'}
+
+# Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
+# Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
+# fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
+STAND = '2026-09-22'
+
+OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
+OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
+           'shlayolotl': '/assets/img/og-shlayolotl.png',
+           'wheresome': '/assets/img/og-wheresome.png'}
+
 T = {
     'de': dict(
-        titel='Hollow Spoon',
+        titel='Hollow Spoon | Apps &amp; Spiele',
+        support_titel='Support: Shlayolotl und Wheresome | Hollow Spoon',
         support_zeile='Schreib uns:',
         support_recht='Support und Datenschutzerkl&auml;rung',
-        beschreibung='Hollow Spoon baut kleine Apps, die eine Sache koennen. '
-                     'Shlayolotl im App Store, Wheresome in Vorbereitung.',
+        beschreibung='Hollow Spoon baut Apps, die eine Sache k&ouml;nnen: '
+                     'Shlayolotl, Tic Tac Toe mit Axolotln, im App Store. '
+                     'Wheresome, ein Ort f&uuml;r deine Reise, in Vorbereitung.',
+        support_beschreibung='Fragen zu Shlayolotl oder Wheresome? Schreib an '
+                             'contact@hollowspoon.app. Hier stehen auch Support '
+                             'und Datenschutzerkl&auml;rung je App.',
+        ds_beschreibung='Datenschutzerkl&auml;rung der Website hollowspoon.app: '
+                        'Auslieferung &uuml;ber Cloudflare, keine Cookies, keine '
+                        'Analyse, Kontakt per E-Mail.',
+        og_alt={'start': 'Schriftzug Hollow Spoon',
+                'shlayolotl': 'Symbol der App Shlayolotl',
+                'wheresome': 'Symbol der App Wheresome'},
         nav_apps='Apps', nav_support='Support',
         h1='Ein L&ouml;ffel reicht.',
         lead='Wir bauen Apps, die eine Sache k&ouml;nnen. Und die richtig.',
+        studio='Hollow Spoon ist ein unabh&auml;ngiges Studio aus Bremen. Wir '
+               'entwickeln eigene Apps und Spiele f&uuml;r iPhone, bald auch '
+               'f&uuml;r Android.',
+        mehr={'shlayolotl': 'Mehr zu Shlayolotl', 'wheresome': 'Mehr zu Wheresome'},
         shlay_text='Tic Tac Toe mit Axolotln. Schnelle Runden gegen den '
                    'Computer, gegen jemanden neben dir oder online.',
         badge_alt='Laden im App Store',
@@ -61,14 +101,28 @@ T = {
                'Shlayolotl: der Bildschirm nach einem gewonnenen Spiel'],
     ),
     'en': dict(
-        titel='Hollow Spoon',
+        titel='Hollow Spoon | Apps &amp; Games',
+        support_titel='Support: Shlayolotl and Wheresome | Hollow Spoon',
         support_zeile='Just write to us:',
         support_recht='Support and privacy policy',
-        beschreibung='Hollow Spoon builds small apps that do one thing. '
-                     'Shlayolotl on the App Store, Wheresome in preparation.',
+        beschreibung='Hollow Spoon builds apps that do one thing: Shlayolotl, '
+                     'tic tac toe with axolotls, on the App Store. Wheresome, '
+                     'one place for your trip, in preparation.',
+        support_beschreibung='Questions about Shlayolotl or Wheresome? Write to '
+                             'contact@hollowspoon.app. Support and privacy '
+                             'policy for each app are linked here too.',
+        ds_beschreibung='Privacy policy of the website hollowspoon.app: '
+                        'delivery via Cloudflare, no cookies, no analytics, '
+                        'contact by e-mail.',
+        og_alt={'start': 'Hollow Spoon wordmark',
+                'shlayolotl': 'Shlayolotl app icon',
+                'wheresome': 'Wheresome app icon'},
         nav_apps='Apps', nav_support='Support',
         h1='One spoon is enough.',
         lead='We build apps that do one thing. And do it properly.',
+        studio='Hollow Spoon is an independent studio in Bremen. We make our '
+               'own apps and games for iPhone, soon for Android too.',
+        mehr={'shlayolotl': 'More about Shlayolotl', 'wheresome': 'More about Wheresome'},
         shlay_text='Tic tac toe with axolotls. Quick rounds against the '
                    'computer, against someone sitting next to you, or online.',
         badge_alt='Download on the App Store',
@@ -87,16 +141,35 @@ T = {
                'Shlayolotl: the screen after a won game'],
     ),
     'fr': dict(
-        titel='Hollow Spoon',
+        titel='Hollow Spoon | Applications et jeux',
+        support_titel='Assistance&nbsp;: Shlayolotl et Wheresome | Hollow Spoon',
         support_zeile='&Eacute;cris-nous&nbsp;:',
         support_recht='Assistance et politique de confidentialit&eacute;',
-        beschreibung='Hollow Spoon cr&eacute;e de petites applications qui '
-                     'font une chose. Shlayolotl sur l&rsquo;App Store, '
-                     'Wheresome en pr&eacute;paration.',
+        beschreibung='Hollow Spoon cr&eacute;e des applications qui font une '
+                     'chose&nbsp;: Shlayolotl, le morpion avec des axolotls, '
+                     'sur l&rsquo;App Store. Wheresome, un lieu pour ton '
+                     'voyage, en pr&eacute;paration.',
+        support_beschreibung='Une question sur Shlayolotl ou Wheresome&nbsp;? '
+                             '&Eacute;cris &agrave; contact@hollowspoon.app. '
+                             'L&rsquo;assistance et la politique de '
+                             'confidentialit&eacute; de chaque application '
+                             'sont li&eacute;es ici.',
+        ds_beschreibung='Politique de confidentialit&eacute; du site '
+                        'hollowspoon.app&nbsp;: diffusion par Cloudflare, aucun '
+                        'cookie, aucune mesure d&rsquo;audience, contact par '
+                        'e-mail.',
+        og_alt={'start': 'Logotype Hollow Spoon',
+                'shlayolotl': 'Ic&ocirc;ne de l&rsquo;application Shlayolotl',
+                'wheresome': 'Ic&ocirc;ne de l&rsquo;application Wheresome'},
         nav_apps='Applications', nav_support='Assistance',
         h1='Une cuill&egrave;re suffit.',
         lead='Nous cr&eacute;ons des applications qui font une chose. Et qui '
              'la font bien.',
+        studio='Hollow Spoon est un studio ind&eacute;pendant de Br&ecirc;me. '
+               'Nous cr&eacute;ons nos propres applications et jeux pour '
+               'iPhone, et bient&ocirc;t pour Android.',
+        mehr={'shlayolotl': 'En savoir plus sur Shlayolotl',
+              'wheresome': 'En savoir plus sur Wheresome'},
         shlay_text='Le morpion avec des axolotls. Des parties rapides contre '
                    'l&rsquo;ordinateur, contre quelqu&rsquo;un &agrave; '
                    'c&ocirc;t&eacute; de toi, ou en ligne.',
@@ -118,15 +191,31 @@ T = {
                'partie gagn&eacute;e'],
     ),
     'es': dict(
-        titel='Hollow Spoon',
+        titel='Hollow Spoon | Apps y juegos',
+        support_titel='Soporte: Shlayolotl y Wheresome | Hollow Spoon',
         support_zeile='Escr&iacute;benos:',
         support_recht='Soporte y pol&iacute;tica de privacidad',
-        beschreibung='Hollow Spoon crea apps peque&ntilde;as que hacen una '
-                     'cosa. Shlayolotl en el App Store, Wheresome en '
-                     'preparaci&oacute;n.',
+        beschreibung='Hollow Spoon crea apps que hacen una cosa: Shlayolotl, '
+                     'tres en raya con ajolotes, en el App Store. Wheresome, '
+                     'un lugar para tu viaje, en preparaci&oacute;n.',
+        support_beschreibung='&iquest;Dudas sobre Shlayolotl o Wheresome? '
+                             'Escribe a contact@hollowspoon.app. Aqu&iacute; '
+                             'est&aacute;n tambi&eacute;n el soporte y la '
+                             'pol&iacute;tica de privacidad de cada app.',
+        ds_beschreibung='Pol&iacute;tica de privacidad del sitio '
+                        'hollowspoon.app: entrega a trav&eacute;s de Cloudflare, '
+                        'sin cookies, sin anal&iacute;tica, contacto por correo.',
+        og_alt={'start': 'Logotipo de Hollow Spoon',
+                'shlayolotl': 'Icono de la app Shlayolotl',
+                'wheresome': 'Icono de la app Wheresome'},
         nav_apps='Apps', nav_support='Soporte',
         h1='Basta una cuchara.',
         lead='Creamos apps que hacen una cosa. Y la hacen bien.',
+        studio='Hollow Spoon es un estudio independiente de Bremen. Creamos '
+               'nuestras propias apps y juegos para iPhone, y pronto '
+               'tambi&eacute;n para Android.',
+        mehr={'shlayolotl': 'M&aacute;s sobre Shlayolotl',
+              'wheresome': 'M&aacute;s sobre Wheresome'},
         shlay_text='Tres en raya con ajolotes. Partidas r&aacute;pidas contra '
                    'el ordenador, contra alguien a tu lado o en l&iacute;nea.',
         badge_alt='Consíguelo en el App Store',
@@ -144,6 +233,147 @@ T = {
                'Shlayolotl: un tablero m&aacute;s grande, de cuatro por cuatro',
                'Shlayolotl: la pantalla despu&eacute;s de ganar una partida'],
     ),
+}
+
+# ---------------------------------------------------------------------------
+# Die Produktseiten. Eine je App und Sprache, auf /shlayolotl/ und /wheresome/
+# und darunter /en/, /fr/, /es/.
+#
+# Nur, was feststeht: fuer Shlayolotl die Spielarten, die zwei Spielfelder,
+# das iPhone und "kein Konto" (steht so schon auf /shlayolotl-download), fuer
+# Wheresome nur das, was auch die Startseite sagt. Keine Preise, keine
+# Bewertungen, keine Downloadzahlen. Wheresome bleibt sichtbar "in
+# Vorbereitung", die Seite ist trotzdem eine richtige Seite und nicht nur
+# ein Platzhalter.
+# ---------------------------------------------------------------------------
+
+P = {
+ 'shlayolotl': {
+  'de': dict(
+   titel='Shlayolotl | Tic Tac Toe mit Axolotln',
+   beschreibung='Tic Tac Toe mit Axolotln, gemacht f&uuml;rs Telefon. Spielfelder '
+                'mit drei mal drei und vier mal vier Feldern, gegen den Computer, '
+                'gegen jemanden neben dir oder online. Kein Konto n&ouml;tig.',
+   erster='Rosa gegen Gr&uuml;n, wer zuerst eine Reihe voll hat, gewinnt. Eine '
+          'Runde dauert kaum eine Minute, deshalb passt das Spiel in jede '
+          'Wartezeit. Shlayolotl ist f&uuml;rs Telefon gemacht und l&auml;uft '
+          'auf dem iPhone.',
+   h2a='Drei Arten zu spielen',
+   pa='Gegen den Computer, wenn du allein bist. Gegen jemanden, der neben dir '
+      'sitzt. Oder online.',
+   h2b='Zwei Spielfelder',
+   pb='Das klassische Spielfeld mit drei mal drei Feldern, und ein '
+      'gr&ouml;&szlig;eres mit vier mal vier.',
+   letzter='Kein Konto, keine Anmeldung. Was das Spiel sich merkt, bleibt auf '
+           'deinem Ger&auml;t.'),
+  'en': dict(
+   titel='Shlayolotl | Tic Tac Toe with Axolotls',
+   beschreibung='Tic tac toe with axolotls, made for the phone. Three by three '
+                'and four by four boards, against the computer, someone next to '
+                'you, or online. No account needed.',
+   erster='Pink against green, and whoever completes a line first wins. A '
+          'round takes barely a minute, so the game fits into any wait. '
+          'Shlayolotl is made for the phone and runs on iPhone.',
+   h2a='Three ways to play',
+   pa='Against the computer when you are on your own. Against someone sitting '
+      'next to you. Or online.',
+   h2b='Two boards',
+   pb='The classic board with three by three squares, and a bigger one with '
+      'four by four.',
+   letzter='No account, no sign-up. Whatever the game remembers stays on your '
+           'device.'),
+  'fr': dict(
+   titel='Shlayolotl | Le morpion avec des axolotls',
+   beschreibung='Le morpion avec des axolotls, fait pour le t&eacute;l&eacute;phone. '
+                'Grilles de trois sur trois et quatre sur quatre, contre '
+                'l&rsquo;ordinateur, quelqu&rsquo;un &agrave; c&ocirc;t&eacute; de '
+                'toi ou en ligne. Sans compte.',
+   erster='Les roses contre les verts, et le premier qui aligne ses axolotls '
+          'gagne. Une partie dure &agrave; peine une minute, alors le jeu se '
+          'glisse dans n&rsquo;importe quelle attente. Shlayolotl est fait pour '
+          'le t&eacute;l&eacute;phone et tourne sur iPhone.',
+   h2a='Trois fa&ccedil;ons de jouer',
+   pa='Contre l&rsquo;ordinateur quand tu es seul. Contre quelqu&rsquo;un assis '
+      '&agrave; c&ocirc;t&eacute; de toi. Ou en ligne.',
+   h2b='Deux grilles',
+   pb='La grille classique de trois sur trois, et une plus grande de quatre '
+      'sur quatre.',
+   letzter='Pas de compte, pas d&rsquo;inscription. Ce que le jeu retient reste '
+           'sur ton appareil.'),
+  'es': dict(
+   titel='Shlayolotl | Tres en raya con ajolotes',
+   beschreibung='Tres en raya con ajolotes, hecho para el tel&eacute;fono. '
+                'Tableros de tres por tres y cuatro por cuatro, contra el '
+                'ordenador, alguien a tu lado o en l&iacute;nea. Sin cuenta.',
+   erster='Rosas contra verdes, y gana quien complete primero una l&iacute;nea. '
+          'Una partida dura apenas un minuto, as&iacute; que el juego cabe en '
+          'cualquier espera. Shlayolotl est&aacute; hecho para el tel&eacute;fono '
+          'y funciona en el iPhone.',
+   h2a='Tres formas de jugar',
+   pa='Contra el ordenador cuando est&aacute;s solo. Contra alguien sentado a tu '
+      'lado. O en l&iacute;nea.',
+   h2b='Dos tableros',
+   pb='El tablero cl&aacute;sico de tres por tres, y uno m&aacute;s grande de '
+      'cuatro por cuatro.',
+   letzter='Sin cuenta, sin registro. Lo que el juego recuerda se queda en tu '
+           'dispositivo.'),
+ },
+ 'wheresome': {
+  'de': dict(
+   titel='Wheresome | Ein Ort, der zu deiner Reise passt',
+   beschreibung='Wheresome zeigt dir einen Ort f&uuml;r deine Reise und '
+                'erkl&auml;rt, warum er passt. Du sagst, was dir wichtig ist: '
+                'Meer, Natur, Ruhe, ein Monat. In Vorbereitung, bald im App '
+                'Store und bei Google Play.',
+   erster='Wheresome hilft dir, einen Ort f&uuml;r eine Reise oder einen '
+          'l&auml;ngeren Aufenthalt zu finden. Du sagst, was dir wichtig ist, '
+          'zum Beispiel Meer oder Natur, Ruhe, oder in welchem Monat du fahren '
+          'willst. Wheresome schl&auml;gt dir daraufhin einen Ort vor und '
+          'erkl&auml;rt, warum er passt.',
+   letzter='Die Begr&uuml;ndung steht direkt neben dem Vorschlag. So siehst du, '
+           'warum gerade dieser Ort, und entscheidest, ob er f&uuml;r dich '
+           'stimmt.',
+   status='Wheresome ist noch in Vorbereitung.'),
+  'en': dict(
+   titel='Wheresome | A place that fits your trip',
+   beschreibung='Wheresome shows you one place for your trip and explains why '
+                'it fits. You say what matters: sea, nature, quiet, a month. In '
+                'preparation, coming soon to the App Store and Google Play.',
+   erster='Wheresome helps you find a place for a trip or a longer stay. You '
+          'say what matters to you, for instance sea or nature, quiet, or which '
+          'month you want to go. Wheresome then suggests a place and explains '
+          'why it fits.',
+   letzter='The reasoning sits right next to the suggestion, so you can see why '
+           'this place, and decide whether it is right for you.',
+   status='Wheresome is still in preparation.'),
+  'fr': dict(
+   titel='Wheresome | Un lieu qui correspond &agrave; ton voyage',
+   beschreibung='Wheresome te montre un lieu pour ton voyage et explique '
+                'pourquoi il convient. Tu dis ce qui compte&nbsp;: la mer, la '
+                'nature, le calme, un mois. En pr&eacute;paration, bient&ocirc;t '
+                'sur l&rsquo;App Store et Google Play.',
+   erster='Wheresome t&rsquo;aide &agrave; trouver un lieu pour un voyage ou un '
+          's&eacute;jour plus long. Tu dis ce qui compte pour toi, par exemple '
+          'la mer ou la nature, le calme, ou le mois o&ugrave; tu veux partir. '
+          'Wheresome te propose alors un lieu et explique pourquoi il convient.',
+   letzter='La raison se trouve juste &agrave; c&ocirc;t&eacute; de la '
+           'proposition&nbsp;: tu vois pourquoi ce lieu-l&agrave;, et tu '
+           'd&eacute;cides s&rsquo;il te correspond.',
+   status='Wheresome est encore en pr&eacute;paration.'),
+  'es': dict(
+   titel='Wheresome | Un lugar que encaja con tu viaje',
+   beschreibung='Wheresome te ense&ntilde;a un lugar para tu viaje y explica por '
+                'qu&eacute; encaja. Dices lo que te importa: mar, naturaleza, '
+                'calma, un mes. En preparaci&oacute;n, pronto en el App Store y '
+                'en Google Play.',
+   erster='Wheresome te ayuda a encontrar un lugar para un viaje o una estancia '
+          'm&aacute;s larga. Dices lo que te importa, por ejemplo mar o '
+          'naturaleza, calma, o en qu&eacute; mes quieres ir. Wheresome te '
+          'propone entonces un lugar y explica por qu&eacute; encaja.',
+   letzter='El motivo est&aacute; justo al lado de la propuesta: ves por '
+           'qu&eacute; ese lugar y decides si es para ti.',
+   status='Wheresome todav&iacute;a est&aacute; en preparaci&oacute;n.'),
+ },
 }
 
 STIL = '''  *, *::before, *::after { box-sizing: border-box; }
@@ -174,6 +404,9 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   h1 { font-size: clamp(52px, 12vw, 132px); line-height: .92; letter-spacing: -.05em;
        margin: 0 0 26px; font-weight: 800; max-width: 9em; }
   .lead { font-size: 21px; line-height: 1.55; color: #5C6270; max-width: 26em; margin: 0; }
+  /* Ein Satz mehr unter dem Claim, leiser gesetzt: wer wir sind und wofuer
+     wir bauen. Der Claim allein sagt einer Suchmaschine nichts. */
+  .studio { font-size: 17px; line-height: 1.6; color: #8A909E; max-width: 32em; margin: 22px 0 0; }
 
   .band { padding: 74px 0; }
   .band.shlay { background: #0A0E24; color: #E7EAF6; }
@@ -183,12 +416,28 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
      height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
      height-Attribut aus dem Markup und das Symbol steht gequetscht da. */
   .band .kopf { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .band .kopf picture { flex: 0 0 auto; display: block; }
   .band .icon { width: 112px; height: auto; border-radius: 25px; flex: 0 0 auto; }
   .band .kopf .tag { margin: 0 0 6px; }
   .band .kopf h2 { margin: 0; }
   .band .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; margin: 0 0 14px; }
   .band h2 { font-size: clamp(32px, 5vw, 50px); letter-spacing: -.025em; margin: 0 0 16px; font-weight: 800; }
+  .band h2 a { color: inherit; text-decoration: none; }
+  .band h2 a:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
   .band p { font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 30em; opacity: .88; }
+  /* Der Weg zur Seite der App: ein Textlink, kein Knopf. */
+  .band .mehr { margin-top: -8px; }
+  .band .mehr a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+  /* Die Seite einer App: dasselbe Band wie auf der Startseite, nur traegt es
+     hier die H1 und den ganzen Text. */
+  .produkt .kopf { margin-bottom: 28px; }
+  .produkt .kopf h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1; letter-spacing: -.035em;
+                      margin: 0; max-width: none; }
+  .produkt h2 { font-size: 22px; letter-spacing: -.01em; margin: 34px 0 10px; }
+  .produkt .text p { max-width: 34em; }
+  .produkt .recht { margin: 30px 0 0; font-size: 15px; opacity: .8; }
+  .produkt .recht a { color: inherit; }
 
   /* Der Knopf von Apple, unveraendert. Apples Richtlinien: nicht umfaerben,
      nicht drehen, nicht animieren, mindestens 40 px hoch, ringsum ein
@@ -252,19 +501,92 @@ def bild(sprache, nr, alt):
     )
 
 
-def seite(sprache):
+def symbol(app):
+    """Das App-Symbol, klein als WebP und das PNG als Rueckfall. Es wird
+    112 px breit gezeigt; das Shlayolotl-PNG allein hat 172 KB. Leerer
+    Alt-Text, weil der Name direkt daneben steht."""
+    return (
+        '      <picture>\n'
+        '        <source type="image/webp" srcset="/assets/img/%s-256.webp 256w, /assets/img/%s-512.webp 512w" sizes="112px">\n'
+        '        <img class="icon" src="/assets/img/%s.png" alt="" width="256" height="256">\n'
+        '      </picture>' % (app, app, app)
+    )
+
+
+def kopf(sprache, pfade, titel, beschreibung, bild='start'):
+    """Die <head>-Zeilen, die jede Seite gleich braucht: Titel, Beschreibung,
+    canonical auf sich selbst, hreflang auf die Geschwister, Open Graph fuer
+    geteilte Links, die Symbole. `pfade` ordnet jeder Sprache ihren Pfad zu.
+    x-default zeigt auf Englisch, wie bisher: wer keine der vier Sprachen
+    spricht, versteht am ehesten die."""
     t = T[sprache]
     hreflang = '\n'.join(
-        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%s">' % (s, PFAD[s])
+        '<link rel="alternate" hreflang="%s" href="%s%s">' % (s, SITE, pfade[s])
         for s in SPRACHEN)
-    hreflang += '\n<link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/">'
+    hreflang += '\n<link rel="alternate" hreflang="x-default" href="%s%s">' % (SITE, pfade['en'])
+    andere = '\n'.join(
+        '<meta property="og:locale:alternate" content="%s">' % OG_LOCALE[s]
+        for s in SPRACHEN if s != sprache)
+    return '''<title>%(titel)s</title>
+<meta name="description" content="%(beschreibung)s">
+<link rel="canonical" href="%(site)s%(pfad)s">
+%(hreflang)s
+<meta property="og:site_name" content="Hollow Spoon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="%(titel)s">
+<meta property="og:description" content="%(beschreibung)s">
+<meta property="og:url" content="%(site)s%(pfad)s">
+<meta property="og:image" content="%(site)s%(og_bild)s">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="%(og_alt)s">
+<meta property="og:locale" content="%(locale)s">
+%(andere)s
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">''' % dict(
+        titel=titel, beschreibung=beschreibung, site=SITE, pfad=pfade[sprache],
+        hreflang=hreflang, og_bild=OG_BILD[bild], og_alt=t['og_alt'][bild],
+        locale=OG_LOCALE[sprache], andere=andere)
 
-    namen = {'de': 'Deutsch', 'en': 'English', 'fr': 'Fran&ccedil;ais', 'es': 'Espa&ntilde;ol'}
-    sprachen = ''.join(
-        '<span class="hier">%s</span>' % namen[s] if s == sprache
-        else '<a href="%s" hreflang="%s">%s</a>' % (PFAD[s], s, namen[s])
+
+# Wer wir sind, fuer Maschinen: nur, was auch im Impressum steht. Keine
+# Profile bei Diensten, die es nicht gibt. Echte Zeichen statt Entitaeten,
+# weil das in <script> nicht mehr HTML ist, sondern JSON.
+ORGANISATION = '''<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Hollow Spoon",
+  "legalName": "Hollow Spoon UG (haftungsbeschränkt)",
+  "url": "https://hollowspoon.app/",
+  "logo": "https://hollowspoon.app/assets/img/hollow-spoon-logo.png",
+  "email": "contact@hollowspoon.app",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Gravensteiner Straße 33",
+    "postalCode": "28219",
+    "addressLocality": "Bremen",
+    "addressCountry": "DE"
+  }
+}
+</script>'''
+
+
+NAMEN = {'de': 'Deutsch', 'en': 'English', 'fr': 'Fran&ccedil;ais', 'es': 'Espa&ntilde;ol'}
+
+
+def sprachleiste(sprache, pfade):
+    return ''.join(
+        '<span class="hier">%s</span>' % NAMEN[s] if s == sprache
+        else '<a href="%s" hreflang="%s">%s</a>' % (pfade[s], s, NAMEN[s])
         for s in SPRACHEN)
 
+
+def seite(sprache):
+    t = T[sprache]
     shots = '\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3))
 
     return '''<!DOCTYPE html>
@@ -272,14 +594,8 @@ def seite(sprache):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>%(titel)s</title>
-<meta name="description" content="%(beschreibung)s">
-<link rel="canonical" href="https://hollowspoon.app%(pfad)s">
-%(hreflang)s
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+%(kopf)s
+%(organisation)s
 <style>
 %(stil)s
 </style>
@@ -291,21 +607,27 @@ def seite(sprache):
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
     <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="%(pfad)ssupport/">%(nav_support)s</a></span>
   </nav>
+</div>
+
+<main>
+<div class="wrap">
   <div class="hero">
     <h1>%(h1)s</h1>
     <p class="lead">%(lead)s</p>
+    <p class="studio">%(studio)s</p>
   </div>
 </div>
 
-<div class="band shlay" id="apps">
+<section class="band shlay" id="apps">
   <div class="wrap">
     <div class="kopf">
-      <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
+%(symbol_shlay)s
       <div>
-        <h2>Shlayolotl</h2>
+        <h2><a href="%(pfad)sshlayolotl/">Shlayolotl</a></h2>
       </div>
     </div>
     <p>%(shlay_text)s</p>
+    <p class="mehr"><a href="%(pfad)sshlayolotl/">%(mehr_shlay)s</a></p>
     <div class="carousel" id="shots">
 %(shots)s
     </div>
@@ -314,21 +636,23 @@ def seite(sprache):
       <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
     </a>
   </div>
-</div>
+</section>
 
-<div class="band where">
+<section class="band where">
   <div class="wrap">
     <div class="kopf">
-      <img class="icon" src="/assets/img/wheresome.png" alt="" width="256" height="256">
+%(symbol_where)s
       <div>
         <p class="tag">%(where_tag)s</p>
-        <h2>Wheresome</h2>
+        <h2><a href="%(pfad)swheresome/">Wheresome</a></h2>
       </div>
     </div>
     <p>%(where_text)s</p>
+    <p class="mehr"><a href="%(pfad)swheresome/">%(mehr_where)s</a></p>
     <p class="soon">%(where_bald)s</p>
   </div>
-</div>
+</section>
+</main>
 
 <div class="wrap">
   <footer>
@@ -374,9 +698,141 @@ def seite(sprache):
 </script>
 </body>
 </html>
-''' % dict(t, sprache=sprache, pfad=PFAD[sprache], hreflang=hreflang,
-           sprachen=sprachen, shots=shots, stil=STIL,
+''' % dict(t, sprache=sprache, pfad=PFAD[sprache],
+           kopf=kopf(sprache, PFAD, t['titel'], t['beschreibung']),
+           organisation=ORGANISATION,
+           sprachen=sprachleiste(sprache, PFAD), shots=shots, stil=STIL,
+           symbol_shlay=symbol('shlayolotl'), symbol_where=symbol('wheresome'),
+           mehr_shlay=t['mehr']['shlayolotl'], mehr_where=t['mehr']['wheresome'],
            ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache])
+
+
+PUNKTE_SKRIPT = '''<script>
+  // Die Punkte unter der Bilderreihe, wie auf der Startseite.
+  document.querySelectorAll('.punkte').forEach(function (leiste) {
+    var reihe = document.getElementById(leiste.dataset.fuer);
+    if (!reihe) return;
+    var bilder = Array.prototype.slice.call(reihe.children);
+    var knoepfe = bilder.map(function (bild, i) {
+      var k = document.createElement('button');
+      k.type = 'button';
+      k.setAttribute('aria-label', String(i + 1));
+      k.addEventListener('click', function () {
+        reihe.scrollTo({ left: bild.offsetLeft - reihe.offsetLeft, behavior: 'smooth' });
+      });
+      leiste.appendChild(k);
+      return k;
+    });
+    function markiere() {
+      var mitte = reihe.scrollLeft + reihe.clientWidth / 2;
+      var naechster = 0, kleinster = Infinity;
+      bilder.forEach(function (bild, i) {
+        var d = Math.abs(bild.offsetLeft - reihe.offsetLeft + bild.offsetWidth / 2 - mitte);
+        if (d < kleinster) { kleinster = d; naechster = i; }
+      });
+      knoepfe.forEach(function (k, i) { k.setAttribute('aria-current', String(i === naechster)); });
+    }
+    reihe.addEventListener('scroll', markiere, { passive: true });
+    markiere();
+  });
+</script>'''
+
+
+def produkt_pfade(app):
+    return {s: PFAD[s] + app + '/' for s in SPRACHEN}
+
+
+def produkt_seite(app, sprache):
+    """Die Seite einer App. Fuer Shlayolotl mit den Bildern und dem Knopf von
+    der Startseite, fuer Wheresome ohne, weil es noch nichts zu zeigen und
+    nichts zu laden gibt. Unten der Link auf die Rechtsseite der App, die
+    unter derselben Adresse ohne Schraegstrich liegt."""
+    t = T[sprache]
+    p = P[app][sprache]
+    pfade = produkt_pfade(app)
+
+    if app == 'shlayolotl':
+        oben = ''
+        text = ('      <p>%(erster)s</p>\n'
+                '      <h2>%(h2a)s</h2>\n'
+                '      <p>%(pa)s</p>\n'
+                '      <h2>%(h2b)s</h2>\n'
+                '      <p>%(pb)s</p>\n'
+                '      <p>%(letzter)s</p>') % p
+        unten = ('    <div class="carousel" id="shots">\n%s\n    </div>\n'
+                 '    <div class="punkte" data-fuer="shots"></div>\n'
+                 '    <a class="badge" href="%s">\n'
+                 '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
+                 '    </a>' % ('\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3)),
+                              SHLAY_URL[sprache], sprache, t['badge_alt']))
+        lead = t['shlay_text']
+        skript = PUNKTE_SKRIPT
+    else:
+        oben = '        <p class="tag">%s</p>\n' % t['where_tag']
+        text = ('      <p>%(erster)s</p>\n'
+                '      <p>%(letzter)s</p>') % p
+        unten = '    <p class="soon">%s %s</p>' % (p['status'], t['where_bald'])
+        lead = t['where_text']
+        skript = ''
+
+    return '''<!DOCTYPE html>
+<html lang="%(sprache)s">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+%(kopf)s
+<style>
+%(stil)s
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
+    <span class="rechts"><a href="%(startpfad)s#apps">%(nav_apps)s</a><a href="%(startpfad)ssupport/">%(nav_support)s</a></span>
+  </nav>
+</div>
+
+<main>
+<section class="band %(klasse)s produkt">
+  <div class="wrap">
+    <div class="kopf">
+%(symbol)s
+      <div>
+%(oben)s        <h1>%(name)s</h1>
+      </div>
+    </div>
+    <p>%(lead)s</p>
+    <div class="text">
+%(text)s
+    </div>
+%(unten)s
+    <p class="recht"><a href="%(recht)s#%(sprache)s">%(support_recht)s</a></p>
+  </div>
+</section>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
+    <a href="/impressum">%(impressum)s</a>
+    <a href="%(ds_pfad)s">%(datenschutz)s</a>
+    <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
+  </footer>
+  <p class="sprachen">%(sprachen)s</p>
+  <p class="marken">%(marken)s</p>
+</div>
+%(skript)s
+</body>
+</html>
+''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
+           kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
+           stil=STIL, klasse='shlay' if app == 'shlayolotl' else 'where',
+           symbol=symbol(app), oben=oben, name=app.capitalize(), lead=lead,
+           text=text, unten=unten, recht=RECHT[app],
+           sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
+           skript=skript)
 
 
 
@@ -403,26 +859,17 @@ SUPPORT_STIL = """  body { margin: 0; background: #fff; color: #14161A;
   .sprachen a { color: #5C6270; text-decoration: none; }
   .sprachen .hier { color: #14161A; font-weight: 600; }"""
 
-NAMEN = {'de': 'Deutsch', 'en': 'English', 'fr': 'Fran&ccedil;ais', 'es': 'Espa&ntilde;ol'}
-
-
 def support_seite(sprache):
     """Support je Sprache statt einer Seite, auf der dieselbe Adresse viermal
     untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
     t = T[sprache]
-    hreflang = '\n'.join(
-        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%ssupport/">' % (x, PFAD[x])
-        for x in SPRACHEN)
-    hreflang += ('\n<link rel="alternate" hreflang="x-default" '
-                 'href="https://hollowspoon.app/en/support/">')
-    sprachen = ''.join(
-        '<span class="hier">%s</span>' % NAMEN[x] if x == sprache
-        else '<a href="%ssupport/" hreflang="%s">%s</a>' % (PFAD[x], x, NAMEN[x])
-        for x in SPRACHEN)
+    pfade = {x: PFAD[x] + 'support/' for x in SPRACHEN}
 
     return VORLAGE_SUPPORT % dict(
-        t, sprache=sprache, pfad=PFAD[sprache] + 'support/', startpfad=PFAD[sprache],
-        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL,
+        t, sprache=sprache, startpfad=PFAD[sprache],
+        kopf=kopf(sprache, pfade, t['support_titel'],
+                  t['support_beschreibung']),
+        sprachen=sprachleiste(sprache, pfade), stil=SUPPORT_STIL,
         ds_pfad=DS_PFAD[sprache])
 
 
@@ -431,13 +878,7 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>%(nav_support)s</title>
-<meta name="description" content="%(nav_support)s: Hollow Spoon, Shlayolotl, Wheresome.">
-<link rel="canonical" href="https://hollowspoon.app%(pfad)s">
-%(hreflang)s
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+%(kopf)s
 <style>
 %(stil)s
 </style>
@@ -669,20 +1110,13 @@ BEHOERDE = ('Die Landesbeauftragte für Datenschutz und Informationsfreiheit<br>
 def datenschutz_seite(sprache):
     t = T[sprache]
     d = DS[sprache]
-    hreflang = '\n'.join(
-        '<link rel="alternate" hreflang="%s" href="https://hollowspoon.app%s">' % (x, DS_PFAD[x])
-        for x in SPRACHEN)
-    hreflang += ('\n<link rel="alternate" hreflang="x-default" '
-                 'href="https://hollowspoon.app/en/privacy/">')
-    sprachen = ''.join(
-        '<span class="hier">%s</span>' % NAMEN[x] if x == sprache
-        else '<a href="%s" hreflang="%s">%s</a>' % (DS_PFAD[x], x, NAMEN[x])
-        for x in SPRACHEN)
     zusammen = dict(t)
     zusammen.update(d)
     return VORLAGE_DS % dict(
-        zusammen, sprache=sprache, pfad=DS_PFAD[sprache], startpfad=PFAD[sprache],
-        hreflang=hreflang, sprachen=sprachen, stil=SUPPORT_STIL,
+        zusammen, sprache=sprache, startpfad=PFAD[sprache],
+        kopf=kopf(sprache, DS_PFAD, d['titel'] + ' | Hollow Spoon',
+                  t['ds_beschreibung']),
+        sprachen=sprachleiste(sprache, DS_PFAD), stil=SUPPORT_STIL,
         stand=DS_STAND[sprache], anschrift=ANSCHRIFT, behoerde=BEHOERDE)
 
 
@@ -691,12 +1125,7 @@ VORLAGE_DS = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>%(titel)s</title>
-<link rel="canonical" href="https://hollowspoon.app%(pfad)s">
-%(hreflang)s
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+%(kopf)s
 <style>
 %(stil)s
   h1 { font-size: 34px; margin: 48px 0 6px; }
@@ -753,14 +1182,44 @@ VORLAGE_DS = """<!DOCTYPE html>
 """
 
 
-for s in SPRACHEN:
-    for ziel, html in (
-        (os.path.join(ROOT, 'index.html' if s == 'de' else '%s/index.html' % s), seite(s)),
-        (os.path.join(ROOT, ('' if s == 'de' else s + '/') + 'support/index.html'),
-         support_seite(s)),
-        (os.path.join(ROOT, DS_DATEI[s]), datenschutz_seite(s)),
-    ):
-        os.makedirs(os.path.dirname(ziel), exist_ok=True)
-        assert not [c for c in html if c in '\u2013\u2014\u2212'], 'Gedankenstrich in ' + s
-        io.open(ziel, 'w', encoding='utf-8').write(html)
-        print('%-28s %6.1f KB' % (os.path.relpath(ziel, ROOT), len(html) / 1024))
+# ---------------------------------------------------------------------------
+# Sitemap: nur die Seiten, die jemand suchen soll. Startseite und die beiden
+# Produktseiten, je in vier Sprachen, jede mit ihren Geschwistern als
+# xhtml:link. Impressum, Datenschutz, Support und die Rechtsseiten der Apps
+# sind erreichbar und duerfen indexiert werden, stehen aber nicht hier: sie
+# sind kein Suchziel, und die Sitemap soll sagen, was wichtig ist.
+# ---------------------------------------------------------------------------
+
+def sitemap():
+    gruppen = [PFAD] + [produkt_pfade(app) for app in APPS]
+    eintraege = []
+    for pfade in gruppen:
+        for s in SPRACHEN:
+            links = ''.join(
+                '\n    <xhtml:link rel="alternate" hreflang="%s" href="%s%s"/>' % (x, SITE, pfade[x])
+                for x in SPRACHEN)
+            links += '\n    <xhtml:link rel="alternate" hreflang="x-default" href="%s%s"/>' % (SITE, pfade['en'])
+            eintraege.append('  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>%s\n  </url>'
+                             % (SITE, pfade[s], STAND, links))
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+            '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+            + '\n'.join(eintraege) + '\n</urlset>\n')
+
+
+def schreibe(ziel, inhalt):
+    os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    assert not [c for c in inhalt if c in '\u2013\u2014\u2212'], 'Gedankenstrich in ' + ziel
+    io.open(ziel, 'w', encoding='utf-8').write(inhalt)
+    print('%-32s %6.1f KB' % (os.path.relpath(ziel, ROOT), len(inhalt) / 1024))
+
+
+if __name__ == '__main__':
+    for s in SPRACHEN:
+        ordner = '' if s == 'de' else s + '/'
+        schreibe(os.path.join(ROOT, ordner + 'index.html'), seite(s))
+        for app in APPS:
+            schreibe(os.path.join(ROOT, ordner + app + '/index.html'), produkt_seite(app, s))
+        schreibe(os.path.join(ROOT, ordner + 'support/index.html'), support_seite(s))
+        schreibe(os.path.join(ROOT, DS_DATEI[s]), datenschutz_seite(s))
+    schreibe(os.path.join(ROOT, 'sitemap.xml'), sitemap())
