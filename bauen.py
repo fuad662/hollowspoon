@@ -511,23 +511,23 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
 
 for _s, (_og, _mehr, _text, _play, _start) in {
     'de': ('Symbol der App Mitrechner', 'Mehr zu Mitrechner',
-           'Die Einkaufsliste, die mitrechnet. Du tr&auml;gst Artikel, Anzahl und '
-           'Preis ein, und oben steht sofort, was alles zusammen kostet.',
+           'Die Einkaufsliste, die mitrechnet. Artikel rein, Anzahl rein, Preis rein, '
+           'und oben steht die ganze Zeit, was dein Einkauf kostet.',
            'Jetzt bei Google Play',
            ' Mitrechner, die Einkaufsliste, die mitrechnet, f&uuml;r iPhone und Android.'),
     'en': ('Mitrechner app icon', 'More about Mitrechner',
-           'The shopping list that does the math. Enter item, quantity and price, '
-           'and the total is right there at the top.',
+           'The shopping list that does the math. Item, quantity, price, done, and '
+           'you can see what your trip costs the whole time.',
            'Get it on Google Play',
            ' Mitrechner, the shopping list that does the math, for iPhone and Android.'),
     'fr': ('Ic&ocirc;ne de l&rsquo;application Mitrechner', 'En savoir plus sur Mitrechner',
-           'La liste de courses qui fait les comptes. Tu saisis l&rsquo;article, la '
-           'quantit&eacute; et le prix, et le total s&rsquo;affiche aussit&ocirc;t en haut.',
+           'La liste de courses qui fait les comptes. Article, quantit&eacute;, prix, et '
+           'tu vois tout le temps ce que &ccedil;a va te co&ucirc;ter.',
            'Disponible sur Google Play',
            ' Mitrechner, la liste de courses qui fait les comptes, pour iPhone et Android.'),
     'es': ('Icono de la app Mitrechner', 'M&aacute;s sobre Mitrechner',
-           'La lista de compras que hace las cuentas. Escribes art&iacute;culo, '
-           'cantidad y precio, y arriba ves al instante cu&aacute;nto cuesta todo junto.',
+           'La lista de compras que hace las cuentas. Art&iacute;culo, cantidad, precio '
+           'y listo, y arriba ves todo el tiempo cu&aacute;nto llevas.',
            'Disponible en Google Play',
            ' Mitrechner, la lista de compras que hace las cuentas, para iPhone y Android.'),
 }.items():
@@ -538,93 +538,101 @@ for _s, (_og, _mehr, _text, _play, _start) in {
     if 'mitrechner' not in AUS:
         T[_s]['beschreibung'] += _start
 
+# Im Ton des Inhabers (2.10.2026: "die texte klingen zu sehr nach KI"): kurze
+# Hauptsaetze, Alltagswoerter, Nebenbemerkungen in Klammern. Dieselben Saetze
+# wie im Store (mitrechner/tool/store.py), damit beides gleich klingt.
 P['mitrechner'] = {
   'de': dict(
    titel='Mitrechner | Die Einkaufsliste, die mitrechnet',
    beschreibung='Mitrechner rechnet beim Einkaufen mit: Artikel, Anzahl und Preis '
-                'eintragen, oben steht sofort die Summe. Ohne Konto, ohne Werbung, '
-                'f&uuml;r iPhone und Android.',
-   erster='So wei&szlig;t du schon im Laden, wo du stehst, und nicht erst an der '
-          'Kasse. Ein gro&szlig;er Knopf f&uuml;r den n&auml;chsten Artikel, Mengen '
-          'wie 0,5 f&uuml;r ein halbes Kilo, und alles bleibt gespeichert, auch wenn '
-          'du die App schlie&szlig;t.',
+                'rein, oben steht die Summe. Kein Konto, keine Werbung, f&uuml;r '
+                'iPhone und Android.',
+   erster='Du wei&szlig;t also schon im Laden, was es kostet, und nicht erst an der '
+          'Kasse. Mengen mit Komma gehen auch (0,5 f&uuml;r ein halbes Kilo zum '
+          'Beispiel), und speichern musst du nichts, das passiert von selbst.',
    h2a='Mitrechner Plus',
-   pa='Ein Budget, das dir zeigt, wie viel noch &uuml;brig ist. Listen, die du zu '
-      'Hause vorschreibst und im Laden nur noch mit Preisen f&uuml;llst. Ein Verlauf '
-      'mit allen Eink&auml;ufen und eine Statistik mit deinen Ausgaben je Monat und '
-      'deinen teuersten, g&uuml;nstigsten und h&auml;ufigsten Artikeln.',
+   pa='Mit Plus setzt du dir ein Budget und siehst unter der Summe, wie viel noch '
+      '&uuml;brig ist. Listen kannst du schon zu Hause schreiben, im Laden '
+      'tr&auml;gst du dann nur noch die Preise ein. Fertige Eink&auml;ufe landen mit '
+      'Datum im Verlauf, und die Statistik zeigt dir, was du im Monat ausgibst und '
+      'was du am h&auml;ufigsten kaufst. Plus kaufst du einmal, ein Abo gibt es nicht.',
    h2b='In deiner Sprache',
-   pb='Mitrechner gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. '
-      'Gerechnet wird in der W&auml;hrung, die zu deinem Ger&auml;t passt, zum '
-      'Beispiel in Euro, Dollar oder Pesos.',
-   letzter='Kein Konto, keine Anmeldung, keine Werbung. Was du eintr&auml;gst, '
-           'bleibt auf deinem Ger&auml;t.',
+   pb='Mitrechner gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. Die '
+      'W&auml;hrung richtet sich nach deinem Land, also zum Beispiel Euro, Dollar '
+      'oder Pesos.',
+   letzter='Du brauchst kein Konto, und Werbung gibt es keine. Was du '
+           'eintr&auml;gst, bleibt auf deinem Handy.',
    shots=['Mitrechner: eine Einkaufsliste mit Gesamtsumme und Budget',
           'Mitrechner: Ausgaben je Monat und die teuersten Artikel',
           'Mitrechner: vorbereitete Einkaufslisten']),
   'en': dict(
    titel='Mitrechner | The shopping list that does the math',
-   beschreibung='Mitrechner adds up your shopping as you go: enter item, quantity '
-                'and price, and the total is right at the top. No account, no ads, '
-                'for iPhone and Android.',
-   erster='So you know where you stand while you shop, not only at the checkout. '
-          'One big button for the next item, quantities like 0.5 for half a pound, '
-          'and everything is saved, even when you close the app.',
+   beschreibung='Mitrechner does the math while you shop: item, quantity and price '
+                'in, and the total is right up top. No account, no ads, for iPhone '
+                'and Android.',
+   erster='So you know what it costs while you are still in the store, not just at '
+          'the checkout. Decimals work too (0.5 for half a pound, for example), and '
+          'you never have to save anything, that happens on its own.',
    h2a='Mitrechner Plus',
-   pa='A budget that shows how much is left. Lists you write at home and only fill '
-      'in with prices at the store. A history of all your shopping trips and '
-      'statistics with your spending per month and your priciest, cheapest and '
-      'most bought items.',
+   pa='With Plus you set a budget and see right under the total how much is left. '
+      'You can write your lists at home, so at the store you only add the prices. '
+      'Finished trips go into your history with their date, and statistics show '
+      'what you spend each month and what you buy most often. You buy Plus once, '
+      'there is no subscription.',
    h2b='In your language',
-   pb='Mitrechner speaks English, German, Spanish and French. It calculates in the '
-      'currency that fits your device, for example in dollars, euros or pesos.',
-   letzter='No account, no sign-up, no ads. What you enter stays on your device.',
+   pb='Mitrechner is available in English, German, Spanish and French. The currency '
+      'goes by your country, so for example dollars, euros or pesos.',
+   letzter='You don&rsquo;t need an account, and there are no ads. What you enter '
+           'stays on your phone.',
    shots=['Mitrechner: a shopping list with total and budget',
           'Mitrechner: spending per month and the priciest items',
           'Mitrechner: shopping lists written ahead of time']),
   'fr': dict(
    titel='Mitrechner | La liste de courses qui fait les comptes',
-   beschreibung='Mitrechner calcule pendant tes courses&nbsp;: saisis l&rsquo;article, '
-                'la quantit&eacute; et le prix, et le total s&rsquo;affiche en haut. '
-                'Sans compte, sans publicit&eacute;, pour iPhone et Android.',
-   erster='Tu sais ainsi o&ugrave; tu en es pendant tes courses, et pas seulement '
-          '&agrave; la caisse. Un grand bouton pour l&rsquo;article suivant, des '
-          'quantit&eacute;s comme 0,5 pour un demi-kilo, et tout reste '
-          'enregistr&eacute;, m&ecirc;me quand tu fermes l&rsquo;app.',
+   beschreibung='Mitrechner calcule pendant tes courses&nbsp;: article, '
+                'quantit&eacute; et prix, et le total s&rsquo;affiche en haut. Sans '
+                'compte, sans pub, pour iPhone et Android.',
+   erster='Tu sais donc ce que &ccedil;a co&ucirc;te d&eacute;j&agrave; dans le '
+          'magasin, pas seulement &agrave; la caisse. Les virgules marchent aussi '
+          '(0,5 pour un demi-kilo, par exemple), et rien &agrave; enregistrer, '
+          '&ccedil;a se fait tout seul.',
    h2a='Mitrechner Plus',
-   pa='Un budget qui t&rsquo;indique ce qu&rsquo;il te reste. Des listes que tu '
-      'pr&eacute;pares &agrave; la maison et que tu compl&egrave;tes au magasin avec '
-      'les prix. Un historique de tous tes achats et des statistiques avec tes '
-      'd&eacute;penses par mois et tes articles les plus chers, les moins chers et '
-      'les plus fr&eacute;quents.',
+   pa='Avec Plus, tu fixes un budget et tu vois sous le total ce qu&rsquo;il te '
+      'reste. Tu peux pr&eacute;parer tes listes &agrave; la maison, au magasin tu '
+      'n&rsquo;as plus qu&rsquo;&agrave; noter les prix. Les achats termin&eacute;s '
+      'vont dans l&rsquo;historique avec leur date, et les statistiques te montrent '
+      'ce que tu d&eacute;penses par mois et ce que tu ach&egrave;tes le plus '
+      'souvent. Plus, tu l&rsquo;ach&egrave;tes une fois, il n&rsquo;y a pas '
+      'd&rsquo;abonnement.',
    h2b='Dans ta langue',
-   pb='Mitrechner parle fran&ccedil;ais, anglais, allemand et espagnol. Il calcule '
-      'dans la monnaie qui correspond &agrave; ton appareil, par exemple en euros, '
-      'en dollars ou en pesos.',
-   letzter='Pas de compte, pas d&rsquo;inscription, pas de publicit&eacute;. Ce que '
-           'tu saisis reste sur ton appareil.',
+   pb='Mitrechner existe en fran&ccedil;ais, anglais, allemand et espagnol. La '
+      'monnaie d&eacute;pend de ton pays, par exemple euros, dollars ou pesos.',
+   letzter='Pas besoin de compte, pas de pub. Ce que tu notes reste sur ton '
+           't&eacute;l&eacute;phone.',
    shots=['Mitrechner&nbsp;: une liste de courses avec total et budget',
           'Mitrechner&nbsp;: d&eacute;penses par mois et articles les plus chers',
           'Mitrechner&nbsp;: listes de courses pr&eacute;par&eacute;es']),
   'es': dict(
    titel='Mitrechner | La lista de compras que hace las cuentas',
-   beschreibung='Mitrechner suma mientras compras: escribe art&iacute;culo, cantidad '
-                'y precio, y arriba ves el total al instante. Sin cuenta, sin '
-                'anuncios, para iPhone y Android.',
-   erster='As&iacute; sabes c&oacute;mo vas mientras compras, y no solo en la caja. '
-          'Un bot&oacute;n grande para el siguiente art&iacute;culo, cantidades con '
-          'decimales como medio kilo, y todo queda guardado aunque cierres la app.',
+   beschreibung='Mitrechner hace las cuentas mientras compras: art&iacute;culo, '
+                'cantidad y precio, y arriba ves el total. Sin cuenta, sin anuncios, '
+                'para iPhone y Android.',
+   erster='As&iacute; sabes cu&aacute;nto vas a pagar desde que est&aacute;s en la '
+          'tienda, no hasta la caja. Los decimales tambi&eacute;n funcionan (0.5 '
+          'para medio kilo, por ejemplo), y no tienes que guardar nada, eso pasa solo.',
    h2a='Mitrechner Plus',
-   pa='Un presupuesto que te muestra cu&aacute;nto te queda. Listas que preparas en '
-      'casa y en la tienda solo completas con precios. Un historial de todas tus '
-      'compras y estad&iacute;sticas con tus gastos por mes y tus art&iacute;culos '
-      'm&aacute;s caros, m&aacute;s baratos y m&aacute;s frecuentes.',
+   pa='Con Plus pones un presupuesto y debajo del total ves cu&aacute;nto te queda. '
+      'Puedes escribir tus listas desde la casa, y en la tienda nada m&aacute;s '
+      'anotas los precios. Las compras terminadas se guardan en el historial con su '
+      'fecha, y en las estad&iacute;sticas ves cu&aacute;nto gastas al mes y '
+      'qu&eacute; compras m&aacute;s seguido. Plus lo pagas una vez, no hay '
+      'suscripci&oacute;n.',
    h2b='En tu idioma',
-   pb='Mitrechner habla espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s. '
-      'Calcula en la moneda que corresponde a tu dispositivo, por ejemplo en pesos, '
+   pb='Mitrechner est&aacute; en espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y '
+      'franc&eacute;s. La moneda va seg&uacute;n tu pa&iacute;s, por ejemplo pesos, '
       'd&oacute;lares o euros.',
-   letzter='Sin cuenta, sin registro, sin anuncios. Lo que escribes se queda en tu '
-           'dispositivo.',
+   letzter='No necesitas cuenta y no hay anuncios. Lo que anotas se queda en tu '
+           'celular.',
    shots=['Mitrechner: una lista de compras con total y presupuesto',
           'Mitrechner: gastos por mes y los art&iacute;culos m&aacute;s caros',
           'Mitrechner: listas de compras preparadas']),
