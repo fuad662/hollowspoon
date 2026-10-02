@@ -55,3 +55,34 @@ karte('shlayolotl', '#0A0E24', rund(shlay, 112), 380)
 karte('wheresome', '#176F7A', rund(where, 112), 380)
 klein('shlayolotl', (256, 512))
 klein('wheresome', (256, 512))
+
+
+# Mitrechner (2.10.2026): Symbol aus dem App-Projekt (~/mitrechner, tool/logo.swift),
+# Bandfarbe ein dunkles Gruen aus dem Logo, damit weisse Schrift darauf lesbar ist.
+MITR_BAND = '#146B4E'
+mitr = Image.open(os.path.join(IMG, 'mitrechner.png')).convert('RGB')
+karte('mitrechner', MITR_BAND, rund(mitr, 112), 380)
+klein('mitrechner', (256, 512))
+
+
+def galerie(app):
+    """Die Bildschirmfotos einer App fuer die Bilderreihe ihrer Seite: aus
+    bilder_original/<app>-<sprache>-<nr>.png (volle Geraeteaufloesung) je zwei
+    Breiten als AVIF und WebP. Die Mitrechner-Fotos macht der Geraetetest
+    integration_test/web_bilder_test.dart im Mitrechner-Projekt."""
+    quelle_ordner = os.path.join(ROOT, 'bilder_original')
+    ziel_ordner = os.path.join(ROOT, 'assets', 'shots')
+    for name in sorted(os.listdir(quelle_ordner)):
+        if not (name.startswith(app + '-') and name.endswith('.png')) or 'symbol' in name:
+            continue
+        quelle = Image.open(os.path.join(quelle_ordner, name)).convert('RGB')
+        for breite in (420, 840):
+            hoehe = round(quelle.height * breite / quelle.width)
+            klein_bild = quelle.resize((breite, hoehe), Image.LANCZOS)
+            for format, optionen in (('webp', dict(quality=82, method=6)), ('avif', dict(quality=60))):
+                ziel = os.path.join(ziel_ordner, '%s-%d.%s' % (name[:-4], breite, format))
+                klein_bild.save(ziel, **optionen)
+                print('%-32s %6.1f KB' % (os.path.relpath(ziel, ROOT), os.path.getsize(ziel) / 1024))
+
+
+galerie('mitrechner')

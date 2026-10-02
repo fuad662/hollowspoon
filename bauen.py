@@ -16,6 +16,7 @@ sondern aus den App-Repositories (tool/make_legal_page.py --site).
 
 import io
 import os
+import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -50,9 +51,17 @@ SITE = 'https://hollowspoon.app'
 # Rechtsseite (/wheresome ohne Schraegstrich) bleibt erreichbar, nur unverlinkt:
 # App Store Connect fuehrt sie als Datenschutz- und Support-Adresse, und Apple
 # prueft den Link bei TestFlight und Review. Zum Freischalten hier austragen.
-OFFLINE = {'wheresome'}
-APPS = [app for app in ['shlayolotl', 'wheresome'] if app not in OFFLINE]
-RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome'}
+OFFLINE = {'wheresome', 'mitrechner'}
+# `python3 bauen.py --vorschau` baut alles, auch was offline ist, nach .vorschau/
+# (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
+VORSCHAU = '--vorschau' in sys.argv
+AUS = set() if VORSCHAU else OFFLINE
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'wheresome'] if app not in AUS]
+RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner'}
+# Die Store-Adressen von Mitrechner gibt es erst, wenn die App angelegt ist. Bis dahin
+# zeigen die Knoepfe in der Vorschau ins Leere; vor dem Freischalten hier eintragen.
+MITR_APPSTORE = {'de': None, 'en': None, 'fr': None, 'es': None}
+MITR_PLAY = None
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
@@ -62,7 +71,8 @@ STAND = '2026-10-02'
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'shlayolotl': '/assets/img/og-shlayolotl.png',
-           'wheresome': '/assets/img/og-wheresome.png'}
+           'wheresome': '/assets/img/og-wheresome.png',
+           'mitrechner': '/assets/img/og-mitrechner.png'}
 
 T = {
     'de': dict(
@@ -414,6 +424,8 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .band { padding: 74px 0; }
   .band.shlay { background: #0A0E24; color: #E7EAF6; }
   .band.where { background: #176F7A; color: #F0EDE4; }
+  /* Mitrechner: ein dunkles Gruen aus dem App-Symbol, weisse Schrift darauf liest sich. */
+  .band.mitr { background: #146B4E; color: #F2FBF6; }
   /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
      App Store, und es sieht auf jeder Breite gleich gewollt aus.
      height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
@@ -490,11 +502,140 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   }'''
 
 
-def bild(sprache, nr, alt):
+# ---------------------------------------------------------------------------
+# Mitrechner (2.10.2026). Nur, was die App wirklich kann: Gesamtsumme sofort,
+# Mengen mit Komma, Plus mit Budget, Listen, Verlauf und Statistik, vier
+# Sprachen, Waehrung nach Land (nicht fuer jedes Land der Welt, darum "zum
+# Beispiel"), kein Konto, keine Werbung. Keine Preise, keine Bewertungen.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _mehr, _text, _play, _start) in {
+    'de': ('Symbol der App Mitrechner', 'Mehr zu Mitrechner',
+           'Die Einkaufsliste, die mitrechnet. Du tr&auml;gst Artikel, Anzahl und '
+           'Preis ein, und oben steht sofort, was alles zusammen kostet.',
+           'Jetzt bei Google Play',
+           ' Mitrechner, die Einkaufsliste, die mitrechnet, f&uuml;r iPhone und Android.'),
+    'en': ('Mitrechner app icon', 'More about Mitrechner',
+           'The shopping list that does the math. Enter item, quantity and price, '
+           'and the total is right there at the top.',
+           'Get it on Google Play',
+           ' Mitrechner, the shopping list that does the math, for iPhone and Android.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Mitrechner', 'En savoir plus sur Mitrechner',
+           'La liste de courses qui fait les comptes. Tu saisis l&rsquo;article, la '
+           'quantit&eacute; et le prix, et le total s&rsquo;affiche aussit&ocirc;t en haut.',
+           'Disponible sur Google Play',
+           ' Mitrechner, la liste de courses qui fait les comptes, pour iPhone et Android.'),
+    'es': ('Icono de la app Mitrechner', 'M&aacute;s sobre Mitrechner',
+           'La lista de compras que hace las cuentas. Escribes art&iacute;culo, '
+           'cantidad y precio, y arriba ves al instante cu&aacute;nto cuesta todo junto.',
+           'Disponible en Google Play',
+           ' Mitrechner, la lista de compras que hace las cuentas, para iPhone y Android.'),
+}.items():
+    T[_s]['og_alt']['mitrechner'] = _og
+    T[_s]['mehr']['mitrechner'] = _mehr
+    T[_s]['mitr_text'] = _text
+    T[_s]['badge_play_alt'] = _play
+    if 'mitrechner' not in AUS:
+        T[_s]['beschreibung'] += _start
+
+P['mitrechner'] = {
+  'de': dict(
+   titel='Mitrechner | Die Einkaufsliste, die mitrechnet',
+   beschreibung='Mitrechner rechnet beim Einkaufen mit: Artikel, Anzahl und Preis '
+                'eintragen, oben steht sofort die Summe. Ohne Konto, ohne Werbung, '
+                'f&uuml;r iPhone und Android.',
+   erster='So wei&szlig;t du schon im Laden, wo du stehst, und nicht erst an der '
+          'Kasse. Ein gro&szlig;er Knopf f&uuml;r den n&auml;chsten Artikel, Mengen '
+          'wie 0,5 f&uuml;r ein halbes Kilo, und alles bleibt gespeichert, auch wenn '
+          'du die App schlie&szlig;t.',
+   h2a='Mitrechner Plus',
+   pa='Ein Budget, das dir zeigt, wie viel noch &uuml;brig ist. Listen, die du zu '
+      'Hause vorschreibst und im Laden nur noch mit Preisen f&uuml;llst. Ein Verlauf '
+      'mit allen Eink&auml;ufen und eine Statistik mit deinen Ausgaben je Monat und '
+      'deinen teuersten, g&uuml;nstigsten und h&auml;ufigsten Artikeln.',
+   h2b='In deiner Sprache',
+   pb='Mitrechner gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. '
+      'Gerechnet wird in der W&auml;hrung, die zu deinem Ger&auml;t passt, zum '
+      'Beispiel in Euro, Dollar oder Pesos.',
+   letzter='Kein Konto, keine Anmeldung, keine Werbung. Was du eintr&auml;gst, '
+           'bleibt auf deinem Ger&auml;t.',
+   shots=['Mitrechner: eine Einkaufsliste mit Gesamtsumme und Budget',
+          'Mitrechner: Ausgaben je Monat und die teuersten Artikel',
+          'Mitrechner: vorbereitete Einkaufslisten']),
+  'en': dict(
+   titel='Mitrechner | The shopping list that does the math',
+   beschreibung='Mitrechner adds up your shopping as you go: enter item, quantity '
+                'and price, and the total is right at the top. No account, no ads, '
+                'for iPhone and Android.',
+   erster='So you know where you stand while you shop, not only at the checkout. '
+          'One big button for the next item, quantities like 0.5 for half a pound, '
+          'and everything is saved, even when you close the app.',
+   h2a='Mitrechner Plus',
+   pa='A budget that shows how much is left. Lists you write at home and only fill '
+      'in with prices at the store. A history of all your shopping trips and '
+      'statistics with your spending per month and your priciest, cheapest and '
+      'most bought items.',
+   h2b='In your language',
+   pb='Mitrechner speaks English, German, Spanish and French. It calculates in the '
+      'currency that fits your device, for example in dollars, euros or pesos.',
+   letzter='No account, no sign-up, no ads. What you enter stays on your device.',
+   shots=['Mitrechner: a shopping list with total and budget',
+          'Mitrechner: spending per month and the priciest items',
+          'Mitrechner: shopping lists written ahead of time']),
+  'fr': dict(
+   titel='Mitrechner | La liste de courses qui fait les comptes',
+   beschreibung='Mitrechner calcule pendant tes courses&nbsp;: saisis l&rsquo;article, '
+                'la quantit&eacute; et le prix, et le total s&rsquo;affiche en haut. '
+                'Sans compte, sans publicit&eacute;, pour iPhone et Android.',
+   erster='Tu sais ainsi o&ugrave; tu en es pendant tes courses, et pas seulement '
+          '&agrave; la caisse. Un grand bouton pour l&rsquo;article suivant, des '
+          'quantit&eacute;s comme 0,5 pour un demi-kilo, et tout reste '
+          'enregistr&eacute;, m&ecirc;me quand tu fermes l&rsquo;app.',
+   h2a='Mitrechner Plus',
+   pa='Un budget qui t&rsquo;indique ce qu&rsquo;il te reste. Des listes que tu '
+      'pr&eacute;pares &agrave; la maison et que tu compl&egrave;tes au magasin avec '
+      'les prix. Un historique de tous tes achats et des statistiques avec tes '
+      'd&eacute;penses par mois et tes articles les plus chers, les moins chers et '
+      'les plus fr&eacute;quents.',
+   h2b='Dans ta langue',
+   pb='Mitrechner parle fran&ccedil;ais, anglais, allemand et espagnol. Il calcule '
+      'dans la monnaie qui correspond &agrave; ton appareil, par exemple en euros, '
+      'en dollars ou en pesos.',
+   letzter='Pas de compte, pas d&rsquo;inscription, pas de publicit&eacute;. Ce que '
+           'tu saisis reste sur ton appareil.',
+   shots=['Mitrechner&nbsp;: une liste de courses avec total et budget',
+          'Mitrechner&nbsp;: d&eacute;penses par mois et articles les plus chers',
+          'Mitrechner&nbsp;: listes de courses pr&eacute;par&eacute;es']),
+  'es': dict(
+   titel='Mitrechner | La lista de compras que hace las cuentas',
+   beschreibung='Mitrechner suma mientras compras: escribe art&iacute;culo, cantidad '
+                'y precio, y arriba ves el total al instante. Sin cuenta, sin '
+                'anuncios, para iPhone y Android.',
+   erster='As&iacute; sabes c&oacute;mo vas mientras compras, y no solo en la caja. '
+          'Un bot&oacute;n grande para el siguiente art&iacute;culo, cantidades con '
+          'decimales como medio kilo, y todo queda guardado aunque cierres la app.',
+   h2a='Mitrechner Plus',
+   pa='Un presupuesto que te muestra cu&aacute;nto te queda. Listas que preparas en '
+      'casa y en la tienda solo completas con precios. Un historial de todas tus '
+      'compras y estad&iacute;sticas con tus gastos por mes y tus art&iacute;culos '
+      'm&aacute;s caros, m&aacute;s baratos y m&aacute;s frecuentes.',
+   h2b='En tu idioma',
+   pb='Mitrechner habla espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s. '
+      'Calcula en la moneda que corresponde a tu dispositivo, por ejemplo en pesos, '
+      'd&oacute;lares o euros.',
+   letzter='Sin cuenta, sin registro, sin anuncios. Lo que escribes se queda en tu '
+           'dispositivo.',
+   shots=['Mitrechner: una lista de compras con total y presupuesto',
+          'Mitrechner: gastos por mes y los art&iacute;culos m&aacute;s caros',
+          'Mitrechner: listas de compras preparadas']),
+}
+
+
+def bild(sprache, nr, alt, app='shlayolotl'):
     """Ein Bildschirmfoto in drei Fassungen: AVIF, WebP, und das WebP als
     Rueckfall. Der Browser nimmt das erste Format, das er kann, und von den
     zwei Breiten die, die zu seinem Bildschirm passt."""
-    b = 'shlayolotl-%s-%d' % (sprache, nr)
+    b = '%s-%d' % (app + '-' + sprache, nr)
     return (
         '        <picture>\n'
         '          <source type="image/avif" srcset="/assets/shots/%s-420.avif 420w, /assets/shots/%s-840.avif 840w" sizes="212px">\n'
@@ -641,7 +782,7 @@ def seite(sprache):
   </div>
 </section>
 
-%(where_abschnitt)s</main>
+%(mitr_abschnitt)s%(where_abschnitt)s</main>
 
 <div class="wrap">
   <footer>
@@ -693,7 +834,11 @@ def seite(sprache):
            sprachen=sprachleiste(sprache, PFAD), shots=shots, stil=STIL,
            symbol_shlay=symbol('shlayolotl'), symbol_where=symbol('wheresome'),
            mehr_shlay=t['mehr']['shlayolotl'],
-           where_abschnitt='' if 'wheresome' in OFFLINE else WHERE_ABSCHNITT % dict(
+           mitr_abschnitt='' if 'mitrechner' in AUS else MITR_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_mitr=symbol('mitrechner'),
+               mehr_mitr=t['mehr']['mitrechner'], shots_mitr=galerie_html('mitrechner', sprache, 'shots-mitr'),
+               knoepfe_mitr=knoepfe('mitrechner', sprache)),
+           where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
                mehr_where=t['mehr']['wheresome']),
            ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache])
@@ -701,6 +846,23 @@ def seite(sprache):
 
 # Die Wheresome-Karte der Startseite, solange die App noch nicht im Store ist
 # ausgeblendet (siehe OFFLINE).
+MITR_ABSCHNITT = '''<section class="band mitr">
+  <div class="wrap">
+    <div class="kopf">
+%(symbol_mitr)s
+      <div>
+        <h2><a href="%(pfad)smitrechner/">Mitrechner</a></h2>
+      </div>
+    </div>
+    <p>%(mitr_text)s</p>
+    <p class="mehr"><a href="%(pfad)smitrechner/">%(mehr_mitr)s</a></p>
+%(shots_mitr)s
+%(knoepfe_mitr)s
+  </div>
+</section>
+'''
+
+
 WHERE_ABSCHNITT = '''<section class="band where">
   <div class="wrap">
     <div class="kopf">
@@ -749,6 +911,52 @@ PUNKTE_SKRIPT = '''<script>
 </script>'''
 
 
+def galerie_html(app, sprache, kennung):
+    """Die drei Bildschirmfotos einer App als Bilderreihe mit Punkten darunter."""
+    alts = T[sprache]['shots'] if app == 'shlayolotl' else P[app][sprache]['shots']
+    return ('    <div class="carousel" id="%s">\n%s\n    </div>\n'
+            '    <div class="punkte" data-fuer="%s"></div>'
+            % (kennung, '\n'.join(bild(sprache, i + 1, alts[i], app) for i in range(3)), kennung))
+
+
+# Googles Markenhinweis, nur auf Seiten, die das Abzeichen zeigen.
+PLAY_MARKEN = {
+    'de': 'Google Play und das Google-Play-Logo sind Marken von Google LLC.',
+    'en': 'Google Play and the Google Play logo are trademarks of Google LLC.',
+    'fr': 'Google Play et le logo Google Play sont des marques de Google LLC.',
+    'es': 'Google Play y el logotipo de Google Play son marcas de Google LLC.',
+}
+
+
+def play_abzeichen(app, sprache):
+    return app == 'mitrechner' and os.path.exists(
+        os.path.join(ROOT, 'assets', 'img', 'googleplay-%s.png' % sprache))
+
+
+def knoepfe(app, sprache):
+    """App Store, und fuer Mitrechner auch Google Play, sobald das offizielle
+    Abzeichen unter assets/img/googleplay-<sprache>.png liegt.
+
+    Das Abzeichen gibt es nur im Partner Marketing Hub von Google, hinter
+    deren Bedingungen; die nimmt der Inhaber selbst an (Stand 2.10.2026).
+    Googles Regeln dafuer: Original, unveraendert, in der Sprache der Seite,
+    Link auf den echten Play-Eintrag, Freiraum ein Viertel der Hoehe, und
+    neben anderen Store-Abzeichen mindestens gleich gross. Die Bilder aus dem
+    Hub haben oft einen durchsichtigen Rand: dann sichtbar nachmessen und die
+    Hoehe so setzen, dass das sichtbare Abzeichen nicht kleiner ist als das
+    von Apple."""
+    t = T[sprache]
+    ziel = SHLAY_URL[sprache] if app == 'shlayolotl' else (MITR_APPSTORE[sprache] or '#')
+    html = ('    <a class="badge" href="%s">\n'
+            '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
+            '    </a>' % (ziel, sprache, t['badge_alt']))
+    if play_abzeichen(app, sprache):
+        html += ('\n    <a class="badge" href="%s">\n'
+                 '      <img src="/assets/img/googleplay-%s.png" alt="%s" width="135" height="40">\n'
+                 '    </a>' % (MITR_PLAY or '#', sprache, t['badge_play_alt']))
+    return html
+
+
 def produkt_pfade(app):
     return {s: PFAD[s] + app + '/' for s in SPRACHEN}
 
@@ -762,7 +970,7 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app == 'shlayolotl':
+    if app in ('shlayolotl', 'mitrechner'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
                 '      <h2>%(h2a)s</h2>\n'
@@ -770,13 +978,8 @@ def produkt_seite(app, sprache):
                 '      <h2>%(h2b)s</h2>\n'
                 '      <p>%(pb)s</p>\n'
                 '      <p>%(letzter)s</p>') % p
-        unten = ('    <div class="carousel" id="shots">\n%s\n    </div>\n'
-                 '    <div class="punkte" data-fuer="shots"></div>\n'
-                 '    <a class="badge" href="%s">\n'
-                 '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
-                 '    </a>' % ('\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3)),
-                              SHLAY_URL[sprache], sprache, t['badge_alt']))
-        lead = t['shlay_text']
+        unten = galerie_html(app, sprache, 'shots') + '\n' + knoepfe(app, sprache)
+        lead = t['shlay_text'] if app == 'shlayolotl' else t['mitr_text']
         skript = PUNKTE_SKRIPT
     else:
         oben = '        <p class="tag">%s</p>\n' % t['where_tag']
@@ -839,11 +1042,12 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL, klasse='shlay' if app == 'shlayolotl' else 'where',
+           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr'}.get(app, 'where'),
            symbol=symbol(app), oben=oben, name=app.capitalize(), lead=lead,
            text=text, unten=unten, recht=RECHT[app],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
-           skript=skript)
+           skript=skript,
+           marken=t['marken'] + (' ' + PLAY_MARKEN[sprache] if play_abzeichen(app, sprache) else ''))
 
 
 
@@ -882,7 +1086,7 @@ def support_seite(sprache):
                   t['support_beschreibung']),
         sprachen=sprachleiste(sprache, pfade), stil=SUPPORT_STIL,
         ds_pfad=DS_PFAD[sprache],
-        support_wheresome='' if 'wheresome' in OFFLINE else
+        support_wheresome='' if 'wheresome' in AUS else
         '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']))
 
 
@@ -1260,11 +1464,18 @@ def schreibe(ziel, inhalt):
 
 
 if __name__ == '__main__':
+    ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
+    if VORSCHAU:
+        os.makedirs(ZIEL, exist_ok=True)
+        for teil in ('assets', 'mitrechner.html', 'shlayolotl.html', 'wheresome.html', 'impressum.html'):
+            verweis = os.path.join(ZIEL, teil)
+            if not os.path.lexists(verweis):
+                os.symlink(os.path.join(ROOT, teil), verweis)
     for s in SPRACHEN:
         ordner = '' if s == 'de' else s + '/'
-        schreibe(os.path.join(ROOT, ordner + 'index.html'), seite(s))
+        schreibe(os.path.join(ZIEL, ordner + 'index.html'), seite(s))
         for app in APPS:
-            schreibe(os.path.join(ROOT, ordner + app + '/index.html'), produkt_seite(app, s))
-        schreibe(os.path.join(ROOT, ordner + 'support/index.html'), support_seite(s))
-        schreibe(os.path.join(ROOT, DS_DATEI[s]), datenschutz_seite(s))
-    schreibe(os.path.join(ROOT, 'sitemap.xml'), sitemap())
+            schreibe(os.path.join(ZIEL, ordner + app + '/index.html'), produkt_seite(app, s))
+        schreibe(os.path.join(ZIEL, ordner + 'support/index.html'), support_seite(s))
+        schreibe(os.path.join(ZIEL, DS_DATEI[s]), datenschutz_seite(s))
+    schreibe(os.path.join(ZIEL, 'sitemap.xml'), sitemap())
