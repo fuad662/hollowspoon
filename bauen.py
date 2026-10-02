@@ -51,16 +51,21 @@ SITE = 'https://hollowspoon.app'
 # Rechtsseite (/wheresome ohne Schraegstrich) bleibt erreichbar, nur unverlinkt:
 # App Store Connect fuehrt sie als Datenschutz- und Support-Adresse, und Apple
 # prueft den Link bei TestFlight und Review. Zum Freischalten hier austragen.
-OFFLINE = {'wheresome', 'mitrechner'}
+# Mitrechner seit 2.10.2026 online (User: "die seite auf der webseite sollst du sofort
+# freischalten"), noch bevor Apple die App freigibt: der Knopf zeigt schon auf die
+# App-Store-Adresse, die ab der Freigabe von selbst funktioniert.
+OFFLINE = {'wheresome'}
 # `python3 bauen.py --vorschau` baut alles, auch was offline ist, nach .vorschau/
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
 APPS = [app for app in ['shlayolotl', 'mitrechner', 'wheresome'] if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner'}
-# Die Store-Adressen von Mitrechner gibt es erst, wenn die App angelegt ist. Bis dahin
-# zeigen die Knoepfe in der Vorschau ins Leere; vor dem Freischalten hier eintragen.
-MITR_APPSTORE = {'de': None, 'en': None, 'fr': None, 'es': None}
+# Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
+# Adresse leitet Apple in den Store des Besuchers weiter; das passt, weil die spanische
+# Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
+# Google Play folgt, sobald die App dort ist (dann auch das Abzeichen, siehe knoepfe).
+MITR_APPSTORE = {s: 'https://apps.apple.com/app/mitrechner/id6818615754' for s in ('de', 'en', 'fr', 'es')}
 MITR_PLAY = None
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
@@ -514,22 +519,22 @@ for _s, (_og, _mehr, _text, _play, _start) in {
            'Die Einkaufsliste, die mitrechnet. Artikel rein, Anzahl rein, Preis rein, '
            'und oben steht die ganze Zeit, was dein Einkauf kostet.',
            'Jetzt bei Google Play',
-           ' Mitrechner, die Einkaufsliste, die mitrechnet, f&uuml;r iPhone und Android.'),
+           ' Mitrechner, die Einkaufsliste, die mitrechnet, f&uuml;r iPhone.'),
     'en': ('Mitrechner app icon', 'More about Mitrechner',
            'The shopping list that does the math. Item, quantity, price, done, and '
            'you can see what your trip costs the whole time.',
            'Get it on Google Play',
-           ' Mitrechner, the shopping list that does the math, for iPhone and Android.'),
+           ' Mitrechner, the shopping list that does the math, for iPhone.'),
     'fr': ('Ic&ocirc;ne de l&rsquo;application Mitrechner', 'En savoir plus sur Mitrechner',
            'La liste de courses qui fait les comptes. Article, quantit&eacute;, prix, et '
            'tu vois tout le temps ce que &ccedil;a va te co&ucirc;ter.',
            'Disponible sur Google Play',
-           ' Mitrechner, la liste de courses qui fait les comptes, pour iPhone et Android.'),
+           ' Mitrechner, la liste de courses qui fait les comptes, pour iPhone.'),
     'es': ('Icono de la app Mitrechner', 'M&aacute;s sobre Mitrechner',
            'La lista de compras que hace las cuentas. Art&iacute;culo, cantidad, precio '
            'y listo, y arriba ves todo el tiempo cu&aacute;nto llevas.',
            'Disponible en Google Play',
-           ' Mitrechner, la lista de compras que hace las cuentas, para iPhone y Android.'),
+           ' Mitrechner, la lista de compras que hace las cuentas, para iPhone.'),
 }.items():
     T[_s]['og_alt']['mitrechner'] = _og
     T[_s]['mehr']['mitrechner'] = _mehr
@@ -546,7 +551,7 @@ P['mitrechner'] = {
    titel='Mitrechner | Die Einkaufsliste, die mitrechnet',
    beschreibung='Mitrechner rechnet beim Einkaufen mit: Artikel, Anzahl und Preis '
                 'rein, oben steht die Summe. Kein Konto, keine Werbung, f&uuml;r '
-                'iPhone und Android.',
+                'iPhone.',
    erster='Du wei&szlig;t also schon im Laden, was es kostet, und nicht erst an der '
           'Kasse. Mengen mit Komma gehen auch (0,5 f&uuml;r ein halbes Kilo zum '
           'Beispiel), und speichern musst du nichts, das passiert von selbst.',
@@ -568,8 +573,8 @@ P['mitrechner'] = {
   'en': dict(
    titel='Mitrechner | The shopping list that does the math',
    beschreibung='Mitrechner does the math while you shop: item, quantity and price '
-                'in, and the total is right up top. No account, no ads, for iPhone '
-                'and Android.',
+                'in, and the total is right up top. No account, no ads, for '
+                'iPhone.',
    erster='So you know what it costs while you are still in the store, not just at '
           'the checkout. Decimals work too (0.5 for half a pound, for example), and '
           'you never have to save anything, that happens on its own.',
@@ -591,7 +596,7 @@ P['mitrechner'] = {
    titel='Mitrechner | La liste de courses qui fait les comptes',
    beschreibung='Mitrechner calcule pendant tes courses&nbsp;: article, '
                 'quantit&eacute; et prix, et le total s&rsquo;affiche en haut. Sans '
-                'compte, sans pub, pour iPhone et Android.',
+                'compte, sans pub, pour iPhone.',
    erster='Tu sais donc ce que &ccedil;a co&ucirc;te d&eacute;j&agrave; dans le '
           'magasin, pas seulement &agrave; la caisse. Les virgules marchent aussi '
           '(0,5 pour un demi-kilo, par exemple), et rien &agrave; enregistrer, '
@@ -616,7 +621,7 @@ P['mitrechner'] = {
    titel='Mitrechner | La lista de compras que hace las cuentas',
    beschreibung='Mitrechner hace las cuentas mientras compras: art&iacute;culo, '
                 'cantidad y precio, y arriba ves el total. Sin cuenta, sin anuncios, '
-                'para iPhone y Android.',
+                'para iPhone.',
    erster='As&iacute; sabes cu&aacute;nto vas a pagar desde que est&aacute;s en la '
           'tienda, no hasta la caja. Los decimales tambi&eacute;n funcionan (0.5 '
           'para medio kilo, por ejemplo), y no tienes que guardar nada, eso pasa solo.',

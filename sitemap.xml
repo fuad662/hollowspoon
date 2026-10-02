@@ -73,4 +73,40 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/shlayolotl/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/shlayolotl/"/>
   </url>
+  <url>
+    <loc>https://hollowspoon.app/mitrechner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/mitrechner/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/en/mitrechner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/mitrechner/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/fr/mitrechner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/mitrechner/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/es/mitrechner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/mitrechner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/mitrechner/"/>
+  </url>
 </urlset>
