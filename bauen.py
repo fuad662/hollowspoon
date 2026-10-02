@@ -44,7 +44,14 @@ SITE = 'https://hollowspoon.app'
 # App-Repository erzeugt, also nicht hier. Cloudflare haelt beide auseinander:
 # shlayolotl.html bedient die kurze Adresse, shlayolotl/index.html die mit
 # Schraegstrich, ohne Umleitung dazwischen (nachgelesen im Asset-Server).
-APPS = ['shlayolotl', 'wheresome']
+# Apps, die noch nicht im Store sind, stehen nirgends auf der Website: keine
+# Karte auf der Startseite, keine Produktseite, kein Eintrag bei Support und in
+# der Sitemap (2.10.2026: "das machen wir, wenn die app online ist"). Ihre
+# Rechtsseite (/wheresome ohne Schraegstrich) bleibt erreichbar, nur unverlinkt:
+# App Store Connect fuehrt sie als Datenschutz- und Support-Adresse, und Apple
+# prueft den Link bei TestFlight und Review. Zum Freischalten hier austragen.
+OFFLINE = {'wheresome'}
+APPS = [app for app in ['shlayolotl', 'wheresome'] if app not in OFFLINE]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome'}
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
@@ -60,13 +67,12 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
 T = {
     'de': dict(
         titel='Hollow Spoon | Apps &amp; Spiele',
-        support_titel='Support: Shlayolotl und Wheresome | Hollow Spoon',
+        support_titel='Support | Hollow Spoon',
         support_zeile='Schreib uns:',
         support_recht='Support und Datenschutzerkl&auml;rung',
         beschreibung='Hollow Spoon baut Apps, die eine Sache k&ouml;nnen: '
-                     'Shlayolotl, Tic Tac Toe mit Axolotln, im App Store. '
-                     'Wheresome, ein Ort f&uuml;r deine Reise, in Vorbereitung.',
-        support_beschreibung='Fragen zu Shlayolotl oder Wheresome? Schreib an '
+                     'Shlayolotl, Tic Tac Toe mit Axolotln, im App Store.',
+        support_beschreibung='Fragen zu unseren Apps? Schreib an '
                              'contact@hollowspoon.app. Hier stehen auch Support '
                              'und Datenschutzerkl&auml;rung je App.',
         ds_beschreibung='Datenschutzerkl&auml;rung der Website hollowspoon.app: '
@@ -102,13 +108,12 @@ T = {
     ),
     'en': dict(
         titel='Hollow Spoon | Apps &amp; Games',
-        support_titel='Support: Shlayolotl and Wheresome | Hollow Spoon',
+        support_titel='Support | Hollow Spoon',
         support_zeile='Just write to us:',
         support_recht='Support and privacy policy',
         beschreibung='Hollow Spoon builds apps that do one thing: Shlayolotl, '
-                     'tic tac toe with axolotls, on the App Store. Wheresome, '
-                     'one place for your trip, in preparation.',
-        support_beschreibung='Questions about Shlayolotl or Wheresome? Write to '
+                     'tic tac toe with axolotls, on the App Store.',
+        support_beschreibung='Questions about our apps? Write to '
                              'contact@hollowspoon.app. Support and privacy '
                              'policy for each app are linked here too.',
         ds_beschreibung='Privacy policy of the website hollowspoon.app: '
@@ -142,14 +147,13 @@ T = {
     ),
     'fr': dict(
         titel='Hollow Spoon | Applications et jeux',
-        support_titel='Assistance&nbsp;: Shlayolotl et Wheresome | Hollow Spoon',
+        support_titel='Assistance | Hollow Spoon',
         support_zeile='&Eacute;cris-nous&nbsp;:',
         support_recht='Assistance et politique de confidentialit&eacute;',
         beschreibung='Hollow Spoon cr&eacute;e des applications qui font une '
                      'chose&nbsp;: Shlayolotl, le morpion avec des axolotls, '
-                     'sur l&rsquo;App Store. Wheresome, un lieu pour ton '
-                     'voyage, en pr&eacute;paration.',
-        support_beschreibung='Une question sur Shlayolotl ou Wheresome&nbsp;? '
+                     'sur l&rsquo;App Store.',
+        support_beschreibung='Une question sur nos apps&nbsp;? '
                              '&Eacute;cris &agrave; contact@hollowspoon.app. '
                              'L&rsquo;assistance et la politique de '
                              'confidentialit&eacute; de chaque application '
@@ -192,13 +196,12 @@ T = {
     ),
     'es': dict(
         titel='Hollow Spoon | Apps y juegos',
-        support_titel='Soporte: Shlayolotl y Wheresome | Hollow Spoon',
+        support_titel='Soporte | Hollow Spoon',
         support_zeile='Escr&iacute;benos:',
         support_recht='Soporte y pol&iacute;tica de privacidad',
         beschreibung='Hollow Spoon crea apps que hacen una cosa: Shlayolotl, '
-                     'tres en raya con ajolotes, en el App Store. Wheresome, '
-                     'un lugar para tu viaje, en preparaci&oacute;n.',
-        support_beschreibung='&iquest;Dudas sobre Shlayolotl o Wheresome? '
+                     'tres en raya con ajolotes, en el App Store.',
+        support_beschreibung='&iquest;Dudas sobre nuestras apps? '
                              'Escribe a contact@hollowspoon.app. Aqu&iacute; '
                              'est&aacute;n tambi&eacute;n el soporte y la '
                              'pol&iacute;tica de privacidad de cada app.',
@@ -638,21 +641,7 @@ def seite(sprache):
   </div>
 </section>
 
-<section class="band where">
-  <div class="wrap">
-    <div class="kopf">
-%(symbol_where)s
-      <div>
-        <p class="tag">%(where_tag)s</p>
-        <h2><a href="%(pfad)swheresome/">Wheresome</a></h2>
-      </div>
-    </div>
-    <p>%(where_text)s</p>
-    <p class="mehr"><a href="%(pfad)swheresome/">%(mehr_where)s</a></p>
-    <p class="soon">%(where_bald)s</p>
-  </div>
-</section>
-</main>
+%(where_abschnitt)s</main>
 
 <div class="wrap">
   <footer>
@@ -703,8 +692,30 @@ def seite(sprache):
            organisation=ORGANISATION,
            sprachen=sprachleiste(sprache, PFAD), shots=shots, stil=STIL,
            symbol_shlay=symbol('shlayolotl'), symbol_where=symbol('wheresome'),
-           mehr_shlay=t['mehr']['shlayolotl'], mehr_where=t['mehr']['wheresome'],
+           mehr_shlay=t['mehr']['shlayolotl'],
+           where_abschnitt='' if 'wheresome' in OFFLINE else WHERE_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
+               mehr_where=t['mehr']['wheresome']),
            ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache])
+
+
+# Die Wheresome-Karte der Startseite, solange die App noch nicht im Store ist
+# ausgeblendet (siehe OFFLINE).
+WHERE_ABSCHNITT = '''<section class="band where">
+  <div class="wrap">
+    <div class="kopf">
+%(symbol_where)s
+      <div>
+        <p class="tag">%(where_tag)s</p>
+        <h2><a href="%(pfad)swheresome/">Wheresome</a></h2>
+      </div>
+    </div>
+    <p>%(where_text)s</p>
+    <p class="mehr"><a href="%(pfad)swheresome/">%(mehr_where)s</a></p>
+    <p class="soon">%(where_bald)s</p>
+  </div>
+</section>
+'''
 
 
 PUNKTE_SKRIPT = '''<script>
@@ -870,7 +881,9 @@ def support_seite(sprache):
         kopf=kopf(sprache, pfade, t['support_titel'],
                   t['support_beschreibung']),
         sprachen=sprachleiste(sprache, pfade), stil=SUPPORT_STIL,
-        ds_pfad=DS_PFAD[sprache])
+        ds_pfad=DS_PFAD[sprache],
+        support_wheresome='' if 'wheresome' in OFFLINE else
+        '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']))
 
 
 VORLAGE_SUPPORT = """<!DOCTYPE html>
@@ -899,9 +912,7 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
   <h2>Shlayolotl</h2>
   <p><a href="/shlayolotl#%(sprache)s">%(support_recht)s</a></p>
 
-  <h2>Wheresome</h2>
-  <p><a href="/wheresome#%(sprache)s">%(support_recht)s</a></p>
-
+%(support_wheresome)s
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
     <a href="/impressum">%(impressum)s</a>
