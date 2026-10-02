@@ -50,7 +50,7 @@ RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome'}
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-09-22'
+STAND = '2026-10-02'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -920,9 +920,9 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
 # ihnen auch auf Franzoesisch sagen, was mit ihren Daten geschieht.
 # ---------------------------------------------------------------------------
 
-DS_STAND = {'de': 'Stand: 20. September 2026', 'en': 'Last updated: 20 September 2026',
-            'fr': 'Mise &agrave; jour&nbsp;: 20 septembre 2026',
-            'es': 'Actualizado: 20 de septiembre de 2026'}
+DS_STAND = {'de': 'Stand: 2. Oktober 2026', 'en': 'Last updated: 2 October 2026',
+            'fr': 'Mise &agrave; jour&nbsp;: 2 octobre 2026',
+            'es': 'Actualizado: 2 de octubre de 2026'}
 
 DS = {
  'de': dict(
@@ -958,6 +958,13 @@ DS = {
           'Anfrage mit einem Vertrag zusammenh&auml;ngt, sonst Art. 6 Abs. 1 lit. f '
           'DSGVO. Wir l&ouml;schen die Daten, sobald sie nicht mehr erforderlich sind '
           'und keine Aufbewahrungspflichten entgegenstehen.',
+  kontakt2='E-Mails an contact@hollowspoon.app leitet die Cloudflare, Inc. (Anschrift siehe '
+           'oben) in unserem Auftrag an unser Postfach bei Gmail weiter. Gmail ist ein Dienst '
+           'der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland; Google '
+           'verarbeitet die Nachricht dort nach seiner eigenen Datenschutzerkl&auml;rung '
+           '(policies.google.com/privacy) und kann sie auch auf Servern in den USA speichern. '
+           'Cloudflare, Inc. und Google LLC sind nach dem EU-US Data Privacy Framework '
+           'zertifiziert (nachgesehen am 2. Oktober 2026).',
   h_rechte='5. Ihre Rechte',
   rechte='Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), '
          'L&ouml;schung (Art. 17), Einschr&auml;nkung der Verarbeitung (Art. 18), '
@@ -997,6 +1004,13 @@ DS = {
           'The legal basis is Art. 6(1)(b) GDPR where the request relates to a '
           'contract, otherwise Art. 6(1)(f) GDPR. We delete the data once it is no '
           'longer needed and no retention duty stands in the way.',
+  kontakt2='E-mails to contact@hollowspoon.app are forwarded on our behalf by Cloudflare, '
+           'Inc. (address above) to our mailbox at Gmail. Gmail is a service of Google '
+           'Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland; Google '
+           'processes the message there under its own privacy policy '
+           '(policies.google.com/privacy) and may also store it on servers in the United '
+           'States. Cloudflare, Inc. and Google LLC are certified under the EU-U.S. Data '
+           'Privacy Framework (checked on 2 October 2026).',
   h_rechte='5. Your rights',
   rechte='You have the rights of access (Art. 15 GDPR), rectification (Art. 16), '
          'erasure (Art. 17), restriction of processing (Art. 18), data portability '
@@ -1044,6 +1058,14 @@ DS = {
           'f. Nous supprimons ces donn&eacute;es d&egrave;s qu\'elles ne sont plus '
           'n&eacute;cessaires et qu\'aucune obligation de conservation ne s\'y '
           'oppose.',
+  kontakt2='Les e-mails adress&eacute;s &agrave; contact@hollowspoon.app sont transf&eacute;r&eacute;s '
+           'pour notre compte par Cloudflare, Inc. (adresse ci-dessus) vers notre bo&icirc;te '
+           'de r&eacute;ception Gmail. Gmail est un service de Google Ireland Limited, Gordon '
+           'House, Barrow Street, Dublin 4, Irlande&nbsp;; Google y traite le message selon sa '
+           'propre politique de confidentialit&eacute; (policies.google.com/privacy) et peut '
+           'aussi le stocker sur des serveurs aux &Eacute;tats-Unis. Cloudflare, Inc. et Google '
+           'LLC sont certifi&eacute;es au titre du cadre de protection des donn&eacute;es '
+           'UE-&Eacute;tats-Unis (v&eacute;rifi&eacute; le 2 octobre 2026).',
   h_rechte='5. Tes droits',
   rechte='Tu disposes des droits d\'acc&egrave;s (art. 15 du RGPD), de rectification '
          '(art. 16), d\'effacement (art. 17), de limitation du traitement (art. 18), '
@@ -1087,6 +1109,14 @@ DS = {
           'solicitud guarda relaci&oacute;n con un contrato, y en los dem&aacute;s '
           'casos la letra f. Borramos los datos en cuanto dejan de ser necesarios y no '
           'existe obligaci&oacute;n de conservarlos.',
+  kontakt2='Los correos a contact@hollowspoon.app los reenv&iacute;a, por encargo nuestro, '
+           'Cloudflare, Inc. (direcci&oacute;n arriba) a nuestro buz&oacute;n de Gmail. Gmail es un '
+           'servicio de Google Ireland Limited, Gordon House, Barrow Street, Dubl&iacute;n 4, '
+           'Irlanda; Google trata all&iacute; el mensaje seg&uacute;n su propia pol&iacute;tica de '
+           'privacidad (policies.google.com/privacy) y tambi&eacute;n puede almacenarlo en '
+           'servidores de Estados Unidos. Cloudflare, Inc. y Google LLC est&aacute;n '
+           'certificadas conforme al Marco de Privacidad de Datos UE-EE. UU. (comprobado el '
+           '2 de octubre de 2026).',
   h_rechte='5. Tus derechos',
   rechte='Tienes derecho de acceso (art. 15 del RGPD), rectificaci&oacute;n (art. 16), '
          'supresi&oacute;n (art. 17), limitaci&oacute;n del tratamiento (art. 18), '
@@ -1102,7 +1132,7 @@ ANSCHRIFT = ('Hollow Spoon UG (haftungsbeschränkt)<br>\n'
              'Gravensteiner Straße 33<br>\n28219 Bremen<br>\n'
              'E-Mail: <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>')
 
-BEHOERDE = ('Die Landesbeauftragte für Datenschutz und Informationsfreiheit<br>\n'
+BEHOERDE = ('Der Landesbeauftragte für Datenschutz und Informationsfreiheit<br>\n'
             'der Freien Hansestadt Bremen<br>\n'
             'Georgstraße 122-124<br>\n27570 Bremerhaven')
 
@@ -1160,6 +1190,7 @@ VORLAGE_DS = """<!DOCTYPE html>
 
     <h2>%(h_kontakt)s</h2>
     <p>%(kontakt)s</p>
+    <p>%(kontakt2)s</p>
 
     <h2>%(h_rechte)s</h2>
     <p>%(rechte)s</p>
