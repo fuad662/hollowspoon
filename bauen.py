@@ -893,6 +893,9 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
   <h1>%(nav_support)s</h1>
   <p class="zeile">%(support_zeile)s <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a></p>
 
+  <h2>Mitrechner</h2>
+  <p><a href="/mitrechner#%(sprache)s">%(support_recht)s</a></p>
+
   <h2>Shlayolotl</h2>
   <p><a href="/shlayolotl#%(sprache)s">%(support_recht)s</a></p>
 
