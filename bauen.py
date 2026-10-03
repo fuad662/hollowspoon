@@ -66,6 +66,11 @@ RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '
 # Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
 # Google Play folgt, sobald die App dort ist (dann auch das Abzeichen, siehe knoepfe).
 MITR_APPSTORE = {s: 'https://apps.apple.com/app/mitrechner/id6818615754' for s in ('de', 'en', 'fr', 'es')}
+# Bis Apple die App freigibt, zeigt die Seite statt des Knopfes „Bald im App Store.“: ein
+# Knopf, der ins Leere fuehrt, verwirrt (User 3.10.2026). Nach der Freigabe auf True.
+MITR_IM_STORE = False
+MITR_BALD = {'de': 'Bald im App Store.', 'en': 'Coming soon to the App Store.',
+             'fr': 'Bient&ocirc;t sur l&rsquo;App Store.', 'es': 'Muy pronto en el App Store.'}
 MITR_PLAY = None
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
@@ -466,6 +471,7 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
   .badge img { height: 44px; width: auto; }
   .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
+  .punkte + .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
      Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
@@ -902,6 +908,8 @@ def knoepfe(app, sprache):
     Hoehe so setzen, dass das sichtbare Abzeichen nicht kleiner ist als das
     von Apple."""
     t = T[sprache]
+    if app == 'mitrechner' and not MITR_IM_STORE:
+        return '    <p class="soon">%s</p>' % MITR_BALD[sprache]
     ziel = SHLAY_URL[sprache] if app == 'shlayolotl' else (MITR_APPSTORE[sprache] or '#')
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
