@@ -59,8 +59,11 @@ OFFLINE = {'wheresome'}
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
-APPS = [app for app in ['shlayolotl', 'mitrechner', 'wheresome'] if app not in AUS]
-RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner'}
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'wheresome'] if app not in AUS]
+RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
+         'karma-farmer': '/karma-farmer'}
+# Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
+NAME = {'karma-farmer': 'Karma Farmer'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
 # Adresse leitet Apple in den Store des Besuchers weiter; das passt, weil die spanische
 # Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
@@ -72,17 +75,23 @@ MITR_IM_STORE = False
 MITR_BALD = {'de': 'Bald im App Store.', 'en': 'Coming soon to the App Store.',
              'fr': 'Bient&ocirc;t sur l&rsquo;App Store.', 'es': 'Muy pronto en el App Store.'}
 MITR_PLAY = None
+# Karma Farmer (3.10.2026: "lade ... die datenschutzseite hoch sowie die marketing seite").
+# Wie Mitrechner: online, bevor Apple die App freigibt, mit „Bald im App Store." statt
+# Knopf. Nach der Freigabe die Apple-ID eintragen und KF_IM_STORE auf True.
+KF_APPSTORE = None
+KF_IM_STORE = False
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-02'
+STAND = '2026-10-03'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'shlayolotl': '/assets/img/og-shlayolotl.png',
            'wheresome': '/assets/img/og-wheresome.png',
-           'mitrechner': '/assets/img/og-mitrechner.png'}
+           'mitrechner': '/assets/img/og-mitrechner.png',
+           'karma-farmer': '/assets/img/og-karma-farmer.png'}
 
 T = {
     'de': dict(
@@ -436,6 +445,8 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .band.where { background: #176F7A; color: #F0EDE4; }
   /* Mitrechner: ein dunkles Gruen aus dem App-Symbol, weisse Schrift darauf liest sich. */
   .band.mitr { background: #146B4E; color: #F2FBF6; }
+  /* Karma Farmer: der Morgenhimmel der App (lib/himmel.dart), dunkle Schrift darauf. */
+  .band.karma { background: linear-gradient(180deg, #F7C9A6 0%, #FBE3C8 40%, #F6F1E4 100%); color: #3D2C1E; }
   /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
      App Store, und es sieht auf jeder Breite gleich gewollt aus.
      height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
@@ -593,6 +604,116 @@ P['mitrechner'] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Karma Farmer (3.10.2026). Dieselben Saetze wie im Store (karma_farmer/tool/store.py),
+# im Ton des Inhabers. Nur, was die App wirklich kann: eine Mission am Tag in fuenf
+# Bereichen, 20 Stufen, 200 Missionen, Streak, Reflexionen auf dem Geraet, Erinnerung nur
+# auf Wunsch, Glow als Einmalkauf (kein Abo), kein Konto, keine Werbung.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _mehr, _text, _start) in {
+    'de': ('Symbol der App Karma Farmer', 'Mehr zu Karma Farmer',
+           'Jeden Tag eine kleine Mission: mal f&uuml;rs Klima, mal f&uuml;r andere, mal f&uuml;r dich. '
+           'Du machst sie, und deine Pflanze w&auml;chst mit.',
+           ' Karma Farmer, jeden Tag eine gute Tat, f&uuml;r iPhone.'),
+    'en': ('Karma Farmer app icon', 'More about Karma Farmer',
+           'One small mission a day: something for the planet, for others or for yourself. '
+           'You do it, and your plant grows with you.',
+           ' Karma Farmer, one good deed a day, for iPhone.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Karma Farmer', 'En savoir plus sur Karma Farmer',
+           'Une petite mission par jour&nbsp;: pour la plan&egrave;te, pour les autres ou pour toi. '
+           'Tu la fais, et ta plante grandit avec toi.',
+           ' Karma Farmer, une bonne action par jour, pour iPhone.'),
+    'es': ('Icono de la app Karma Farmer', 'M&aacute;s sobre Karma Farmer',
+           'Una peque&ntilde;a misi&oacute;n al d&iacute;a: algo por el planeta, por los dem&aacute;s o por ti. '
+           'La haces y tu planta crece contigo.',
+           ' Karma Farmer, una buena acci&oacute;n al d&iacute;a, para iPhone.'),
+}.items():
+    T[_s]['og_alt']['karma-farmer'] = _og
+    T[_s]['mehr']['karma-farmer'] = _mehr
+    T[_s]['kf_text'] = _text
+    if 'karma-farmer' not in AUS:
+        T[_s]['beschreibung'] += _start
+
+P['karma-farmer'] = {
+  'de': dict(
+   titel='Karma Farmer | Jeden Tag eine gute Tat',
+   beschreibung='Karma Farmer gibt dir jeden Tag eine kleine Mission. Du machst sie, und deine '
+                'Pflanze w&auml;chst mit. Ohne Konto, ohne Werbung, f&uuml;r iPhone.',
+   erster='Du schaust, was heute dran ist, machst es und tippst auf &bdquo;Mission '
+          'abschlie&szlig;en&ldquo;. Daf&uuml;r gibt&rsquo;s Karma. Es gibt 20 Stufen, vom kleinen '
+          'Samen bis zum Weltbaum, und 200 Missionen in f&uuml;nf Bereichen. Du suchst dir aus, '
+          'was dir wichtig ist.',
+   h2a='Karma Farmer Glow',
+   pa='Glow kaufst du einmal, ein Abo gibt es nicht. Damit kannst du einmal pro Woche einen '
+      'verpassten Tag reparieren und einmal pro Woche deine Mission wechseln. Dazu kommen die '
+      'Galerie mit allen deinen Pflanzen und eine Statistik.',
+   h2b='In deiner Sprache',
+   pb='Karma Farmer gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. Eine '
+      'Erinnerung gibt&rsquo;s auch, zu der Uhrzeit, die du willst (und nur wenn du willst).',
+   letzter='Kein Konto, keine Werbung. Was du schreibst, bleibt auf deinem Ger&auml;t.',
+   shots=['Karma Farmer: die Mission des Tages und deine Pflanze',
+          'Karma Farmer: eine neue Stufe',
+          'Karma Farmer: deine Reflexionen']),
+  'en': dict(
+   titel='Karma Farmer | One good deed a day',
+   beschreibung='Karma Farmer gives you one small mission every day. You do it, and your plant '
+                'grows with you. No account, no ads, for iPhone.',
+   erster='You check what&rsquo;s up today, do it and tap &ldquo;Complete '
+          'mission&rdquo;. You get Karma for it. There are 20 levels, from a tiny seed to the '
+          'World Tree, and 200 missions in five areas. You pick what matters to you.',
+   h2a='Karma Farmer Glow',
+   pa='You buy Glow once, there&rsquo;s no subscription. With it you can repair a missed day '
+      'once a week and swap your mission once a week. You also get the gallery with all your '
+      'plants and your stats.',
+   h2b='In your language',
+   pb='Karma Farmer speaks English, German, Spanish and French. There&rsquo;s a reminder too, '
+      'at the time you want (and only if you want it).',
+   letzter='No account, no ads. What you write stays on your device.',
+   shots=['Karma Farmer: today&rsquo;s mission and your plant',
+          'Karma Farmer: a new level',
+          'Karma Farmer: your reflections']),
+  'fr': dict(
+   titel='Karma Farmer | Une bonne action par jour',
+   beschreibung='Karma Farmer te donne une petite mission chaque jour. Tu la fais, et ta plante '
+                'grandit avec toi. Sans compte, sans publicit&eacute;, pour iPhone.',
+   erster='Tu regardes ce qu&rsquo;il y a aujourd&rsquo;hui, tu le fais et tu touches '
+          '&laquo;&nbsp;Terminer la mission&nbsp;&raquo;. Tu gagnes du Karma. Il y a 20 niveaux, '
+          'de la petite graine &agrave; l&rsquo;Arbre monde, et 200 missions dans cinq domaines. '
+          'Tu choisis ce qui compte pour toi.',
+   h2a='Karma Farmer Glow',
+   pa='Glow, tu l&rsquo;ach&egrave;tes une fois, il n&rsquo;y a pas d&rsquo;abonnement. Avec '
+      'lui, tu peux r&eacute;parer un jour manqu&eacute; une fois par semaine et changer ta '
+      'mission une fois par semaine. Tu as aussi la galerie avec toutes tes plantes et tes '
+      'statistiques.',
+   h2b='Dans ta langue',
+   pb='Karma Farmer parle fran&ccedil;ais, anglais, allemand et espagnol. Il y a aussi un '
+      'rappel, &agrave; l&rsquo;heure que tu veux (et seulement si tu veux).',
+   letzter='Pas de compte, pas de pub. Ce que tu &eacute;cris reste sur ton appareil.',
+   shots=['Karma Farmer&nbsp;: la mission du jour et ta plante',
+          'Karma Farmer&nbsp;: un nouveau niveau',
+          'Karma Farmer&nbsp;: tes r&eacute;flexions']),
+  'es': dict(
+   titel='Karma Farmer | Una buena acci&oacute;n al d&iacute;a',
+   beschreibung='Karma Farmer te da una peque&ntilde;a misi&oacute;n cada d&iacute;a. La haces '
+                'y tu planta crece contigo. Sin cuenta, sin anuncios, para iPhone.',
+   erster='Ves qu&eacute; toca hoy, lo haces y tocas &laquo;Completar misi&oacute;n&raquo;. Ganas Karma. Hay '
+          '20 niveles, de una semillita al &Aacute;rbol del mundo, y 200 misiones en cinco '
+          '&aacute;reas. T&uacute; eliges lo que te importa.',
+   h2a='Karma Farmer Glow',
+   pa='Glow lo pagas una vez, no hay suscripci&oacute;n. Con &eacute;l puedes reparar un '
+      'd&iacute;a perdido una vez por semana y cambiar tu misi&oacute;n una vez por semana. '
+      'Adem&aacute;s tienes la galer&iacute;a con todas tus plantas y tus estad&iacute;sticas.',
+   h2b='En tu idioma',
+   pb='Karma Farmer habla espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s. '
+      'Tambi&eacute;n hay un recordatorio, a la hora que quieras (y solo si quieres).',
+   letzter='Sin cuenta, sin anuncios. Lo que escribes se queda en tu dispositivo.',
+   shots=['Karma Farmer: la misi&oacute;n del d&iacute;a y tu planta',
+          'Karma Farmer: un nivel nuevo',
+          'Karma Farmer: tus reflexiones']),
+}
+
+
 def bild(sprache, nr, alt, app='shlayolotl'):
     """Ein Bildschirmfoto in drei Fassungen: AVIF, WebP, und das WebP als
     Rueckfall. Der Browser nimmt das erste Format, das er kann, und von den
@@ -744,7 +865,7 @@ def seite(sprache):
   </div>
 </section>
 
-%(mitr_abschnitt)s%(where_abschnitt)s</main>
+%(mitr_abschnitt)s%(kf_abschnitt)s%(where_abschnitt)s</main>
 
 <div class="wrap">
   <footer>
@@ -800,6 +921,10 @@ def seite(sprache):
                t, pfad=PFAD[sprache], symbol_mitr=symbol('mitrechner'),
                mehr_mitr=t['mehr']['mitrechner'], shots_mitr=galerie_html('mitrechner', sprache, 'shots-mitr'),
                knoepfe_mitr=knoepfe('mitrechner', sprache)),
+           kf_abschnitt='' if 'karma-farmer' in AUS else KF_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_kf=symbol('karma-farmer'),
+               mehr_kf=t['mehr']['karma-farmer'], shots_kf=galerie_html('karma-farmer', sprache, 'shots-kf'),
+               knoepfe_kf=knoepfe('karma-farmer', sprache)),
            where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
                mehr_where=t['mehr']['wheresome']),
@@ -820,6 +945,23 @@ MITR_ABSCHNITT = '''<section class="band mitr">
     <p class="mehr"><a href="%(pfad)smitrechner/">%(mehr_mitr)s</a></p>
 %(shots_mitr)s
 %(knoepfe_mitr)s
+  </div>
+</section>
+'''
+
+
+KF_ABSCHNITT = '''<section class="band karma">
+  <div class="wrap">
+    <div class="kopf">
+%(symbol_kf)s
+      <div>
+        <h2><a href="%(pfad)skarma-farmer/">Karma Farmer</a></h2>
+      </div>
+    </div>
+    <p>%(kf_text)s</p>
+    <p class="mehr"><a href="%(pfad)skarma-farmer/">%(mehr_kf)s</a></p>
+%(shots_kf)s
+%(knoepfe_kf)s
   </div>
 </section>
 '''
@@ -908,9 +1050,10 @@ def knoepfe(app, sprache):
     Hoehe so setzen, dass das sichtbare Abzeichen nicht kleiner ist als das
     von Apple."""
     t = T[sprache]
-    if app == 'mitrechner' and not MITR_IM_STORE:
+    if (app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE):
         return '    <p class="soon">%s</p>' % MITR_BALD[sprache]
-    ziel = SHLAY_URL[sprache] if app == 'shlayolotl' else (MITR_APPSTORE[sprache] or '#')
+    ziel = {'shlayolotl': SHLAY_URL[sprache], 'mitrechner': MITR_APPSTORE[sprache],
+            'karma-farmer': KF_APPSTORE}.get(app) or '#'
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
             '    </a>' % (ziel, sprache, t['badge_alt']))
@@ -934,7 +1077,7 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app in ('shlayolotl', 'mitrechner'):
+    if app in ('shlayolotl', 'mitrechner', 'karma-farmer'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
                 '      <h2>%(h2a)s</h2>\n'
@@ -943,7 +1086,7 @@ def produkt_seite(app, sprache):
                 '      <p>%(pb)s</p>\n'
                 '      <p>%(letzter)s</p>') % p
         unten = galerie_html(app, sprache, 'shots') + '\n' + knoepfe(app, sprache)
-        lead = t['shlay_text'] if app == 'shlayolotl' else t['mitr_text']
+        lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text']}[app]
         skript = PUNKTE_SKRIPT
     else:
         oben = '        <p class="tag">%s</p>\n' % t['where_tag']
@@ -1006,8 +1149,8 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr'}.get(app, 'where'),
-           symbol=symbol(app), oben=oben, name=app.capitalize(), lead=lead,
+           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma'}.get(app, 'where'),
+           symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
            text=text, unten=unten, recht=RECHT[app],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
            skript=skript,
@@ -1076,6 +1219,9 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
 
   <h2>Mitrechner</h2>
   <p><a href="/mitrechner#%(sprache)s">%(support_recht)s</a></p>
+
+  <h2>Karma Farmer</h2>
+  <p><a href="/karma-farmer#%(sprache)s">%(support_recht)s</a></p>
 
   <h2>Shlayolotl</h2>
   <p><a href="/shlayolotl#%(sprache)s">%(support_recht)s</a></p>
@@ -1431,7 +1577,7 @@ if __name__ == '__main__':
     ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
     if VORSCHAU:
         os.makedirs(ZIEL, exist_ok=True)
-        for teil in ('assets', 'mitrechner.html', 'shlayolotl.html', 'wheresome.html', 'impressum.html'):
+        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'shlayolotl.html', 'wheresome.html', 'impressum.html'):
             verweis = os.path.join(ZIEL, teil)
             if not os.path.lexists(verweis):
                 os.symlink(os.path.join(ROOT, teil), verweis)

@@ -86,3 +86,13 @@ def galerie(app):
 
 
 galerie('mitrechner')
+
+
+# Karma Farmer (3.10.2026): Symbol aus dem App-Projekt (~/karma_farmer/assets/icon), Karte
+# im Pfirsichton des Morgenhimmels der App. Die Fotos kommen aus dem Store-Bilder-Test
+# (integration_test/store_bilder_test.dart, iPhone 17 Pro Max), Bilder 1 bis 3.
+KF_BAND = '#F7C9A6'
+kf = Image.open(os.path.join(IMG, 'karma-farmer.png')).convert('RGB')
+karte('karma-farmer', KF_BAND, rund(kf, 112), 380)
+klein('karma-farmer', (256, 512))
+galerie('karma-farmer')

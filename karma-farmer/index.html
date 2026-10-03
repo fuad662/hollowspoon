@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karma Farmer | Jeden Tag eine gute Tat</title>
+<meta name="description" content="Karma Farmer gibt dir jeden Tag eine kleine Mission. Du machst sie, und deine Pflanze w&auml;chst mit. Ohne Konto, ohne Werbung, f&uuml;r iPhone.">
+<link rel="canonical" href="https://hollowspoon.app/karma-farmer/">
+<link rel="alternate" hreflang="de" href="https://hollowspoon.app/karma-farmer/">
+<link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/karma-farmer/">
+<link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/karma-farmer/">
+<link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/karma-farmer/">
+<link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/karma-farmer/">
+<meta property="og:site_name" content="Hollow Spoon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Karma Farmer | Jeden Tag eine gute Tat">
+<meta property="og:description" content="Karma Farmer gibt dir jeden Tag eine kleine Mission. Du machst sie, und deine Pflanze w&auml;chst mit. Ohne Konto, ohne Werbung, f&uuml;r iPhone.">
+<meta property="og:url" content="https://hollowspoon.app/karma-farmer/">
+<meta property="og:image" content="https://hollowspoon.app/assets/img/og-karma-farmer.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Symbol der App Karma Farmer">
+<meta property="og:locale" content="de_DE">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: #14161A;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 20px;
+        padding: 26px 0; font-size: 14px; }
+  /* flex-shrink 0 und max-width none: sonst quetscht der Kopf den Schriftzug
+     schmal, waehrend die feste Hoehe stehen bleibt. Auf dem Telefon sah er
+     deshalb zusammengedrueckt aus. */
+  nav .mark { flex: 0 0 auto; }
+  nav .mark img { height: 22px; width: auto; max-width: none; display: block; }
+  nav .rechts a { color: #5C6270; text-decoration: none; margin-left: 24px; white-space: nowrap; }
+  nav .rechts a:hover { color: #14161A; }
+
+  /* Die Sprachen stehen unten, nicht oben. Vier Kuerzel neben Apps und
+     Support waren auf dem Telefon nicht zu verstehen und brachen um. */
+  .sprachen { padding: 22px 0 0; font-size: 13px; color: #8A909E;
+              display: flex; gap: 16px; flex-wrap: wrap; }
+  .sprachen a { color: #5C6270; text-decoration: none; }
+  .sprachen a:hover { color: #14161A; }
+  .sprachen .hier { color: #14161A; font-weight: 600; }
+
+  .hero { padding: 84px 0 68px; }
+  h1 { font-size: clamp(52px, 12vw, 132px); line-height: .92; letter-spacing: -.05em;
+       margin: 0 0 26px; font-weight: 800; max-width: 9em; }
+  .lead { font-size: 21px; line-height: 1.55; color: #5C6270; max-width: 26em; margin: 0; }
+  /* Ein Satz mehr unter dem Claim, leiser gesetzt: wer wir sind und wofuer
+     wir bauen. Der Claim allein sagt einer Suchmaschine nichts. */
+  .studio { font-size: 17px; line-height: 1.6; color: #8A909E; max-width: 32em; margin: 22px 0 0; }
+
+  .band { padding: 74px 0; }
+  .band.shlay { background: #0A0E24; color: #E7EAF6; }
+  .band.where { background: #176F7A; color: #F0EDE4; }
+  /* Mitrechner: ein dunkles Gruen aus dem App-Symbol, weisse Schrift darauf liest sich. */
+  .band.mitr { background: #146B4E; color: #F2FBF6; }
+  /* Karma Farmer: der Morgenhimmel der App (lib/himmel.dart), dunkle Schrift darauf. */
+  .band.karma { background: linear-gradient(180deg, #F7C9A6 0%, #FBE3C8 40%, #F6F1E4 100%); color: #3D2C1E; }
+  /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
+     App Store, und es sieht auf jeder Breite gleich gewollt aus.
+     height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
+     height-Attribut aus dem Markup und das Symbol steht gequetscht da. */
+  .band .kopf { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .band .kopf picture { flex: 0 0 auto; display: block; }
+  .band .icon { width: 112px; height: auto; border-radius: 25px; flex: 0 0 auto; }
+  .band .kopf .tag { margin: 0 0 6px; }
+  .band .kopf h2 { margin: 0; }
+  .band .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; margin: 0 0 14px; }
+  .band h2 { font-size: clamp(32px, 5vw, 50px); letter-spacing: -.025em; margin: 0 0 16px; font-weight: 800; }
+  .band h2 a { color: inherit; text-decoration: none; }
+  .band h2 a:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  .band p { font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 30em; opacity: .88; }
+  /* Der Weg zur Seite der App: ein Textlink, kein Knopf. */
+  .band .mehr { margin-top: -8px; }
+  .band .mehr a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+  /* Die Seite einer App: dasselbe Band wie auf der Startseite, nur traegt es
+     hier die H1 und den ganzen Text. */
+  .produkt .kopf { margin-bottom: 28px; }
+  .produkt .kopf h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1; letter-spacing: -.035em;
+                      margin: 0; max-width: none; }
+  .produkt h2 { font-size: 22px; letter-spacing: -.01em; margin: 34px 0 10px; }
+  .produkt .text p { max-width: 34em; }
+  .produkt .recht { margin: 30px 0 0; font-size: 15px; opacity: .8; }
+  .produkt .recht a { color: inherit; }
+
+  /* Der Knopf von Apple, unveraendert. Apples Richtlinien: nicht umfaerben,
+     nicht drehen, nicht animieren, mindestens 40 px hoch, ringsum ein
+     Viertel der Hoehe frei. */
+  /* Der Knopf steht unter den Bildern: erst sehen, was es ist, dann laden. */
+  .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
+  .badge img { height: 44px; width: auto; }
+  .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
+  .punkte + .soon { margin-top: 26px; }
+
+  /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
+     Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
+  .carousel { display: flex; gap: 14px; margin-top: 30px; padding-bottom: 14px;
+              overflow-x: auto; scroll-snap-type: x mandatory;
+              -webkit-overflow-scrolling: touch;
+              scrollbar-color: rgba(255,255,255,.35) transparent; scrollbar-width: thin; }
+  .carousel::-webkit-scrollbar { height: 6px; }
+  .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 99px; }
+  .carousel picture { flex: 0 0 auto; scroll-snap-align: center; }
+  .carousel img { width: 212px; height: auto; border-radius: 18px; }
+
+  /* Die Punkte zeichnen wir selbst. ::scroll-marker waere schoener, aber
+     Safari auf dem iPhone kennt es noch nicht, und dort fehlten sie ganz. */
+  .punkte { display: none; }
+  .punkte button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%;
+                   background: rgba(255,255,255,.28); cursor: pointer; }
+  .punkte button[aria-current="true"] { background: #fff; }
+
+
+  footer { padding: 34px 0 14px; font-size: 13px; color: #8A909E;
+           display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid #E7E9ED; }
+  footer a { color: #5C6270; text-decoration: none; }
+  .marken { padding: 0 0 64px; font-size: 12px; line-height: 1.6; color: #A4AAB6; max-width: 46em; }
+
+  @media (max-width: 720px) {
+    .band .inner { grid-template-columns: 1fr; gap: 20px; }
+    .band .icon { width: 132px; justify-self: start; }
+    /* Auf dem Telefon passt ohnehin nur eines nebeneinander. Also gleich
+       eines je Seite, mit den Punkten darunter. */
+    .carousel { gap: 0; scrollbar-width: none; padding-bottom: 0; }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel picture { flex: 0 0 100%; display: flex; justify-content: center; }
+    .carousel img { width: auto; height: 58vh; max-width: 100%; }
+    .punkte { display: flex; gap: 9px; justify-content: center; padding-top: 18px; }
+    .band .icon { width: 84px; border-radius: 19px; }
+    .band .kopf { gap: 16px; }
+    nav .rechts a { margin-left: 18px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <span class="mark"><a href="/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
+    <span class="rechts"><a href="/#apps">Apps</a><a href="/support/">Support</a></span>
+  </nav>
+</div>
+
+<main>
+<section class="band karma produkt">
+  <div class="wrap">
+    <div class="kopf">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/karma-farmer-256.webp 256w, /assets/img/karma-farmer-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/karma-farmer.png" alt="" width="256" height="256">
+      </picture>
+      <div>
+        <h1>Karma Farmer</h1>
+      </div>
+    </div>
+    <p>Jeden Tag eine kleine Mission: mal f&uuml;rs Klima, mal f&uuml;r andere, mal f&uuml;r dich. Du machst sie, und deine Pflanze w&auml;chst mit.</p>
+    <div class="text">
+      <p>Du schaust, was heute dran ist, machst es und tippst auf &bdquo;Mission abschlie&szlig;en&ldquo;. Daf&uuml;r gibt&rsquo;s Karma. Es gibt 20 Stufen, vom kleinen Samen bis zum Weltbaum, und 200 Missionen in f&uuml;nf Bereichen. Du suchst dir aus, was dir wichtig ist.</p>
+      <h2>Karma Farmer Glow</h2>
+      <p>Glow kaufst du einmal, ein Abo gibt es nicht. Damit kannst du einmal pro Woche einen verpassten Tag reparieren und einmal pro Woche deine Mission wechseln. Dazu kommen die Galerie mit allen deinen Pflanzen und eine Statistik.</p>
+      <h2>In deiner Sprache</h2>
+      <p>Karma Farmer gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. Eine Erinnerung gibt&rsquo;s auch, zu der Uhrzeit, die du willst (und nur wenn du willst).</p>
+      <p>Kein Konto, keine Werbung. Was du schreibst, bleibt auf deinem Ger&auml;t.</p>
+    </div>
+    <div class="carousel" id="shots">
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/karma-farmer-de-1-420.avif 420w, /assets/shots/karma-farmer-de-1-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/karma-farmer-de-1-420.webp 420w, /assets/shots/karma-farmer-de-1-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/karma-farmer-de-1-420.webp" width="420" height="910" alt="Karma Farmer: die Mission des Tages und deine Pflanze" loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/karma-farmer-de-2-420.avif 420w, /assets/shots/karma-farmer-de-2-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/karma-farmer-de-2-420.webp 420w, /assets/shots/karma-farmer-de-2-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/karma-farmer-de-2-420.webp" width="420" height="910" alt="Karma Farmer: eine neue Stufe" loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/karma-farmer-de-3-420.avif 420w, /assets/shots/karma-farmer-de-3-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/karma-farmer-de-3-420.webp 420w, /assets/shots/karma-farmer-de-3-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/karma-farmer-de-3-420.webp" width="420" height="910" alt="Karma Farmer: deine Reflexionen" loading="lazy" decoding="async">
+        </picture>
+    </div>
+    <div class="punkte" data-fuer="shots"></div>
+    <p class="soon">Bald im App Store.</p>
+    <p class="recht"><a href="/karma-farmer#de">Support und Datenschutzerkl&auml;rung</a></p>
+  </div>
+</section>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
+    <a href="/impressum">Impressum</a>
+    <a href="/datenschutz">Datenschutz</a>
+    <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
+  </footer>
+  <p class="sprachen"><span class="hier">Deutsch</span><a href="/en/karma-farmer/" hreflang="en">English</a><a href="/fr/karma-farmer/" hreflang="fr">Fran&ccedil;ais</a><a href="/es/karma-farmer/" hreflang="es">Espa&ntilde;ol</a></p>
+  <p class="marken">Apple und das Apple-Logo sind Marken von Apple Inc., eingetragen in den USA und anderen L&auml;ndern. App Store ist eine Dienstleistungsmarke von Apple Inc.</p>
+</div>
+<script>
+  // Die Punkte unter der Bilderreihe, wie auf der Startseite.
+  document.querySelectorAll('.punkte').forEach(function (leiste) {
+    var reihe = document.getElementById(leiste.dataset.fuer);
+    if (!reihe) return;
+    var bilder = Array.prototype.slice.call(reihe.children);
+    var knoepfe = bilder.map(function (bild, i) {
+      var k = document.createElement('button');
+      k.type = 'button';
+      k.setAttribute('aria-label', String(i + 1));
+      k.addEventListener('click', function () {
+        reihe.scrollTo({ left: bild.offsetLeft - reihe.offsetLeft, behavior: 'smooth' });
+      });
+      leiste.appendChild(k);
+      return k;
+    });
+    function markiere() {
+      var mitte = reihe.scrollLeft + reihe.clientWidth / 2;
+      var naechster = 0, kleinster = Infinity;
+      bilder.forEach(function (bild, i) {
+        var d = Math.abs(bild.offsetLeft - reihe.offsetLeft + bild.offsetWidth / 2 - mitte);
+        if (d < kleinster) { kleinster = d; naechster = i; }
+      });
+      knoepfe.forEach(function (k, i) { k.setAttribute('aria-current', String(i === naechster)); });
+    }
+    reihe.addEventListener('scroll', markiere, { passive: true });
+    markiere();
+  });
+</script>
+</body>
+</html>
