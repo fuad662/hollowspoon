@@ -96,3 +96,18 @@ kf = Image.open(os.path.join(IMG, 'karma-farmer.png')).convert('RGB')
 karte('karma-farmer', KF_BAND, rund(kf, 112), 380)
 klein('karma-farmer', (256, 512))
 galerie('karma-farmer')
+
+
+# Freelancerito (4.10.2026): Symbol aus dem App-Projekt (freelancerito/ios/Runner/
+# Assets.xcassets/AppIcon.appiconset, das 1024er, auf 512 px verkleinert wie die anderen
+# Symbole hier), Karte im Tintenblau des Schiebereglers aus dem Symbol, damit das helle Symbol
+# darauf steht. Fotos gibt es noch keine. Sie sollen aus dem Store-Bilder-Test der App kommen
+# (integration_test/store_bilder_test.dart, iPhone 17 Pro Max Simulator, laeuft beim Inhaber),
+# nur Deutsch und Englisch, weil die App nur die zwei Sprachen hat. Den Test gibt es am
+# 4.10.2026 noch nicht. Bis dahin findet galerie nichts, und bauen.py laesst die Bilderreihe
+# weg, statt kaputte Bilder zu zeigen.
+FL_BAND = '#2F5175'
+fl = Image.open(os.path.join(IMG, 'freelancerito.png')).convert('RGB')
+karte('freelancerito', FL_BAND, rund(fl, 112), 380)
+klein('freelancerito', (256, 512))
+galerie('freelancerito')

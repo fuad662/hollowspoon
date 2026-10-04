@@ -56,14 +56,41 @@ SITE = 'https://hollowspoon.app'
 # Mitrechner seit 2.10.2026 online (User: "die seite auf der webseite sollst du sofort
 # freischalten"), noch bevor Apple die App freigibt: der Knopf zeigt schon auf die
 # App-Store-Adresse, die ab der Freigabe von selbst funktioniert.
-OFFLINE = {'wheresome'}
+# Freelancerito (4.10.2026) ist in keinem Store, weder bei Apple noch bei Google, also
+# offline wie Wheresome: Produktseiten, Karte und Support-Eintrag gibt es nur in der
+# Vorschau. Die Rechtsseite /freelancerito liegt trotzdem schon da (aus dem App-Repository,
+# tool/rechtsseite.py --site), weil App Store Connect sie als Datenschutz- und
+# Support-Adresse braucht.
+OFFLINE = {'wheresome', 'freelancerito'}
 # `python3 bauen.py --vorschau` baut alles, auch was offline ist, nach .vorschau/
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
-APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'wheresome'] if app not in AUS]
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'wheresome']
+        if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
-         'karma-farmer': '/karma-farmer'}
+         'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito'}
+# Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gibt es nur
+# auf Deutsch und Englisch (4.10.2026), ein Geraet auf Franzoesisch oder Spanisch zeigt die
+# App auf Englisch. Die Rechtsseite /freelancerito hat deshalb nur #de und #en: die
+# franzoesische und spanische Seite verlinken /freelancerito#en (ein #fr ginge ins Leere,
+# man landete oben auf der deutschen Fassung) und zeigen die englischen Bildschirmfotos.
+APP_SPRACHEN = {'freelancerito': ('de', 'en')}
+# Dazu ein Hinweis am Link, damit niemand Franzoesisch erwartet und Englisch bekommt.
+AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
+
+
+def app_sprache(app, sprache):
+    """Die Sprache, in der die App (und ihre Rechtsseite) einem Besucher dieser Seite begegnet."""
+    return sprache if sprache in APP_SPRACHEN.get(app, SPRACHEN) else 'en'
+
+
+def recht_link(app, sprache):
+    """Adresse und Text des Links auf die Rechtsseite einer App, in der Sprache der Seite,
+    soweit die Rechtsseite sie hat."""
+    s = app_sprache(app, sprache)
+    text = T[sprache]['support_recht'] + (AUF_ENGLISCH[sprache] if s != sprache else '')
+    return '%s#%s' % (RECHT[app], s), text
 # Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
 NAME = {'karma-farmer': 'Karma Farmer'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
@@ -82,6 +109,13 @@ MITR_PLAY = None
 # Knopf. Nach der Freigabe die Apple-ID eintragen und KF_IM_STORE auf True.
 KF_APPSTORE = None
 KF_IM_STORE = False
+# Freelancerito (4.10.2026): noch in keinem Store, keine Apple-ID, nicht bei Google Play.
+# Wie bei Mitrechner und Karma Farmer steht auf der Seite „Bald im App Store." statt eines
+# Knopfes, der ins Leere fuehrt. Nach der Freigabe die Apple-ID eintragen, FL_IM_STORE auf
+# True und freelancerito aus OFFLINE nehmen; Google Play folgt, sobald die App dort ist.
+FL_APPSTORE = None
+FL_IM_STORE = False
+FL_PLAY = None
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
@@ -93,7 +127,8 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'shlayolotl': '/assets/img/og-shlayolotl.png',
            'wheresome': '/assets/img/og-wheresome.png',
            'mitrechner': '/assets/img/og-mitrechner.png',
-           'karma-farmer': '/assets/img/og-karma-farmer.png'}
+           'karma-farmer': '/assets/img/og-karma-farmer.png',
+           'freelancerito': '/assets/img/og-freelancerito.png'}
 
 T = {
     'de': dict(
@@ -449,7 +484,12 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .band.mitr { background: #146B4E; color: #F2FBF6; }
   /* Karma Farmer: der Morgenhimmel der App (lib/himmel.dart), dunkle Schrift darauf. */
   .band.karma { background: linear-gradient(180deg, #F7C9A6 0%, #FBE3C8 40%, #F6F1E4 100%); color: #3D2C1E; }
-  /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
+''' + ('' if 'freelancerito' in AUS else
+       # Nur im Stil, wenn Freelancerito gebaut wird: solange die App in OFFLINE ist, bleiben
+       # die Live-Seiten Zeichen fuer Zeichen, wie sie sind.
+       '  /* Freelancerito: das Tintenblau des Schiebereglers aus dem App-Symbol, darauf das warme\n'
+       '     Off-White der App. Ruhig und ohne Verlauf, wie die App selbst. */\n'
+       '  .band.freel { background: #2F5175; color: #F7F5F0; }\n') + '''  /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
      App Store, und es sieht auf jeder Breite gleich gewollt aus.
      height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
      height-Attribut aus dem Markup und das Symbol steht gequetscht da. */
@@ -716,6 +756,184 @@ P['karma-farmer'] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Freelancerito (4.10.2026). Nur, was die App wirklich kann (lib/l10n/app_de.arb und README im
+# App-Projekt): Stundenwert, Aufwand in fuenf Teilen, direkte Kosten, Puffer, daraus
+# Mindestpreis, Zielpreis und Premium, alles aus den eigenen Werten und ausdruecklich keine
+# Marktpreise. Simulator, Rabatt und Mehraufwand kostenlos und ohne Grenzen, Plus als
+# Einmalkauf (kein Abo). Keine Steuern, kein Konto, keine Werbung, kein Tracking, keine KI.
+# Kein Kaufpreis fuer Plus, wie bei den anderen Apps. Das Rechenbeispiel ist das aus der
+# README der App, nachgerechnet. Die App spricht nur Deutsch und Englisch: die franzoesische
+# und spanische Seite sagen das offen, statt "in deiner Sprache" zu versprechen.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _mehr, _text, _start) in {
+    'de': ('Symbol der App Freelancerito', 'Mehr zu Freelancerito',
+           'Finde heraus, was du f&uuml;r einen Auftrag verlangen solltest, bevor du zusagst. '
+           'Gerechnet wird mit deinen eigenen Werten, nicht mit Marktpreisen.',
+           ' Freelancerito, der Preisrechner f&uuml;r Freelancer und Selbstst&auml;ndige, f&uuml;r iPhone.'),
+    'en': ('Freelancerito app icon', 'More about Freelancerito',
+           'Find out what to charge for a job before you say yes. '
+           'It works with your own values, not with market prices.',
+           ' Freelancerito, the price calculator for freelancers and the self-employed, for iPhone.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Freelancerito', 'En savoir plus sur Freelancerito',
+           'D&eacute;couvre combien demander pour une mission avant de dire oui. '
+           'Le calcul part de tes propres valeurs, pas des prix du march&eacute;.',
+           ' Freelancerito, le calculateur de prix pour freelances et ind&eacute;pendants, pour iPhone.'),
+    'es': ('Icono de la app Freelancerito', 'M&aacute;s sobre Freelancerito',
+           'Descubre cu&aacute;nto cobrar por un trabajo antes de decir que s&iacute;. '
+           'Con tus propios valores, no con precios de mercado.',
+           ' Freelancerito, la calculadora de precios para freelancers e independientes, para iPhone.'),
+}.items():
+    T[_s]['og_alt']['freelancerito'] = _og
+    T[_s]['mehr']['freelancerito'] = _mehr
+    T[_s]['fl_text'] = _text
+    if 'freelancerito' not in AUS:
+        T[_s]['beschreibung'] += _start
+
+# Ein Abschnitt mehr als bei den anderen Apps (h2sim, psim): der Simulator. Er ist kostenlos und
+# steht deshalb vor Plus. Die Alt-Texte der Fotos sind geschrieben, bevor es die Fotos gibt:
+# sobald sie da sind, gegen die Bilder pruefen.
+P['freelancerito'] = {
+  'de': dict(
+   titel='Freelancerito | Preisrechner f&uuml;r Freelancer und Selbstst&auml;ndige',
+   beschreibung='Freelancerito rechnet dir aus, was du f&uuml;r einen Auftrag verlangen solltest: '
+                'Mindestpreis, Zielpreis und Premium, aus deinen eigenen Werten. Ohne Konto, ohne '
+                'Werbung, f&uuml;r iPhone.',
+   erster='Du tr&auml;gst ein, was dir eine Stunde deiner Zeit wert sein soll. Dann, wie viel Arbeit '
+          'wirklich im Auftrag steckt, auch Kommunikation, Vorbereitung und Korrekturen. Dazu kommen '
+          'die direkten Kosten, etwa Material oder Fahrten, und ein Sicherheitspuffer f&uuml;r das '
+          'Unerwartete. Daraus werden drei Preise. Unter dem Mindestpreis liegst du unter deiner '
+          'eigenen Kalkulation. Mit dem Zielpreis gehst du in dein Angebot. Premium l&auml;sst dir '
+          'mehr Spielraum, wenn der Auftrag besonders wertvoll, eilig oder anspruchsvoll ist. '
+          'Steuern rechnet Freelancerito bewusst nicht mit.',
+   h2sim='Preis testen',
+   psim='Im Simulator schiebst du den Preis zwischen Mindestpreis und Premium hin und her und '
+        'siehst sofort den effektiven Wert deiner Zeit: was nach den direkten Kosten pro Stunde '
+        'Aufwand bleibt. Du kannst einen Rabatt ausprobieren, bevor du ihn gibst, und sehen, was '
+        'passiert, wenn es l&auml;nger dauert. Ein Beispiel: 60&nbsp;&euro; pro Stunde, 11 Stunden '
+        'Aufwand, 80&nbsp;&euro; Kosten und 15&nbsp;% Puffer ergeben 850, 890 und 1.050&nbsp;&euro;. '
+        'Bei 890&nbsp;&euro; ist deine Stunde 73,64&nbsp;&euro; wert. Mit 100&nbsp;&euro; Rabatt sind '
+        'es noch 64,55&nbsp;&euro;, mit zwei Stunden mehr 62,31&nbsp;&euro;.',
+   h2a='Freelancerito Plus',
+   pa='Der ganze Rechner und alle Simulatoren sind kostenlos, ohne Grenzen. Plus kaufst du einmal, '
+      'ein Abo gibt es nicht. Damit speicherst du Kalkulationen und findest sie im Verlauf wieder. '
+      'Du legst eigene Standardwerte und Kostenarten an, h&auml;ltst Szenarien fest und teilst eine '
+      'Kalkulation als PDF oder Text.',
+   h2b='In deiner Sprache',
+   pb='Freelancerito gibt es auf Deutsch und Englisch. Du rechnest in Euro, Schweizer Franken, Pfund '
+      'oder Dollar.',
+   letzter='Kein Konto, keine Werbung, kein Tracking, keine KI. Freelancerito funktioniert ohne '
+           'Internet, und was du eintr&auml;gst, bleibt auf deinem Ger&auml;t.',
+   shots=['Freelancerito: Mindestpreis, Zielpreis und Premium f&uuml;r einen Auftrag',
+          'Freelancerito: der Simulator mit dem effektiven Wert deiner Zeit',
+          'Freelancerito: der Aufwand eines Auftrags, Schritt f&uuml;r Schritt']),
+  'en': dict(
+   titel='Freelancerito | Price calculator for freelancers',
+   beschreibung='Freelancerito works out what you should charge for a job: a minimum price, a target '
+                'price and a premium, all from your own values. No account, no ads, for iPhone.',
+   erster='You enter what one hour of your time should be worth to you. Then how much work the job '
+          'really involves, including communication, preparation and corrections. Add the direct '
+          'costs, such as materials or travel, and a safety buffer for the unexpected. That gives '
+          'you three prices. Below the minimum price, you fall below your own calculation. The '
+          'target price is a sensible price to start your offer with. The premium gives you more '
+          'room when the job is especially valuable, urgent or demanding. Freelancerito deliberately '
+          'leaves taxes out.',
+   h2sim='Test your price',
+   psim='In the simulator you move the price between minimum and premium and see the effective '
+        'value of your time right away: what is left per hour of effort after direct costs. You can '
+        'try out a discount before you give it, and see what happens if the job takes longer. An '
+        'example: &euro;60 an hour, 11 hours of effort, &euro;80 in costs and a 15% buffer give you '
+        '&euro;850, &euro;890 and &euro;1,050. At &euro;890 your hour is worth &euro;73.64. With a '
+        '&euro;100 discount it drops to &euro;64.55, with two extra hours to &euro;62.31.',
+   h2a='Freelancerito Plus',
+   pa='The whole calculator and all simulators are free, without limits. You buy Plus once, there '
+      'is no subscription. With it you save your calculations and find them again in your history. '
+      'You set your own defaults and cost types, keep scenarios and share a calculation as a PDF or '
+      'as text.',
+   h2b='In your language',
+   pb='Freelancerito is available in English and German. You can work in euros, Swiss francs, '
+      'pounds or dollars.',
+   letzter='No account, no ads, no tracking, no AI. Freelancerito works offline, and what you enter '
+           'stays on your device.',
+   shots=['Freelancerito: minimum price, target price and premium for a job',
+          'Freelancerito: the simulator with the effective value of your time',
+          'Freelancerito: the effort of a job, step by step']),
+  'fr': dict(
+   titel='Freelancerito | Calculateur de prix pour freelances',
+   beschreibung='Freelancerito calcule ce que tu devrais demander pour une mission&nbsp;: prix '
+                'minimum, prix cible et premium, &agrave; partir de tes propres valeurs. Sans compte, '
+                'sans publicit&eacute;, pour iPhone.',
+   erster='Tu indiques ce que doit valoir une heure de ton temps. Puis le travail que la mission '
+          'demande vraiment, communication, pr&eacute;paration et corrections comprises. Ensuite '
+          'les co&ucirc;ts directs, comme le mat&eacute;riel ou les d&eacute;placements, et une marge '
+          'de s&eacute;curit&eacute; pour l&rsquo;impr&eacute;vu. Tu obtiens trois prix. Sous le prix '
+          'minimum, tu passes sous ton propre calcul. Le prix cible est un prix raisonnable pour '
+          'commencer ton offre. Le premium te laisse plus de marge quand la mission est '
+          'particuli&egrave;rement pr&eacute;cieuse, urgente ou exigeante. Freelancerito ne calcule '
+          'volontairement pas les imp&ocirc;ts.',
+   h2sim='Tester ton prix',
+   psim='Dans le simulateur, tu d&eacute;places le prix entre le minimum et le premium et tu vois '
+        'tout de suite la valeur effective de ton temps&nbsp;: ce qui reste par heure de travail '
+        'apr&egrave;s les co&ucirc;ts directs. Tu peux essayer une remise avant de l&rsquo;accorder, '
+        'et voir ce qui se passe si la mission prend plus de temps. Un exemple&nbsp;: 60&nbsp;&euro; '
+        'de l&rsquo;heure, 11 heures de travail, 80&nbsp;&euro; de co&ucirc;ts et 15&nbsp;% de marge '
+        'donnent 850, 890 et 1&nbsp;050&nbsp;&euro;. &Agrave; 890&nbsp;&euro;, ton heure vaut '
+        '73,64&nbsp;&euro;. Avec 100&nbsp;&euro; de remise, elle tombe &agrave; 64,55&nbsp;&euro;, '
+        'avec deux heures de plus &agrave; 62,31&nbsp;&euro;.',
+   h2a='Freelancerito Plus',
+   pa='Le calculateur et tous les simulateurs sont gratuits, sans limite. Plus, tu l&rsquo;ach&egrave;tes '
+      'une fois, il n&rsquo;y a pas d&rsquo;abonnement. Avec lui, tu enregistres tes calculs et tu les '
+      'retrouves dans l&rsquo;historique. Tu d&eacute;finis tes propres valeurs par d&eacute;faut et '
+      'types de co&ucirc;ts, tu gardes des sc&eacute;narios et tu partages un calcul en PDF ou en '
+      'texte.',
+   h2b='En anglais et en allemand',
+   pb='Freelancerito existe en anglais et en allemand, pas encore en fran&ccedil;ais. Sur un appareil '
+      'r&eacute;gl&eacute; en fran&ccedil;ais, l&rsquo;application s&rsquo;affiche en anglais. Tu peux '
+      'compter en euros, francs suisses, livres ou dollars.',
+   letzter='Pas de compte, pas de pub, pas de pistage, pas d&rsquo;IA. Freelancerito fonctionne hors '
+           'ligne, et ce que tu saisis reste sur ton appareil.',
+   shots=['Freelancerito&nbsp;: prix minimum, prix cible et premium pour une mission',
+          'Freelancerito&nbsp;: le simulateur avec la valeur effective de ton temps',
+          'Freelancerito&nbsp;: le travail d&rsquo;une mission, &eacute;tape par &eacute;tape']),
+  'es': dict(
+   titel='Freelancerito | Calculadora de precios para freelancers',
+   beschreibung='Freelancerito calcula cu&aacute;nto deber&iacute;as cobrar por un trabajo: precio '
+                'm&iacute;nimo, precio objetivo y premium, a partir de tus propios valores. Sin cuenta, '
+                'sin anuncios, para iPhone.',
+   erster='Anotas cu&aacute;nto quieres que valga una hora de tu tiempo. Despu&eacute;s, cu&aacute;nto '
+          'trabajo lleva de verdad el encargo, incluidas la comunicaci&oacute;n, la preparaci&oacute;n '
+          'y las correcciones. Luego los gastos directos, como material o traslados, y un margen de '
+          'seguridad para lo inesperado. Con eso obtienes tres precios. Por debajo del precio '
+          'm&iacute;nimo, quedas por debajo de tu propio c&aacute;lculo. El precio objetivo es un '
+          'precio razonable para empezar tu oferta. El premium te deja m&aacute;s margen cuando el '
+          'trabajo es especialmente valioso, urgente o exigente. Freelancerito no calcula impuestos, '
+          'a prop&oacute;sito.',
+   h2sim='Prueba tu precio',
+   psim='En el simulador mueves el precio entre el m&iacute;nimo y el premium y ves al momento el '
+        'valor efectivo de tu tiempo: lo que queda por hora de trabajo despu&eacute;s de los gastos '
+        'directos. Puedes probar un descuento antes de darlo y ver qu&eacute; pasa si el trabajo '
+        'lleva m&aacute;s tiempo. Un ejemplo: 60&nbsp;&euro; la hora, 11 horas de trabajo, '
+        '80&nbsp;&euro; de gastos y un margen del 15&nbsp;% dan 850, 890 y 1050&nbsp;&euro;. A '
+        '890&nbsp;&euro;, tu hora vale 73,64&nbsp;&euro;. Con 100&nbsp;&euro; de descuento baja a '
+        '64,55&nbsp;&euro;, con dos horas m&aacute;s a 62,31&nbsp;&euro;.',
+   h2a='Freelancerito Plus',
+   pa='La calculadora y todos los simuladores son gratis, sin l&iacute;mites. Plus lo pagas una vez, '
+      'no hay suscripci&oacute;n. Con &eacute;l guardas tus c&aacute;lculos y los encuentras en el '
+      'historial. Defines tus propios valores predeterminados y tipos de gastos, guardas escenarios '
+      'y compartes un c&aacute;lculo como PDF o como texto.',
+   h2b='En ingl&eacute;s y alem&aacute;n',
+   pb='Freelancerito est&aacute; en ingl&eacute;s y alem&aacute;n, todav&iacute;a no en espa&ntilde;ol. '
+      'En un dispositivo en espa&ntilde;ol, la app se muestra en ingl&eacute;s. Puedes calcular en '
+      'euros, francos suizos, libras o d&oacute;lares.',
+   letzter='Sin cuenta, sin anuncios, sin rastreo, sin IA. Freelancerito funciona sin conexi&oacute;n, '
+           'y lo que anotas se queda en tu dispositivo.',
+   shots=['Freelancerito: precio m&iacute;nimo, precio objetivo y premium para un trabajo',
+          'Freelancerito: el simulador con el valor efectivo de tu tiempo',
+          'Freelancerito: el trabajo de un encargo, paso a paso']),
+}
+
+
 def bild(sprache, nr, alt, app='shlayolotl'):
     """Ein Bildschirmfoto in drei Fassungen: AVIF, WebP, und das WebP als
     Rueckfall. Der Browser nimmt das erste Format, das er kann, und von den
@@ -867,7 +1085,7 @@ def seite(sprache):
   </div>
 </section>
 
-%(mitr_abschnitt)s%(kf_abschnitt)s%(where_abschnitt)s</main>
+%(mitr_abschnitt)s%(kf_abschnitt)s%(fl_abschnitt)s%(where_abschnitt)s</main>
 
 <div class="wrap">
   <footer>
@@ -927,6 +1145,9 @@ def seite(sprache):
                t, pfad=PFAD[sprache], symbol_kf=symbol('karma-farmer'),
                mehr_kf=t['mehr']['karma-farmer'], shots_kf=galerie_html('karma-farmer', sprache, 'shots-kf'),
                knoepfe_kf=knoepfe('karma-farmer', sprache)),
+           fl_abschnitt='' if 'freelancerito' in AUS else FL_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_fl=symbol('freelancerito'),
+               mehr_fl=t['mehr']['freelancerito'], unten_fl=unten_html('freelancerito', sprache, 'shots-fl')),
            where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
                mehr_where=t['mehr']['wheresome']),
@@ -964,6 +1185,23 @@ KF_ABSCHNITT = '''<section class="band karma">
     <p class="mehr"><a href="%(pfad)skarma-farmer/product/">%(mehr_kf)s</a></p>
 %(shots_kf)s
 %(knoepfe_kf)s
+  </div>
+</section>
+'''
+
+
+# Freelancerito, solange die App in keinem Store ist, nur in der Vorschau (siehe OFFLINE).
+FL_ABSCHNITT = '''<section class="band freel">
+  <div class="wrap">
+    <div class="kopf">
+%(symbol_fl)s
+      <div>
+        <h2><a href="%(pfad)sfreelancerito/product/">Freelancerito</a></h2>
+      </div>
+    </div>
+    <p>%(fl_text)s</p>
+    <p class="mehr"><a href="%(pfad)sfreelancerito/product/">%(mehr_fl)s</a></p>
+%(unten_fl)s
   </div>
 </section>
 '''
@@ -1018,11 +1256,23 @@ PUNKTE_SKRIPT = '''<script>
 
 
 def galerie_html(app, sprache, kennung):
-    """Die drei Bildschirmfotos einer App als Bilderreihe mit Punkten darunter."""
+    """Die drei Bildschirmfotos einer App als Bilderreihe mit Punkten darunter.
+    Die Fotos sind in der Sprache, in der die App dem Besucher begegnet (app_sprache).
+    Leer, solange es die Fotos noch nicht gibt (Freelancerito, 4.10.2026): lieber keine
+    Bilderreihe als drei kaputte Bilder."""
     alts = T[sprache]['shots'] if app == 'shlayolotl' else P[app][sprache]['shots']
+    foto = app_sprache(app, sprache)
+    if not all(os.path.exists(os.path.join(ROOT, 'assets', 'shots', '%s-%s-%d-420.webp' % (app, foto, i + 1)))
+               for i in range(3)):
+        return ''
     return ('    <div class="carousel" id="%s">\n%s\n    </div>\n'
             '    <div class="punkte" data-fuer="%s"></div>'
-            % (kennung, '\n'.join(bild(sprache, i + 1, alts[i], app) for i in range(3)), kennung))
+            % (kennung, '\n'.join(bild(foto, i + 1, alts[i], app) for i in range(3)), kennung))
+
+
+def unten_html(app, sprache, kennung):
+    """Bilderreihe und Knopf (oder „Bald im App Store."), ohne Leerzeile, wenn die Bilder fehlen."""
+    return '\n'.join(x for x in (galerie_html(app, sprache, kennung), knoepfe(app, sprache)) if x)
 
 
 # Googles Markenhinweis, nur auf Seiten, die das Abzeichen zeigen.
@@ -1052,10 +1302,11 @@ def knoepfe(app, sprache):
     Hoehe so setzen, dass das sichtbare Abzeichen nicht kleiner ist als das
     von Apple."""
     t = T[sprache]
-    if (app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE):
+    if ((app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE)
+            or (app == 'freelancerito' and not FL_IM_STORE)):
         return '    <p class="soon">%s</p>' % MITR_BALD[sprache]
     ziel = {'shlayolotl': SHLAY_URL[sprache], 'mitrechner': MITR_APPSTORE[sprache],
-            'karma-farmer': KF_APPSTORE}.get(app) or '#'
+            'karma-farmer': KF_APPSTORE, 'freelancerito': FL_APPSTORE}.get(app) or '#'
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
             '    </a>' % (ziel, sprache, t['badge_alt']))
@@ -1079,17 +1330,22 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app in ('shlayolotl', 'mitrechner', 'karma-farmer'):
+    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
-                '      <h2>%(h2a)s</h2>\n'
-                '      <p>%(pa)s</p>\n'
-                '      <h2>%(h2b)s</h2>\n'
-                '      <p>%(pb)s</p>\n'
-                '      <p>%(letzter)s</p>') % p
-        unten = galerie_html(app, sprache, 'shots') + '\n' + knoepfe(app, sprache)
-        lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text']}[app]
-        skript = PUNKTE_SKRIPT
+                + ('      <h2>%(h2sim)s</h2>\n'
+                   '      <p>%(psim)s</p>\n' if 'h2sim' in p else '')
+                + '      <h2>%(h2a)s</h2>\n'
+                  '      <p>%(pa)s</p>\n'
+                  '      <h2>%(h2b)s</h2>\n'
+                  '      <p>%(pb)s</p>\n'
+                  '      <p>%(letzter)s</p>') % p
+        reihe = galerie_html(app, sprache, 'shots')
+        unten = unten_html(app, sprache, 'shots')
+        lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text'],
+                'freelancerito': t['fl_text']}[app]
+        # Ohne Bilderreihe keine Punkte, also auch kein Skript dafuer.
+        skript = PUNKTE_SKRIPT if reihe else ''
     else:
         oben = '        <p class="tag">%s</p>\n' % t['where_tag']
         text = ('      <p>%(erster)s</p>\n'
@@ -1131,7 +1387,7 @@ def produkt_seite(app, sprache):
 %(text)s
     </div>
 %(unten)s
-    <p class="recht"><a href="%(recht)s#%(sprache)s">%(support_recht)s</a></p>
+    <p class="recht"><a href="%(recht_href)s">%(recht_text)s</a></p>
   </div>
 </section>
 </main>
@@ -1151,9 +1407,10 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma'}.get(app, 'where'),
+           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma',
+                              'freelancerito': 'freel'}.get(app, 'where'),
            symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
-           text=text, unten=unten, recht=RECHT[app],
+           text=text, unten=unten, recht_href=recht_link(app, sprache)[0], recht_text=recht_link(app, sprache)[1],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
            skript=skript,
            marken=t['marken'] + (' ' + PLAY_MARKEN[sprache] if play_abzeichen(app, sprache) else ''))
@@ -1185,7 +1442,8 @@ SUPPORT_STIL = """  body { margin: 0; background: #fff; color: #14161A;
 
 def support_seite(sprache):
     """Support je Sprache statt einer Seite, auf der dieselbe Adresse viermal
-    untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
+    untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier (Freelancerito
+    nur Deutsch und Englisch, siehe APP_SPRACHEN)."""
     t = T[sprache]
     pfade = {x: PFAD[x] + 'support/' for x in SPRACHEN}
 
@@ -1196,7 +1454,9 @@ def support_seite(sprache):
         sprachen=sprachleiste(sprache, pfade), stil=SUPPORT_STIL,
         ds_pfad=DS_PFAD[sprache],
         support_wheresome='' if 'wheresome' in AUS else
-        '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']))
+        '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']),
+        support_freelancerito='' if 'freelancerito' in AUS else
+        '  <h2>Freelancerito</h2>\n  <p><a href="%s">%s</a></p>\n\n' % recht_link('freelancerito', sprache))
 
 
 VORLAGE_SUPPORT = """<!DOCTYPE html>
@@ -1225,7 +1485,7 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
   <h2>Karma Farmer</h2>
   <p><a href="/karma-farmer#%(sprache)s">%(support_recht)s</a></p>
 
-  <h2>Shlayolotl</h2>
+%(support_freelancerito)s  <h2>Shlayolotl</h2>
   <p><a href="/shlayolotl#%(sprache)s">%(support_recht)s</a></p>
 
 %(support_wheresome)s
@@ -1579,7 +1839,8 @@ if __name__ == '__main__':
     ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
     if VORSCHAU:
         os.makedirs(ZIEL, exist_ok=True)
-        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'shlayolotl.html', 'wheresome.html', 'impressum.html'):
+        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'shlayolotl.html',
+                     'wheresome.html', 'impressum.html'):
             verweis = os.path.join(ZIEL, teil)
             if not os.path.lexists(verweis):
                 os.symlink(os.path.join(ROOT, teil), verweis)
