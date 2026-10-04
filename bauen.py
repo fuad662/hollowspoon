@@ -70,12 +70,13 @@ APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelanceri
         if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
          'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito'}
-# Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gibt es nur
-# auf Deutsch und Englisch (4.10.2026), ein Geraet auf Franzoesisch oder Spanisch zeigt die
-# App auf Englisch. Die Rechtsseite /freelancerito hat deshalb nur #de und #en: die
-# franzoesische und spanische Seite verlinken /freelancerito#en (ein #fr ginge ins Leere,
-# man landete oben auf der deutschen Fassung) und zeigen die englischen Bildschirmfotos.
-APP_SPRACHEN = {'freelancerito': ('de', 'en')}
+# Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gab es am
+# 4.10.2026 zuerst nur auf Deutsch und Englisch; noch am selben Tag kamen Spanisch und
+# Franzoesisch dazu (Englisch ist dort Hauptsprache und Rueckfall). Seitdem spricht jede App
+# alle vier, die Rechtsseite /freelancerito hat #de, #en, #es und #fr, und jede Seite zeigt
+# die Fotos in ihrer eigenen Sprache. Die Mechanik bleibt fuer eine kuenftige App mit weniger
+# Sprachen.
+APP_SPRACHEN = {}
 # Dazu ein Hinweis am Link, damit niemand Franzoesisch erwartet und Englisch bekommt
 # (app_sprache und recht_link, weiter unten bei galerie_html).
 AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
@@ -754,8 +755,8 @@ P['karma-farmer'] = {
 # Marktpreise. Simulator, Rabatt und Mehraufwand kostenlos und ohne Grenzen, Plus als
 # Einmalkauf (kein Abo). Keine Steuern, kein Konto, keine Werbung, kein Tracking, keine KI.
 # Kein Kaufpreis fuer Plus, wie bei den anderen Apps. Das Rechenbeispiel ist das aus der
-# README der App, nachgerechnet. Die App spricht nur Deutsch und Englisch: die franzoesische
-# und spanische Seite sagen das offen, statt "in deiner Sprache" zu versprechen.
+# README der App, nachgerechnet. Die App spricht Englisch, Deutsch, Spanisch und
+# Franzoesisch, mit denselben Begriffen wie hier (lib/l10n/app_es.arb, app_fr.arb).
 # ---------------------------------------------------------------------------
 
 for _s, (_og, _mehr, _text, _start) in {
@@ -812,8 +813,8 @@ P['freelancerito'] = {
       'Du legst eigene Standardwerte und Kostenarten an, h&auml;ltst Szenarien fest und teilst eine '
       'Kalkulation als PDF oder Text.',
    h2b='In deiner Sprache',
-   pb='Freelancerito gibt es auf Deutsch und Englisch. Du rechnest in Euro, Schweizer Franken, Pfund '
-      'oder Dollar.',
+   pb='Freelancerito gibt es auf Deutsch, Englisch, Spanisch und Franz&ouml;sisch. Du rechnest in '
+      'Euro, Schweizer Franken, Pfund oder Dollar.',
    letzter='Kein Konto, keine Werbung, kein Tracking, keine KI. Freelancerito funktioniert ohne '
            'Internet, und was du eintr&auml;gst, bleibt auf deinem Ger&auml;t.',
    shots=['Freelancerito: Mindestpreis, Zielpreis und Premium f&uuml;r einen Auftrag',
@@ -844,8 +845,8 @@ P['freelancerito'] = {
       'You set your own defaults and cost types, keep scenarios and share a calculation as a PDF or '
       'as text.',
    h2b='In your language',
-   pb='Freelancerito is available in English and German. You can work in euros, Swiss francs, '
-      'pounds or dollars.',
+   pb='Freelancerito is available in English, German, Spanish and French. You can work in euros, '
+      'Swiss francs, pounds or dollars.',
    letzter='No account, no ads, no tracking, no AI. Freelancerito works offline, and what you enter '
            'stays on your device.',
    shots=['Freelancerito: minimum price, target price and premium for a job',
@@ -879,10 +880,9 @@ P['freelancerito'] = {
       'retrouves dans l&rsquo;historique. Tu d&eacute;finis tes propres valeurs par d&eacute;faut et '
       'types de co&ucirc;ts, tu gardes des sc&eacute;narios et tu partages un calcul en PDF ou en '
       'texte.',
-   h2b='En anglais et en allemand',
-   pb='Freelancerito existe en anglais et en allemand, mais pas en fran&ccedil;ais. Sur un appareil '
-      'r&eacute;gl&eacute; en fran&ccedil;ais, l&rsquo;application s&rsquo;affiche en anglais. Tu peux '
-      'calculer en euros, en francs suisses, en livres ou en dollars.',
+   h2b='Dans ta langue',
+   pb='Freelancerito existe en fran&ccedil;ais, anglais, allemand et espagnol. Tu peux calculer en '
+      'euros, en francs suisses, en livres ou en dollars.',
    letzter='Pas de compte, pas de pub, pas de pistage, pas d&rsquo;IA. Freelancerito fonctionne hors '
            'ligne, et ce que tu saisis reste sur ton appareil.',
    shots=['Freelancerito&nbsp;: prix minimum, prix cible et premium pour une mission',
@@ -895,7 +895,7 @@ P['freelancerito'] = {
                 'sin anuncios, para iPhone.',
    erster='Anotas cu&aacute;nto quieres que valga una hora de tu tiempo y cu&aacute;nto trabajo lleva '
           'de verdad el encargo, incluidas la comunicaci&oacute;n, la preparaci&oacute;n y las '
-          'correcciones. A eso se suman los gastos directos, como material o traslados, y un margen de '
+          'correcciones. A eso se suman los costes directos, como material o traslados, y un margen de '
           'seguridad para lo inesperado. Con eso obtienes tres precios. Por debajo del precio '
           'm&iacute;nimo, quedas por debajo de tu propio c&aacute;lculo. El precio objetivo es un '
           'precio razonable para tu oferta. El premium te deja m&aacute;s margen cuando el trabajo es '
@@ -903,21 +903,20 @@ P['freelancerito'] = {
           'prop&oacute;sito.',
    h2sim='Prueba tu precio',
    psim='En el simulador mueves el precio entre el m&iacute;nimo y el premium y ves al momento el '
-        'valor efectivo de tu tiempo: lo que queda por hora de trabajo despu&eacute;s de los gastos '
+        'valor efectivo de tu tiempo: lo que queda por hora de trabajo despu&eacute;s de los costes '
         'directos. Puedes probar un descuento antes de ofrecerlo y ver qu&eacute; pasa si el trabajo '
         'lleva m&aacute;s tiempo. Un ejemplo: 60&nbsp;&euro; la hora, 11 horas de trabajo, '
-        '80&nbsp;&euro; de gastos y un margen del 15&nbsp;% dan 850, 890 y 1050&nbsp;&euro;. A '
+        '80&nbsp;&euro; de costes y un margen del 15&nbsp;% dan 850, 890 y 1050&nbsp;&euro;. A '
         '890&nbsp;&euro;, tu hora vale 73,64&nbsp;&euro;. Con 100&nbsp;&euro; de descuento baja a '
         '64,55&nbsp;&euro;. Sin descuento, pero con dos horas m&aacute;s, se queda en 62,31&nbsp;&euro;.',
    h2a='Freelancerito Plus',
    pa='La calculadora y todos los simuladores son gratis, sin l&iacute;mites. Plus lo pagas una vez, '
       'no hay suscripci&oacute;n. Con &eacute;l guardas tus c&aacute;lculos y vuelves a abrirlos desde '
-      'el historial. Defines tus propios valores predeterminados y tipos de gastos, guardas escenarios '
+      'el historial. Defines tus propios valores predeterminados y tipos de coste, guardas escenarios '
       'y compartes un c&aacute;lculo como PDF o como texto.',
-   h2b='En ingl&eacute;s y alem&aacute;n',
-   pb='Freelancerito est&aacute; en ingl&eacute;s y alem&aacute;n, pero no en espa&ntilde;ol. '
-      'En un dispositivo en espa&ntilde;ol, la app se muestra en ingl&eacute;s. Puedes calcular en '
-      'euros, francos suizos, libras o d&oacute;lares.',
+   h2b='En tu idioma',
+   pb='Freelancerito est&aacute; en espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s. '
+      'Puedes calcular en euros, francos suizos, libras o d&oacute;lares.',
    letzter='Sin cuenta, sin anuncios, sin rastreo, sin IA. Freelancerito funciona sin conexi&oacute;n, '
            'y lo que anotas se queda en tu dispositivo.',
    shots=['Freelancerito: precio m&iacute;nimo, precio objetivo y premium para un trabajo',
@@ -1447,8 +1446,7 @@ SUPPORT_STIL = """  body { margin: 0; background: #fff; color: #14161A;
 
 def support_seite(sprache):
     """Support je Sprache statt einer Seite, auf der dieselbe Adresse viermal
-    untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier (Freelancerito
-    nur Deutsch und Englisch, siehe APP_SPRACHEN)."""
+    untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
     t = T[sprache]
     pfade = {x: PFAD[x] + 'support/' for x in SPRACHEN}
 

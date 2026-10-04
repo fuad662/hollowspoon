@@ -101,15 +101,14 @@ galerie('karma-farmer')
 # Freelancerito (4.10.2026): Symbol aus dem App-Projekt (freelancerito/ios/Runner/
 # Assets.xcassets/AppIcon.appiconset, das 1024er, auf 512 px verkleinert wie die anderen
 # Symbole hier), Karte im Tintenblau des Schiebereglers aus dem Symbol, damit das helle Symbol
-# darauf steht. Fotos gibt es noch keine. Sie sollen aus dem Store-Bilder-Test der App kommen
-# (integration_test/store_bilder_test.dart, iPhone 17 Pro Max Simulator, laeuft beim Inhaber),
-# nur Deutsch und Englisch, weil die App nur die zwei Sprachen hat: bilder_original/
-# freelancerito-de-1.png bis -3.png und freelancerito-en-1.png bis -3.png. Die franzoesische
-# und spanische Seite zeigen die englischen. Den Test gibt es seit dem 4.10.2026; beim
-# Inhaber erzeugt `tool/mac.sh storefotos` (im App-Projekt) die PNGs, die hierher gehoeren,
-# in build/store_fotos/website/. Solange sie nicht hier liegen, findet galerie nichts, und
-# bauen.py laesst die Bilderreihe weg, statt kaputte Bilder zu zeigen. Danach die Alt-Texte in bauen.py (P['freelancerito'], shots) gegen die Fotos
-# pruefen, sie sind ohne die Fotos geschrieben.
+# darauf steht. Fotos gibt es noch keine. Sie kommen aus dem Store-Bilder-Test der App
+# (integration_test/store_bilder_test.dart, iPhone 17 Pro Max Simulator, laeuft beim Inhaber
+# mit `tool/mac.sh storefotos` im App-Projekt), in allen vier Sprachen der App:
+# bilder_original/freelancerito-<de|en|es|fr>-1.png bis -3.png. Das Skript legt sie in
+# build/store_fotos/website/ ab. Solange sie nicht hier liegen, findet galerie nichts, und
+# bauen.py laesst die Bilderreihe weg, statt kaputte Bilder zu zeigen. Danach die Alt-Texte in
+# bauen.py (P['freelancerito'], shots) gegen die Fotos pruefen, sie sind ohne die Fotos
+# geschrieben.
 FL_BAND = '#2F5175'
 fl = Image.open(os.path.join(IMG, 'freelancerito.png')).convert('RGB')
 karte('freelancerito', FL_BAND, rund(fl, 112), 380)
