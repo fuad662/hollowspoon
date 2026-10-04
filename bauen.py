@@ -39,12 +39,14 @@ SHLAY_URL = {
 
 SITE = 'https://hollowspoon.app'
 
-# Die Produktseiten liegen MIT Schraegstrich: /shlayolotl/ ist die Seite ueber
-# das Spiel, /shlayolotl (ohne) bleibt die Rechtsseite der App. Die ist bei
-# Apple als Datenschutz- und Support-Adresse hinterlegt und wird aus dem
-# App-Repository erzeugt, also nicht hier. Cloudflare haelt beide auseinander:
-# shlayolotl.html bedient die kurze Adresse, shlayolotl/index.html die mit
-# Schraegstrich, ohne Umleitung dazwischen (nachgelesen im Asset-Server).
+# Zwei Adressen je App (4.10.2026, auf Vorschlag des Inhabers): /shlayolotl ist die
+# Rechtsseite der App (Datenschutz und Support), bei Apple und Google hinterlegt und aus
+# dem App-Repository erzeugt, also nicht hier; /shlayolotl/product/ ist die Seite ueber die
+# App. Frueher lag die Produktseite auf /shlayolotl/, und ein einziger Schraegstrich
+# entschied, welche der beiden Seiten man bekam. Jetzt haengt die Produktseite unter dem
+# Namen der App. Die alten Adressen mit Schraegstrich gibt es nicht mehr (Cloudflare leitet
+# /shlayolotl/ auf /shlayolotl um, also auf die Rechtsseite). Bei Shlayolotl steht bei Apple
+# als Marketing-URL nur die Startseite (geprueft 4.10.2026), nichts bricht.
 # Apps, die noch nicht im Store sind, stehen nirgends auf der Website: keine
 # Karte auf der Startseite, keine Produktseite, kein Eintrag bei Support und in
 # der Sitemap (2.10.2026: "das machen wir, wenn die app online ist"). Ihre
@@ -268,8 +270,8 @@ T = {
 }
 
 # ---------------------------------------------------------------------------
-# Die Produktseiten. Eine je App und Sprache, auf /shlayolotl/ und /wheresome/
-# und darunter /en/, /fr/, /es/.
+# Die Produktseiten. Eine je App und Sprache, auf /shlayolotl/product/ und
+# /wheresome/product/ und davor /en/, /fr/, /es/.
 #
 # Nur, was feststeht: fuer Shlayolotl die Spielarten, die zwei Spielfelder,
 # das iPhone und "kein Konto" (steht so schon auf /shlayolotl-download), fuer
@@ -850,11 +852,11 @@ def seite(sprache):
     <div class="kopf">
 %(symbol_shlay)s
       <div>
-        <h2><a href="%(pfad)sshlayolotl/">Shlayolotl</a></h2>
+        <h2><a href="%(pfad)sshlayolotl/product/">Shlayolotl</a></h2>
       </div>
     </div>
     <p>%(shlay_text)s</p>
-    <p class="mehr"><a href="%(pfad)sshlayolotl/">%(mehr_shlay)s</a></p>
+    <p class="mehr"><a href="%(pfad)sshlayolotl/product/">%(mehr_shlay)s</a></p>
     <div class="carousel" id="shots">
 %(shots)s
     </div>
@@ -938,11 +940,11 @@ MITR_ABSCHNITT = '''<section class="band mitr">
     <div class="kopf">
 %(symbol_mitr)s
       <div>
-        <h2><a href="%(pfad)smitrechner/">Mitrechner</a></h2>
+        <h2><a href="%(pfad)smitrechner/product/">Mitrechner</a></h2>
       </div>
     </div>
     <p>%(mitr_text)s</p>
-    <p class="mehr"><a href="%(pfad)smitrechner/">%(mehr_mitr)s</a></p>
+    <p class="mehr"><a href="%(pfad)smitrechner/product/">%(mehr_mitr)s</a></p>
 %(shots_mitr)s
 %(knoepfe_mitr)s
   </div>
@@ -955,11 +957,11 @@ KF_ABSCHNITT = '''<section class="band karma">
     <div class="kopf">
 %(symbol_kf)s
       <div>
-        <h2><a href="%(pfad)skarma-farmer/">Karma Farmer</a></h2>
+        <h2><a href="%(pfad)skarma-farmer/product/">Karma Farmer</a></h2>
       </div>
     </div>
     <p>%(kf_text)s</p>
-    <p class="mehr"><a href="%(pfad)skarma-farmer/">%(mehr_kf)s</a></p>
+    <p class="mehr"><a href="%(pfad)skarma-farmer/product/">%(mehr_kf)s</a></p>
 %(shots_kf)s
 %(knoepfe_kf)s
   </div>
@@ -973,11 +975,11 @@ WHERE_ABSCHNITT = '''<section class="band where">
 %(symbol_where)s
       <div>
         <p class="tag">%(where_tag)s</p>
-        <h2><a href="%(pfad)swheresome/">Wheresome</a></h2>
+        <h2><a href="%(pfad)swheresome/product/">Wheresome</a></h2>
       </div>
     </div>
     <p>%(where_text)s</p>
-    <p class="mehr"><a href="%(pfad)swheresome/">%(mehr_where)s</a></p>
+    <p class="mehr"><a href="%(pfad)swheresome/product/">%(mehr_where)s</a></p>
     <p class="soon">%(where_bald)s</p>
   </div>
 </section>
@@ -1065,7 +1067,7 @@ def knoepfe(app, sprache):
 
 
 def produkt_pfade(app):
-    return {s: PFAD[s] + app + '/' for s in SPRACHEN}
+    return {s: PFAD[s] + app + '/product/' for s in SPRACHEN}
 
 
 def produkt_seite(app, sprache):
@@ -1585,7 +1587,7 @@ if __name__ == '__main__':
         ordner = '' if s == 'de' else s + '/'
         schreibe(os.path.join(ZIEL, ordner + 'index.html'), seite(s))
         for app in APPS:
-            schreibe(os.path.join(ZIEL, ordner + app + '/index.html'), produkt_seite(app, s))
+            schreibe(os.path.join(ZIEL, ordner + app + '/product/index.html'), produkt_seite(app, s))
         schreibe(os.path.join(ZIEL, ordner + 'support/index.html'), support_seite(s))
         schreibe(os.path.join(ZIEL, DS_DATEI[s]), datenschutz_seite(s))
     schreibe(os.path.join(ZIEL, 'sitemap.xml'), sitemap())
