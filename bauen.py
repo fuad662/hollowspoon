@@ -76,21 +76,9 @@ RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '
 # franzoesische und spanische Seite verlinken /freelancerito#en (ein #fr ginge ins Leere,
 # man landete oben auf der deutschen Fassung) und zeigen die englischen Bildschirmfotos.
 APP_SPRACHEN = {'freelancerito': ('de', 'en')}
-# Dazu ein Hinweis am Link, damit niemand Franzoesisch erwartet und Englisch bekommt.
+# Dazu ein Hinweis am Link, damit niemand Franzoesisch erwartet und Englisch bekommt
+# (app_sprache und recht_link, weiter unten bei galerie_html).
 AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
-
-
-def app_sprache(app, sprache):
-    """Die Sprache, in der die App (und ihre Rechtsseite) einem Besucher dieser Seite begegnet."""
-    return sprache if sprache in APP_SPRACHEN.get(app, SPRACHEN) else 'en'
-
-
-def recht_link(app, sprache):
-    """Adresse und Text des Links auf die Rechtsseite einer App, in der Sprache der Seite,
-    soweit die Rechtsseite sie hat."""
-    s = app_sprache(app, sprache)
-    text = T[sprache]['support_recht'] + (AUF_ENGLISCH[sprache] if s != sprache else '')
-    return '%s#%s' % (RECHT[app], s), text
 # Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
 NAME = {'karma-farmer': 'Karma Farmer'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
@@ -111,8 +99,11 @@ KF_APPSTORE = None
 KF_IM_STORE = False
 # Freelancerito (4.10.2026): noch in keinem Store, keine Apple-ID, nicht bei Google Play.
 # Wie bei Mitrechner und Karma Farmer steht auf der Seite „Bald im App Store." statt eines
-# Knopfes, der ins Leere fuehrt. Nach der Freigabe die Apple-ID eintragen, FL_IM_STORE auf
-# True und freelancerito aus OFFLINE nehmen; Google Play folgt, sobald die App dort ist.
+# Knopfes, der ins Leere fuehrt. Zwei Schritte, die nicht zusammenfallen muessen: zum
+# Freischalten freelancerito aus OFFLINE nehmen und STAND hochsetzen (ob schon vor Apples
+# Freigabe, wie bei Mitrechner und Karma Farmer, entscheidet der Inhaber); nach der Freigabe
+# die App-Store-Adresse in FL_APPSTORE eintragen und FL_IM_STORE auf True. Google Play
+# folgt, sobald die App dort ist.
 FL_APPSTORE = None
 FL_IM_STORE = False
 FL_PLAY = None
@@ -800,10 +791,10 @@ P['freelancerito'] = {
    beschreibung='Freelancerito rechnet dir aus, was du f&uuml;r einen Auftrag verlangen solltest: '
                 'Mindestpreis, Zielpreis und Premium, aus deinen eigenen Werten. Ohne Konto, ohne '
                 'Werbung, f&uuml;r iPhone.',
-   erster='Du tr&auml;gst ein, was dir eine Stunde deiner Zeit wert sein soll. Dann, wie viel Arbeit '
+   erster='Du tr&auml;gst ein, was dir eine Stunde deiner Zeit wert sein soll und wie viel Arbeit '
           'wirklich im Auftrag steckt, auch Kommunikation, Vorbereitung und Korrekturen. Dazu kommen '
           'die direkten Kosten, etwa Material oder Fahrten, und ein Sicherheitspuffer f&uuml;r das '
-          'Unerwartete. Daraus werden drei Preise. Unter dem Mindestpreis liegst du unter deiner '
+          'Unerwartete. Daraus ergeben sich drei Preise. Unter dem Mindestpreis liegst du unter deiner '
           'eigenen Kalkulation. Mit dem Zielpreis gehst du in dein Angebot. Premium l&auml;sst dir '
           'mehr Spielraum, wenn der Auftrag besonders wertvoll, eilig oder anspruchsvoll ist. '
           'Steuern rechnet Freelancerito bewusst nicht mit.',
@@ -814,7 +805,7 @@ P['freelancerito'] = {
         'passiert, wenn es l&auml;nger dauert. Ein Beispiel: 60&nbsp;&euro; pro Stunde, 11 Stunden '
         'Aufwand, 80&nbsp;&euro; Kosten und 15&nbsp;% Puffer ergeben 850, 890 und 1.050&nbsp;&euro;. '
         'Bei 890&nbsp;&euro; ist deine Stunde 73,64&nbsp;&euro; wert. Mit 100&nbsp;&euro; Rabatt sind '
-        'es noch 64,55&nbsp;&euro;, mit zwei Stunden mehr 62,31&nbsp;&euro;.',
+        'es noch 64,55&nbsp;&euro;. Ohne Rabatt, aber mit zwei Stunden mehr, sind es 62,31&nbsp;&euro;.',
    h2a='Freelancerito Plus',
    pa='Der ganze Rechner und alle Simulatoren sind kostenlos, ohne Grenzen. Plus kaufst du einmal, '
       'ein Abo gibt es nicht. Damit speicherst du Kalkulationen und findest sie im Verlauf wieder. '
@@ -832,7 +823,7 @@ P['freelancerito'] = {
    titel='Freelancerito | Price calculator for freelancers',
    beschreibung='Freelancerito works out what you should charge for a job: a minimum price, a target '
                 'price and a premium, all from your own values. No account, no ads, for iPhone.',
-   erster='You enter what one hour of your time should be worth to you. Then how much work the job '
+   erster='You enter what one hour of your time should be worth to you and how much work the job '
           'really involves, including communication, preparation and corrections. Add the direct '
           'costs, such as materials or travel, and a safety buffer for the unexpected. That gives '
           'you three prices. Below the minimum price, you fall below your own calculation. The '
@@ -842,10 +833,11 @@ P['freelancerito'] = {
    h2sim='Test your price',
    psim='In the simulator you move the price between minimum and premium and see the effective '
         'value of your time right away: what is left per hour of effort after direct costs. You can '
-        'try out a discount before you give it, and see what happens if the job takes longer. An '
+        'try out a discount before you offer it, and see what happens if the job takes longer. An '
         'example: &euro;60 an hour, 11 hours of effort, &euro;80 in costs and a 15% buffer give you '
         '&euro;850, &euro;890 and &euro;1,050. At &euro;890 your hour is worth &euro;73.64. With a '
-        '&euro;100 discount it drops to &euro;64.55, with two extra hours to &euro;62.31.',
+        '&euro;100 discount it drops to &euro;64.55. Without the discount but with two extra hours, '
+        'it is &euro;62.31.',
    h2a='Freelancerito Plus',
    pa='The whole calculator and all simulators are free, without limits. You buy Plus once, there '
       'is no subscription. With it you save your calculations and find them again in your history. '
@@ -864,23 +856,23 @@ P['freelancerito'] = {
    beschreibung='Freelancerito calcule ce que tu devrais demander pour une mission&nbsp;: prix '
                 'minimum, prix cible et premium, &agrave; partir de tes propres valeurs. Sans compte, '
                 'sans publicit&eacute;, pour iPhone.',
-   erster='Tu indiques ce que doit valoir une heure de ton temps. Puis le travail que la mission '
-          'demande vraiment, communication, pr&eacute;paration et corrections comprises. Ensuite '
-          'les co&ucirc;ts directs, comme le mat&eacute;riel ou les d&eacute;placements, et une marge '
-          'de s&eacute;curit&eacute; pour l&rsquo;impr&eacute;vu. Tu obtiens trois prix. Sous le prix '
-          'minimum, tu passes sous ton propre calcul. Le prix cible est un prix raisonnable pour '
-          'commencer ton offre. Le premium te laisse plus de marge quand la mission est '
-          'particuli&egrave;rement pr&eacute;cieuse, urgente ou exigeante. Freelancerito ne calcule '
-          'volontairement pas les imp&ocirc;ts.',
+   erster='Tu indiques ce que doit valoir une heure de ton temps et le travail que la mission '
+          'demande vraiment, communication, pr&eacute;paration et corrections comprises. '
+          'S&rsquo;y ajoutent les co&ucirc;ts directs, comme le mat&eacute;riel ou les '
+          'd&eacute;placements, et une marge de s&eacute;curit&eacute; pour l&rsquo;impr&eacute;vu. '
+          'Tu obtiens trois prix. En dessous du prix minimum, tu passes sous ton propre calcul. Le '
+          'prix cible est un prix raisonnable pour ton devis. Le premium te laisse plus de marge quand '
+          'la mission est particuli&egrave;rement importante, urgente ou exigeante. Freelancerito ne '
+          'calcule volontairement pas les imp&ocirc;ts.',
    h2sim='Tester ton prix',
    psim='Dans le simulateur, tu d&eacute;places le prix entre le minimum et le premium et tu vois '
         'tout de suite la valeur effective de ton temps&nbsp;: ce qui reste par heure de travail '
-        'apr&egrave;s les co&ucirc;ts directs. Tu peux essayer une remise avant de l&rsquo;accorder, '
+        'apr&egrave;s les co&ucirc;ts directs. Tu peux essayer une remise avant de l&rsquo;accorder '
         'et voir ce qui se passe si la mission prend plus de temps. Un exemple&nbsp;: 60&nbsp;&euro; '
         'de l&rsquo;heure, 11 heures de travail, 80&nbsp;&euro; de co&ucirc;ts et 15&nbsp;% de marge '
         'donnent 850, 890 et 1&nbsp;050&nbsp;&euro;. &Agrave; 890&nbsp;&euro;, ton heure vaut '
-        '73,64&nbsp;&euro;. Avec 100&nbsp;&euro; de remise, elle tombe &agrave; 64,55&nbsp;&euro;, '
-        'avec deux heures de plus &agrave; 62,31&nbsp;&euro;.',
+        '73,64&nbsp;&euro;. Avec 100&nbsp;&euro; de remise, elle tombe &agrave; 64,55&nbsp;&euro;. '
+        'Sans remise, mais avec deux heures de plus, elle vaut 62,31&nbsp;&euro;.',
    h2a='Freelancerito Plus',
    pa='Le calculateur et tous les simulateurs sont gratuits, sans limite. Plus, tu l&rsquo;ach&egrave;tes '
       'une fois, il n&rsquo;y a pas d&rsquo;abonnement. Avec lui, tu enregistres tes calculs et tu les '
@@ -888,9 +880,9 @@ P['freelancerito'] = {
       'types de co&ucirc;ts, tu gardes des sc&eacute;narios et tu partages un calcul en PDF ou en '
       'texte.',
    h2b='En anglais et en allemand',
-   pb='Freelancerito existe en anglais et en allemand, pas encore en fran&ccedil;ais. Sur un appareil '
+   pb='Freelancerito existe en anglais et en allemand, mais pas en fran&ccedil;ais. Sur un appareil '
       'r&eacute;gl&eacute; en fran&ccedil;ais, l&rsquo;application s&rsquo;affiche en anglais. Tu peux '
-      'compter en euros, francs suisses, livres ou dollars.',
+      'calculer en euros, en francs suisses, en livres ou en dollars.',
    letzter='Pas de compte, pas de pub, pas de pistage, pas d&rsquo;IA. Freelancerito fonctionne hors '
            'ligne, et ce que tu saisis reste sur ton appareil.',
    shots=['Freelancerito&nbsp;: prix minimum, prix cible et premium pour une mission',
@@ -901,29 +893,29 @@ P['freelancerito'] = {
    beschreibung='Freelancerito calcula cu&aacute;nto deber&iacute;as cobrar por un trabajo: precio '
                 'm&iacute;nimo, precio objetivo y premium, a partir de tus propios valores. Sin cuenta, '
                 'sin anuncios, para iPhone.',
-   erster='Anotas cu&aacute;nto quieres que valga una hora de tu tiempo. Despu&eacute;s, cu&aacute;nto '
-          'trabajo lleva de verdad el encargo, incluidas la comunicaci&oacute;n, la preparaci&oacute;n '
-          'y las correcciones. Luego los gastos directos, como material o traslados, y un margen de '
+   erster='Anotas cu&aacute;nto quieres que valga una hora de tu tiempo y cu&aacute;nto trabajo lleva '
+          'de verdad el encargo, incluidas la comunicaci&oacute;n, la preparaci&oacute;n y las '
+          'correcciones. A eso se suman los gastos directos, como material o traslados, y un margen de '
           'seguridad para lo inesperado. Con eso obtienes tres precios. Por debajo del precio '
           'm&iacute;nimo, quedas por debajo de tu propio c&aacute;lculo. El precio objetivo es un '
-          'precio razonable para empezar tu oferta. El premium te deja m&aacute;s margen cuando el '
-          'trabajo es especialmente valioso, urgente o exigente. Freelancerito no calcula impuestos, '
-          'a prop&oacute;sito.',
+          'precio razonable para tu oferta. El premium te deja m&aacute;s margen cuando el trabajo es '
+          'especialmente valioso, urgente o exigente. Freelancerito deja fuera los impuestos a '
+          'prop&oacute;sito.',
    h2sim='Prueba tu precio',
    psim='En el simulador mueves el precio entre el m&iacute;nimo y el premium y ves al momento el '
         'valor efectivo de tu tiempo: lo que queda por hora de trabajo despu&eacute;s de los gastos '
-        'directos. Puedes probar un descuento antes de darlo y ver qu&eacute; pasa si el trabajo '
+        'directos. Puedes probar un descuento antes de ofrecerlo y ver qu&eacute; pasa si el trabajo '
         'lleva m&aacute;s tiempo. Un ejemplo: 60&nbsp;&euro; la hora, 11 horas de trabajo, '
         '80&nbsp;&euro; de gastos y un margen del 15&nbsp;% dan 850, 890 y 1050&nbsp;&euro;. A '
         '890&nbsp;&euro;, tu hora vale 73,64&nbsp;&euro;. Con 100&nbsp;&euro; de descuento baja a '
-        '64,55&nbsp;&euro;, con dos horas m&aacute;s a 62,31&nbsp;&euro;.',
+        '64,55&nbsp;&euro;. Sin descuento, pero con dos horas m&aacute;s, se queda en 62,31&nbsp;&euro;.',
    h2a='Freelancerito Plus',
    pa='La calculadora y todos los simuladores son gratis, sin l&iacute;mites. Plus lo pagas una vez, '
-      'no hay suscripci&oacute;n. Con &eacute;l guardas tus c&aacute;lculos y los encuentras en el '
-      'historial. Defines tus propios valores predeterminados y tipos de gastos, guardas escenarios '
+      'no hay suscripci&oacute;n. Con &eacute;l guardas tus c&aacute;lculos y vuelves a abrirlos desde '
+      'el historial. Defines tus propios valores predeterminados y tipos de gastos, guardas escenarios '
       'y compartes un c&aacute;lculo como PDF o como texto.',
    h2b='En ingl&eacute;s y alem&aacute;n',
-   pb='Freelancerito est&aacute; en ingl&eacute;s y alem&aacute;n, todav&iacute;a no en espa&ntilde;ol. '
+   pb='Freelancerito est&aacute; en ingl&eacute;s y alem&aacute;n, pero no en espa&ntilde;ol. '
       'En un dispositivo en espa&ntilde;ol, la app se muestra en ingl&eacute;s. Puedes calcular en '
       'euros, francos suizos, libras o d&oacute;lares.',
    letzter='Sin cuenta, sin anuncios, sin rastreo, sin IA. Freelancerito funciona sin conexi&oacute;n, '
@@ -1253,6 +1245,19 @@ PUNKTE_SKRIPT = '''<script>
     markiere();
   });
 </script>'''
+
+
+def app_sprache(app, sprache):
+    """Die Sprache, in der die App (und ihre Rechtsseite) einem Besucher dieser Seite begegnet."""
+    return sprache if sprache in APP_SPRACHEN.get(app, SPRACHEN) else 'en'
+
+
+def recht_link(app, sprache):
+    """Adresse und Text des Links auf die Rechtsseite einer App, in der Sprache der Seite,
+    soweit die Rechtsseite sie hat."""
+    s = app_sprache(app, sprache)
+    text = T[sprache]['support_recht'] + (AUF_ENGLISCH[sprache] if s != sprache else '')
+    return '%s#%s' % (RECHT[app], s), text
 
 
 def galerie_html(app, sprache, kennung):

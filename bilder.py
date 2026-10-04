@@ -103,9 +103,12 @@ galerie('karma-farmer')
 # Symbole hier), Karte im Tintenblau des Schiebereglers aus dem Symbol, damit das helle Symbol
 # darauf steht. Fotos gibt es noch keine. Sie sollen aus dem Store-Bilder-Test der App kommen
 # (integration_test/store_bilder_test.dart, iPhone 17 Pro Max Simulator, laeuft beim Inhaber),
-# nur Deutsch und Englisch, weil die App nur die zwei Sprachen hat. Den Test gibt es am
-# 4.10.2026 noch nicht. Bis dahin findet galerie nichts, und bauen.py laesst die Bilderreihe
-# weg, statt kaputte Bilder zu zeigen.
+# nur Deutsch und Englisch, weil die App nur die zwei Sprachen hat: bilder_original/
+# freelancerito-de-1.png bis -3.png und freelancerito-en-1.png bis -3.png. Die franzoesische
+# und spanische Seite zeigen die englischen. Den Test gibt es am 4.10.2026 noch nicht. Bis
+# dahin findet galerie nichts, und bauen.py laesst die Bilderreihe weg, statt kaputte Bilder
+# zu zeigen. Danach die Alt-Texte in bauen.py (P['freelancerito'], shots) gegen die Fotos
+# pruefen, sie sind ohne die Fotos geschrieben.
 FL_BAND = '#2F5175'
 fl = Image.open(os.path.join(IMG, 'freelancerito.png')).convert('RGB')
 karte('freelancerito', FL_BAND, rund(fl, 112), 380)
