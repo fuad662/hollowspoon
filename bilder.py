@@ -105,9 +105,10 @@ galerie('karma-farmer')
 # (integration_test/store_bilder_test.dart, iPhone 17 Pro Max Simulator, laeuft beim Inhaber),
 # nur Deutsch und Englisch, weil die App nur die zwei Sprachen hat: bilder_original/
 # freelancerito-de-1.png bis -3.png und freelancerito-en-1.png bis -3.png. Die franzoesische
-# und spanische Seite zeigen die englischen. Den Test gibt es am 4.10.2026 noch nicht. Bis
-# dahin findet galerie nichts, und bauen.py laesst die Bilderreihe weg, statt kaputte Bilder
-# zu zeigen. Danach die Alt-Texte in bauen.py (P['freelancerito'], shots) gegen die Fotos
+# und spanische Seite zeigen die englischen. Den Test gibt es seit dem 4.10.2026; beim
+# Inhaber erzeugt `tool/mac.sh storefotos` (im App-Projekt) die PNGs, die hierher gehoeren,
+# in build/store_fotos/website/. Solange sie nicht hier liegen, findet galerie nichts, und
+# bauen.py laesst die Bilderreihe weg, statt kaputte Bilder zu zeigen. Danach die Alt-Texte in bauen.py (P['freelancerito'], shots) gegen die Fotos
 # pruefen, sie sind ohne die Fotos geschrieben.
 FL_BAND = '#2F5175'
 fl = Image.open(os.path.join(IMG, 'freelancerito.png')).convert('RGB')
