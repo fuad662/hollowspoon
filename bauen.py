@@ -57,8 +57,9 @@ SITE = 'https://hollowspoon.app'
 # freischalten"), noch bevor Apple die App freigibt: der Knopf zeigt schon auf die
 # App-Store-Adresse, die ab der Freigabe von selbst funktioniert.
 # Freelancerito (4.10.2026) ist in keinem Store, weder bei Apple noch bei Google, also
-# offline wie Wheresome: Produktseiten, Karte und Support-Eintrag gibt es nur in der
-# Vorschau. Die Rechtsseite /freelancerito liegt trotzdem schon da (aus dem App-Repository,
+# offline wie Wheresome: Produktseiten und Karte gibt es nur in der Vorschau. Auf der
+# Support-Seite steht Freelancerito seit 7.10.2026 trotzdem, wie Mitrechner und Karma Farmer
+# vor ihrem Start (User: "und auch die Supportseite"). Die Rechtsseite /freelancerito liegt trotzdem schon da (aus dem App-Repository,
 # tool/rechtsseite.py --site), weil App Store Connect sie als Datenschutz- und
 # Support-Adresse braucht.
 OFFLINE = {'wheresome', 'freelancerito'}
@@ -112,7 +113,7 @@ FL_PLAY = None
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-03'
+STAND = '2026-10-07'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -1458,7 +1459,7 @@ def support_seite(sprache):
         ds_pfad=DS_PFAD[sprache],
         support_wheresome='' if 'wheresome' in AUS else
         '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']),
-        support_freelancerito='' if 'freelancerito' in AUS else
+        support_freelancerito=
         '  <h2>Freelancerito</h2>\n  <p><a href="%s">%s</a></p>\n\n' % recht_link('freelancerito', sprache))
 
 
