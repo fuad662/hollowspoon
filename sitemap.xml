@@ -145,4 +145,40 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/karma-farmer/product/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/karma-farmer/product/"/>
   </url>
+  <url>
+    <loc>https://hollowspoon.app/capyroo-run/product/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/en/capyroo-run/product/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/fr/capyroo-run/product/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+  </url>
+  <url>
+    <loc>https://hollowspoon.app/es/capyroo-run/product/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="de" href="https://hollowspoon.app/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/capyroo-run/product/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/capyroo-run/product/"/>
+  </url>
 </urlset>

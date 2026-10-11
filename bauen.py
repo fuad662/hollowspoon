@@ -67,10 +67,11 @@ OFFLINE = {'wheresome', 'freelancerito'}
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
-APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'wheresome']
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'wheresome']
         if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
-         'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito'}
+         'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito',
+         'capyroo-run': '/capyroo-run'}
 # Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gab es am
 # 4.10.2026 zuerst nur auf Deutsch und Englisch; noch am selben Tag kamen Spanisch und
 # Franzoesisch dazu (Englisch ist dort Hauptsprache und Rueckfall). Seitdem spricht jede App
@@ -82,7 +83,7 @@ APP_SPRACHEN = {}
 # (app_sprache und recht_link, weiter unten bei galerie_html).
 AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
 # Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
-NAME = {'karma-farmer': 'Karma Farmer'}
+NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
 # Adresse leitet Apple in den Store des Besuchers weiter; das passt, weil die spanische
 # Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
@@ -99,6 +100,12 @@ MITR_PLAY = None
 # Knopf. Nach der Freigabe die Apple-ID eintragen und KF_IM_STORE auf True.
 KF_APPSTORE = None
 KF_IM_STORE = False
+# Capyroo Run (11.10.2026, "baue sofort eine produktseite"): noch nicht im Store, also
+# "Bald im App Store." statt Knopf. Nach der Freigabe die Apple-ID eintragen und CR_IM_STORE
+# auf True. Die Seite steht NICHT auf der Startseite und nicht im Support (nur unter
+# /capyroo-run/product/ und in der Sitemap), damit die anderen Seiten bleiben, wie sie sind.
+CR_APPSTORE = None
+CR_IM_STORE = False
 # Freelancerito (4.10.2026): noch in keinem Store, keine Apple-ID, nicht bei Google Play.
 # Wie bei Mitrechner und Karma Farmer steht auf der Seite „Bald im App Store." statt eines
 # Knopfes, der ins Leere fuehrt. Zwei Schritte, die nicht zusammenfallen muessen: zum
@@ -121,7 +128,8 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'wheresome': '/assets/img/og-wheresome.png',
            'mitrechner': '/assets/img/og-mitrechner.png',
            'karma-farmer': '/assets/img/og-karma-farmer.png',
-           'freelancerito': '/assets/img/og-freelancerito.png'}
+           'freelancerito': '/assets/img/og-freelancerito.png',
+           'capyroo-run': '/assets/img/og-capyroo-run.png'}
 
 T = {
     'de': dict(
@@ -750,6 +758,125 @@ P['karma-farmer'] = {
 
 
 # ---------------------------------------------------------------------------
+# Capyroo Run (11.10.2026). Dieselben Saetze wie im Store (capyroo_runner/tools/store/store.py),
+# nur, was das Spiel wirklich kann: ein Finger, Doppelsprung, Besucher am Himmel, zwoelf
+# Landschaften, 15 Skins, 15 Glueh­wuermchen, 20 Spuren, 48 Missionen, Tageslauf, Werbung nur
+# zwischen zwei Laeufen, Werbefrei als Einmalkauf, kein Konto.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _text, _start) in {
+    'de': ('Symbol der App Capyroo Run',
+           'Ein Capybara, ein kleiner Planet, ein Finger. Wie weit kommst du?', ''),
+    'en': ('Capyroo Run app icon',
+           'One capybara, one tiny planet, one finger. How far will you get?', ''),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Capyroo Run',
+           'Un capybara, une petite plan&egrave;te, un doigt. Jusqu&rsquo;o&ugrave; iras-tu&nbsp;?', ''),
+    'es': ('Icono de la app Capyroo Run',
+           'Un carpincho, un planeta peque&ntilde;o, un dedo. &iquest;Hasta d&oacute;nde llegar&aacute;s?', ''),
+}.items():
+    T[_s]['og_alt']['capyroo-run'] = _og
+    T[_s]['cr_text'] = _text
+
+P['capyroo-run'] = {
+  'de': dict(
+   titel='Capyroo Run | Ein Tipp, und Capyroo fliegt',
+   beschreibung='Capyroo rennt um einen kleinen Planeten, und du springst mit einem Finger. '
+                'Ohne Konto, f&uuml;r iPhone.',
+   erster='Capyroo rennt um einen kleinen Planeten. Tippen hei&szlig;t springen, Halten hei&szlig;t '
+          'h&ouml;her, und in der Luft noch mal tippen ist der Doppelsprung. Unterwegs warten '
+          'Baumst&auml;mme, L&uuml;cken, Felsen und Plattformen in zwei H&ouml;hen, und je weiter du '
+          'kommst, desto schneller wird es.',
+   h2a='&Uuml;ber dir ist was los',
+   pa='Ein Wal zieht vorbei, ein Delfin, ein Astronaut, ein Ballon, und ganze Planeten gehen am '
+      'Horizont auf. Dazu zw&ouml;lf Landschaften, vom Morgenrot bis zum Polarlicht.',
+   h2b='Mach Capyroo zu deinem',
+   pb='Mit deinen Funken holst du dir 15 Skins, 15 Gl&uuml;hw&uuml;rmchen, 20 Spuren und eigene '
+      'Tricks. Dazu vier Power-ups in f&uuml;nf Stufen, 48 Missionen und jeden Tag ein Tageslauf, '
+      'der f&uuml;r alle gleich ist. Funken kann man nicht kaufen, die erspielst du. Ein paar '
+      'besondere Skins, Tricks und eine Spur gibt es einzeln, und mit &bdquo;Werbung '
+      'entfernen&ldquo; (einmal kaufen, kein Abo) ist die Werbung weg.',
+   letzter='Kein Konto. Werbung kommt nur zwischen zwei L&auml;ufen, nie beim Laufen. Capyroo Run '
+           'gibt es auf Deutsch, Englisch, Franz&ouml;sisch und Spanisch.',
+   shots=['Capyroo Run: ein Salto unterm Wal',
+          'Capyroo Run: Planeten gehen vor dir auf',
+          'Capyroo Run: hoch oben im Pilzwald']),
+  'en': dict(
+   titel='Capyroo Run | One tap and Capyroo flies',
+   beschreibung='Capyroo runs around a tiny planet, and you jump with one finger. No account, '
+                'for iPhone.',
+   erster='Capyroo runs around a tiny planet. Tap to jump, hold to jump higher, and tap again '
+          'in the air for the double jump. On the way come logs, gaps, rocks and platforms on two '
+          'levels, and the further you get, the faster it goes.',
+   h2a='Something&rsquo;s always going on above you',
+   pa='A whale drifts by, a dolphin, an astronaut, a balloon, and whole planets rise on the '
+      'horizon. Plus twelve landscapes, from dawn to northern lights.',
+   h2b='Make Capyroo your own',
+   pb='With your Sparks you get 15 skins, 15 fireflies, 20 trails and your own tricks. Plus four '
+      'power-ups in five levels, 48 missions and every day a daily run that&rsquo;s the same for '
+      'everyone. Sparks can&rsquo;t be bought, you earn them. A few special skins, tricks and a '
+      'trail can be bought one by one, and with &ldquo;Remove Ads&rdquo; (buy once, no '
+      'subscription) the ads are gone.',
+   letzter='No account. Ads only come between two runs, never while you run. Capyroo Run is '
+           'available in English, German, French and Spanish.',
+   shots=['Capyroo Run: a flip under a whale',
+          'Capyroo Run: planets rise ahead of you',
+          'Capyroo Run: high up in the mushroom forest']),
+  'fr': dict(
+   titel='Capyroo Run | Une touche et Capyroo s&rsquo;envole',
+   beschreibung='Capyroo court autour d&rsquo;une petite plan&egrave;te, et tu sautes avec un '
+                'doigt. Sans compte, pour iPhone.',
+   erster='Capyroo court autour d&rsquo;une petite plan&egrave;te. Touche pour sauter, maintiens '
+          'pour sauter plus haut, et touche encore en l&rsquo;air pour le double saut. En chemin, '
+          'il y a des troncs, des trous, des rochers et des plateformes sur deux hauteurs, et plus '
+          'tu vas loin, plus &ccedil;a va vite.',
+   h2a='Au-dessus de toi, il se passe toujours quelque chose',
+   pa='Une baleine passe, un dauphin, un astronaute, une montgolfi&egrave;re, et des plan&egrave;tes '
+      'enti&egrave;res se l&egrave;vent &agrave; l&rsquo;horizon. En plus, douze paysages, de '
+      'l&rsquo;aube &agrave; l&rsquo;aurore bor&eacute;ale.',
+   h2b='Ton Capyroo &agrave; toi',
+   pb='Avec tes &eacute;tincelles, tu obtiens 15 skins, 15 lucioles, 20 tra&icirc;n&eacute;es et '
+      'tes propres figures. En plus, quatre bonus sur cinq niveaux, 48 missions et chaque jour une '
+      'course du jour, la m&ecirc;me pour tout le monde. Les &eacute;tincelles ne s&rsquo;ach&egrave;'
+      'tent pas, tu les gagnes en jouant. Quelques skins, figures et une tra&icirc;n&eacute;e '
+      's&rsquo;ach&egrave;tent &agrave; l&rsquo;unit&eacute;, et avec &laquo;&nbsp;Supprimer les '
+      'pubs&nbsp;&raquo; (un seul achat, sans abonnement), la pub dispara&icirc;t.',
+   letzter='Sans compte. La pub ne vient qu&rsquo;entre deux courses, jamais pendant que tu cours. '
+           'Capyroo Run est disponible en fran&ccedil;ais, anglais, allemand et espagnol.',
+   shots=['Capyroo Run&nbsp;: un salto sous la baleine',
+          'Capyroo Run&nbsp;: des plan&egrave;tes se l&egrave;vent',
+          'Capyroo Run&nbsp;: tout en haut de la for&ecirc;t de champignons']),
+  'es': dict(
+   titel='Capyroo Run | Un toque y Capyroo vuela',
+   beschreibung='Capyroo corre alrededor de un planeta peque&ntilde;o y t&uacute; saltas con un '
+                'dedo. Sin cuenta, para iPhone.',
+   erster='Capyroo corre alrededor de un planeta peque&ntilde;o. Toca para saltar, mant&eacute;n '
+          'pulsado para saltar m&aacute;s alto, y toca otra vez en el aire para el doble salto. En '
+          'el camino hay troncos, huecos, rocas y plataformas en dos alturas, y cuanto m&aacute;s '
+          'lejos llegas, m&aacute;s r&aacute;pido va.',
+   h2a='Arriba siempre pasa algo',
+   pa='Una ballena pasa flotando, un delf&iacute;n, un astronauta, un globo, y planetas enteros '
+      'salen en el horizonte. Adem&aacute;s, doce paisajes, del amanecer a la aurora boreal.',
+   h2b='Haz tuyo a Capyroo',
+   pb='Con tus chispas consigues 15 aspectos, 15 luci&eacute;rnagas, 20 estelas y tus propios '
+      'trucos. Adem&aacute;s, cuatro potenciadores en cinco niveles, 48 misiones y cada d&iacute;a '
+      'una carrera diaria que es igual para todos. Las chispas no se compran, se ganan jugando. '
+      'Algunos aspectos, trucos y una estela especiales se pueden comprar sueltos, y con '
+      '&laquo;Quitar anuncios&raquo; (una sola compra, sin suscripci&oacute;n) se van los anuncios.',
+   letzter='Sin cuenta. Los anuncios solo aparecen entre dos carreras, nunca mientras corres. '
+           'Capyroo Run est&aacute; en espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s.',
+   shots=['Capyroo Run: un mortal bajo la ballena',
+          'Capyroo Run: planetas salen ante ti',
+          'Capyroo Run: arriba en el bosque de setas']),
+}
+
+# Der Stil der Capyroo-Seite gehoert nur zu dieser Seite: so aendert sich keine andere.
+CAPY_STIL = """
+  /* Capyroo Run: der Abendhimmel der App, hell auf dunklem Violett. */
+  .band.capy { background: linear-gradient(180deg, #1B1646 0%, #3C2A74 55%, #6A3E8C 100%); color: #F6F1FF; }
+"""
+
+
+# ---------------------------------------------------------------------------
 # Freelancerito (4.10.2026). Nur, was die App wirklich kann (lib/l10n/app_de.arb und README im
 # App-Projekt): Stundenwert, Aufwand in fuenf Teilen, direkte Kosten, Puffer, daraus
 # Mindestpreis, Zielpreis und Premium, alles aus den eigenen Werten und ausdruecklich keine
@@ -1308,10 +1435,12 @@ def knoepfe(app, sprache):
     von Apple."""
     t = T[sprache]
     if ((app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE)
-            or (app == 'freelancerito' and not FL_IM_STORE)):
+            or (app == 'freelancerito' and not FL_IM_STORE)
+            or (app == 'capyroo-run' and not CR_IM_STORE)):
         return '    <p class="soon">%s</p>' % MITR_BALD[sprache]
     ziel = {'shlayolotl': SHLAY_URL[sprache], 'mitrechner': MITR_APPSTORE[sprache],
-            'karma-farmer': KF_APPSTORE, 'freelancerito': FL_APPSTORE}.get(app) or '#'
+            'karma-farmer': KF_APPSTORE, 'freelancerito': FL_APPSTORE,
+            'capyroo-run': CR_APPSTORE}.get(app) or '#'
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
             '    </a>' % (ziel, sprache, t['badge_alt']))
@@ -1335,7 +1464,7 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito'):
+    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
                 + ('      <h2>%(h2sim)s</h2>\n'
@@ -1348,7 +1477,7 @@ def produkt_seite(app, sprache):
         reihe = galerie_html(app, sprache, 'shots')
         unten = unten_html(app, sprache, 'shots')
         lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text'],
-                'freelancerito': t['fl_text']}[app]
+                'freelancerito': t['fl_text'], 'capyroo-run': t['cr_text']}[app]
         # Ohne Bilderreihe keine Punkte, also auch kein Skript dafuer.
         skript = PUNKTE_SKRIPT if reihe else ''
     else:
@@ -1412,8 +1541,9 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL, klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma',
-                              'freelancerito': 'freel'}.get(app, 'where'),
+           stil=STIL + (CAPY_STIL if app == 'capyroo-run' else ''),
+           klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma',
+                   'freelancerito': 'freel', 'capyroo-run': 'capy'}.get(app, 'where'),
            symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
            text=text, unten=unten, recht_href=recht_link(app, sprache)[0], recht_text=recht_link(app, sprache)[1],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
@@ -1843,7 +1973,7 @@ if __name__ == '__main__':
     ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
     if VORSCHAU:
         os.makedirs(ZIEL, exist_ok=True)
-        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'shlayolotl.html',
+        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'capyroo-run.html', 'shlayolotl.html',
                      'wheresome.html', 'impressum.html'):
             verweis = os.path.join(ZIEL, teil)
             if not os.path.lexists(verweis):
