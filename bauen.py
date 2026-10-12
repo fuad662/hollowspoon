@@ -120,7 +120,7 @@ FL_PLAY = None
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-07'
+STAND = '2026-10-12'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -133,12 +133,12 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
 
 T = {
     'de': dict(
-        titel='Hollow Spoon | Apps &amp; Spiele',
+        titel='Hollow Spoon | Eine App. Eine Sache. Richtig gut.',
         support_titel='Support | Hollow Spoon',
         support_zeile='Schreib uns:',
         support_recht='Support und Datenschutzerkl&auml;rung',
-        beschreibung='Hollow Spoon baut Apps, die eine Sache k&ouml;nnen: '
-                     'Shlayolotl, Tic Tac Toe mit Axolotln, im App Store.',
+        beschreibung='Kleine Apps mit Charakter: Axolotl zocken, Capybara '
+                     'h&uuml;pfen, Pflanze wachsen lassen. Von Hollow Spoon aus Bremen.',
         support_beschreibung='Fragen zu unseren Apps? Schreib an '
                              'contact@hollowspoon.app. Hier stehen auch Support '
                              'und Datenschutzerkl&auml;rung je App.',
@@ -1077,6 +1077,12 @@ def symbol(app):
         '        <img class="icon" src="/assets/img/%s.png" alt="" width="256" height="256">\n'
         '      </picture>' % (app, app, app)
     )
+
+
+# Startseite deutsch: eigene kurze Beschreibung (max. ca. 155 Zeichen), ohne die je App
+# angehaengten Saetze oben. Die Namen der Apps stehen drin, damit man sie findet.
+T['de']['beschreibung'] = ('Kleine Apps mit Charakter: Shlayolotl, Mitrechner, Karma Farmer und '
+                           'Capyroo Run. Axolotl zocken, Capybara h&uuml;pfen, Pflanze wachsen lassen.')
 
 
 def kopf(sprache, pfade, titel, beschreibung, bild='start'):
