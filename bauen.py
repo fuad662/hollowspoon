@@ -2081,7 +2081,7 @@ def datenschutz_seite(sprache):
         zusammen, sprache=sprache, startpfad=PFAD[sprache],
         kopf=kopf(sprache, DS_PFAD, d['titel'] + ' | Hollow Spoon',
                   t['ds_beschreibung']),
-        sprachen=sprachleiste(sprache, DS_PFAD), stil=SUPPORT_STIL, menue=apps_menue(sprache),
+        sprachen=sprachleiste(sprache, DS_PFAD), stil=SUPPORT_STIL, menue=apps_menue(sprache), ds_pfad=DS_PFAD[sprache],
         stand=DS_STAND[sprache], anschrift=ANSCHRIFT, behoerde=BEHOERDE)
 
 
@@ -2139,7 +2139,7 @@ VORLAGE_DS = """<!DOCTYPE html>
   <footer>
     <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
     <a href="/impressum">%(impressum)s</a>
-    <a href="%(startpfad)ssupport/">%(nav_support)s</a>
+    <a href="%(ds_pfad)s">%(datenschutz)s</a>
   </footer>
   <p class="sprachen">%(sprachen)s</p>
 </div>
