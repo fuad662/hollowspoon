@@ -1272,7 +1272,10 @@ for _s, (_z, _w) in {'de': ('Vorige App', 'N&auml;chste App'), 'en': ('Previous 
 
 
 def apps_menue(sprache):
-    """Das Menue "Apps": jede App der Startseite mit Symbol, der Link fuehrt dort zu ihr."""
+    """Das Menue "Apps": jede App der Startseite mit Symbol, der Link fuehrt dort zu ihr.
+    Seit 14.10.2026 steht oben nur noch dieses Menue. "Support" ist aus der Leiste raus
+    (User: "die seite weiter bestehen lassen aber oben aus der leiste entfernen"); die
+    Seite selbst bleibt, falls sie irgendwo als Adresse eingetragen ist."""
     eintraege = ''.join(
         '<a href="%s#%s"><img src="/assets/img/%s-256.webp" alt="" width="28" height="28">%s</a>'
         % (PFAD[sprache], app, app, NAME.get(app, app.capitalize())) for app in START_APPS)
@@ -1301,7 +1304,7 @@ def seite(sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts">%(menue)s<a href="%(pfad)ssupport/">%(nav_support)s</a></div>
+    <div class="rechts">%(menue)s</div>
   </nav>
 </div>
 
@@ -1708,7 +1711,7 @@ def produkt_seite(app, sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts">%(menue)s<a href="%(startpfad)ssupport/">%(nav_support)s</a></div>
+    <div class="rechts">%(menue)s</div>
   </nav>
 </div>
 
@@ -2078,7 +2081,7 @@ def datenschutz_seite(sprache):
         zusammen, sprache=sprache, startpfad=PFAD[sprache],
         kopf=kopf(sprache, DS_PFAD, d['titel'] + ' | Hollow Spoon',
                   t['ds_beschreibung']),
-        sprachen=sprachleiste(sprache, DS_PFAD), stil=SUPPORT_STIL,
+        sprachen=sprachleiste(sprache, DS_PFAD), stil=SUPPORT_STIL, menue=apps_menue(sprache),
         stand=DS_STAND[sprache], anschrift=ANSCHRIFT, behoerde=BEHOERDE)
 
 
@@ -2100,7 +2103,7 @@ VORLAGE_DS = """<!DOCTYPE html>
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158"></a></span>
-    <span class="rechts"><a href="%(startpfad)ssupport/">%(nav_support)s</a></span>
+    <div class="rechts">%(menue)s</div>
   </nav>
 
   <h1>%(titel)s</h1>
