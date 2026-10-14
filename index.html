@@ -193,7 +193,7 @@
   .apps .carousel { overscroll-behavior-x: contain; }
   /* Die Pfeile auf Hoehe von Symbol und Name: sichtbar, sobald die App anfaengt, und am
      Rechner neben der Textspalte statt darauf. */
-  .apps-pfeil { position: absolute; top: 130px; transform: translateY(-50%); z-index: 2;
+  .apps-pfeil { position: absolute; top: 94px; transform: translateY(-50%); z-index: 2;
                 width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
                 background: rgba(255,255,255,.9); color: #14161A; cursor: pointer;
                 box-shadow: 0 4px 14px rgba(0,0,0,.18); }
@@ -212,6 +212,25 @@
   }
   @media (max-width: 720px) {
     .apps-pfeil { display: none; }
+    .apps .carousel img { height: 48vh; }
+  }
+  /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch"): weniger Rand, kleineres
+     Symbol, kleinere Bilder, und am Rechner Text links, Bilder rechts, damit eine App auf
+     einen Bildschirm passt. */
+  .apps .band { padding: 52px 0; }
+  .apps .band .icon { width: 84px; border-radius: 19px; }
+  .apps .band h2 { font-size: clamp(30px, 3.6vw, 42px); }
+  @media (min-width: 721px) {
+    .apps .carousel img { width: 150px; }
+  }
+  @media (min-width: 1000px) {
+    .apps .band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto;
+                        grid-template-rows: auto 1fr; column-gap: 48px; align-items: start; }
+    .apps .band .info { grid-column: 1; grid-row: 1; }
+    .apps .band .kaufen { grid-column: 1; grid-row: 2; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; padding-bottom: 0; }
+    .apps .band .kaufen .badge { margin-top: 0; }
+    .apps-pfeil { top: 50%; }
   }
 
 </style>
@@ -247,6 +266,7 @@
 <div class="apps-reihe" id="apps-reihe">
 <section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
       <picture>
         <source type="image/webp" srcset="/assets/img/shlayolotl-256.webp 256w, /assets/img/shlayolotl-512.webp 512w" sizes="112px">
@@ -258,6 +278,7 @@
     </div>
     <p>Tic Tac Toe mit Axolotln. Schnelle Runden gegen den Computer, gegen jemanden neben dir oder online.</p>
     <p class="mehr"><a href="/shlayolotl/product/">Mehr zu Shlayolotl</a></p>
+    </div>
     <div class="carousel" id="shots">
         <picture>
           <source type="image/avif" srcset="/assets/shots/shlayolotl-de-1-420.avif 420w, /assets/shots/shlayolotl-de-1-840.avif 840w" sizes="212px">
@@ -276,14 +297,17 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots"></div>
+    <div class="kaufen">
     <a class="badge" href="https://apps.apple.com/de/app/shlayolotl/id6805653548">
       <img src="/assets/img/appstore-de.svg" alt="Laden im App Store" width="120" height="40">
     </a>
+    </div>
   </div>
 </section>
 
 <section class="band mitr" id="mitrechner" data-name="Mitrechner">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
       <picture>
         <source type="image/webp" srcset="/assets/img/mitrechner-256.webp 256w, /assets/img/mitrechner-512.webp 512w" sizes="112px">
@@ -295,6 +319,7 @@
     </div>
     <p>Die Einkaufsliste mit &Uuml;berblick. Du wei&szlig;t beim Einkaufen immer, was alles zusammen kostet.</p>
     <p class="mehr"><a href="/mitrechner/product/">Mehr zu Mitrechner</a></p>
+    </div>
     <div class="carousel" id="shots-mitr">
         <picture>
           <source type="image/avif" srcset="/assets/shots/mitrechner-de-1-420.avif 420w, /assets/shots/mitrechner-de-1-840.avif 840w" sizes="212px">
@@ -313,14 +338,17 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots-mitr"></div>
+    <div class="kaufen">
     <a class="badge" href="https://apps.apple.com/app/mitrechner/id6818615754">
       <img src="/assets/img/appstore-de.svg" alt="Laden im App Store" width="120" height="40">
     </a>
     <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner">Auch bei Google Play</a></p>
+    </div>
   </div>
 </section>
 <section class="band karma" id="karma-farmer" data-name="Karma Farmer">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
       <picture>
         <source type="image/webp" srcset="/assets/img/karma-farmer-256.webp 256w, /assets/img/karma-farmer-512.webp 512w" sizes="112px">
@@ -332,6 +360,7 @@
     </div>
     <p>Jeden Tag eine kleine Mission: mal f&uuml;rs Klima, mal f&uuml;r andere, mal f&uuml;r dich. Du machst sie, und deine Pflanze w&auml;chst mit.</p>
     <p class="mehr"><a href="/karma-farmer/product/">Mehr zu Karma Farmer</a></p>
+    </div>
     <div class="carousel" id="shots-kf">
         <picture>
           <source type="image/avif" srcset="/assets/shots/karma-farmer-de-1-420.avif 420w, /assets/shots/karma-farmer-de-1-840.avif 840w" sizes="212px">
@@ -350,10 +379,12 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots-kf"></div>
+    <div class="kaufen">
     <a class="badge" href="https://apps.apple.com/app/karma-farmer/id6818803808">
       <img src="/assets/img/appstore-de.svg" alt="Laden im App Store" width="120" height="40">
     </a>
     <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.karmafarmer">Auch bei Google Play</a></p>
+    </div>
   </div>
 </section>
 </div>

@@ -490,7 +490,7 @@ APPS_STIL = '''
   .apps .carousel { overscroll-behavior-x: contain; }
   /* Die Pfeile auf Hoehe von Symbol und Name: sichtbar, sobald die App anfaengt, und am
      Rechner neben der Textspalte statt darauf. */
-  .apps-pfeil { position: absolute; top: 130px; transform: translateY(-50%); z-index: 2;
+  .apps-pfeil { position: absolute; top: 94px; transform: translateY(-50%); z-index: 2;
                 width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
                 background: rgba(255,255,255,.9); color: #14161A; cursor: pointer;
                 box-shadow: 0 4px 14px rgba(0,0,0,.18); }
@@ -509,6 +509,25 @@ APPS_STIL = '''
   }
   @media (max-width: 720px) {
     .apps-pfeil { display: none; }
+    .apps .carousel img { height: 48vh; }
+  }
+  /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch"): weniger Rand, kleineres
+     Symbol, kleinere Bilder, und am Rechner Text links, Bilder rechts, damit eine App auf
+     einen Bildschirm passt. */
+  .apps .band { padding: 52px 0; }
+  .apps .band .icon { width: 84px; border-radius: 19px; }
+  .apps .band h2 { font-size: clamp(30px, 3.6vw, 42px); }
+  @media (min-width: 721px) {
+    .apps .carousel img { width: 150px; }
+  }
+  @media (min-width: 1000px) {
+    .apps .band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto;
+                        grid-template-rows: auto 1fr; column-gap: 48px; align-items: start; }
+    .apps .band .info { grid-column: 1; grid-row: 1; }
+    .apps .band .kaufen { grid-column: 1; grid-row: 2; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; padding-bottom: 0; }
+    .apps .band .kaufen .badge { margin-top: 0; }
+    .apps-pfeil { top: 50%; }
   }
 '''
 
@@ -1296,6 +1315,7 @@ def seite(sprache):
 <div class="apps-reihe" id="apps-reihe">
 <section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
 %(symbol_shlay)s
       <div>
@@ -1304,13 +1324,16 @@ def seite(sprache):
     </div>
     <p>%(shlay_text)s</p>
     <p class="mehr"><a href="%(pfad)sshlayolotl/product/">%(mehr_shlay)s</a></p>
+    </div>
     <div class="carousel" id="shots">
 %(shots)s
     </div>
     <div class="punkte" data-fuer="shots"></div>
+    <div class="kaufen">
     <a class="badge" href="%(shlay_url)s">
       <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
     </a>
+    </div>
   </div>
 </section>
 
@@ -1405,7 +1428,8 @@ def seite(sprache):
                knoepfe_kf=knoepfe('karma-farmer', sprache)),
            fl_abschnitt='' if 'freelancerito' in AUS else FL_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_fl=symbol('freelancerito'),
-               mehr_fl=t['mehr']['freelancerito'], unten_fl=unten_html('freelancerito', sprache, 'shots-fl')),
+               mehr_fl=t['mehr']['freelancerito'], shots_fl=galerie_html('freelancerito', sprache, 'shots-fl'),
+               knoepfe_fl=knoepfe('freelancerito', sprache)),
            where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
                mehr_where=t['mehr']['wheresome']),
@@ -1416,6 +1440,7 @@ def seite(sprache):
 # ausgeblendet (siehe OFFLINE).
 MITR_ABSCHNITT = '''<section class="band mitr" id="mitrechner" data-name="Mitrechner">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
 %(symbol_mitr)s
       <div>
@@ -1424,8 +1449,11 @@ MITR_ABSCHNITT = '''<section class="band mitr" id="mitrechner" data-name="Mitrec
     </div>
     <p>%(mitr_text)s</p>
     <p class="mehr"><a href="%(pfad)smitrechner/product/">%(mehr_mitr)s</a></p>
+    </div>
 %(shots_mitr)s
+    <div class="kaufen">
 %(knoepfe_mitr)s
+    </div>
   </div>
 </section>
 '''
@@ -1433,6 +1461,7 @@ MITR_ABSCHNITT = '''<section class="band mitr" id="mitrechner" data-name="Mitrec
 
 KF_ABSCHNITT = '''<section class="band karma" id="karma-farmer" data-name="Karma Farmer">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
 %(symbol_kf)s
       <div>
@@ -1441,8 +1470,11 @@ KF_ABSCHNITT = '''<section class="band karma" id="karma-farmer" data-name="Karma
     </div>
     <p>%(kf_text)s</p>
     <p class="mehr"><a href="%(pfad)skarma-farmer/product/">%(mehr_kf)s</a></p>
+    </div>
 %(shots_kf)s
+    <div class="kaufen">
 %(knoepfe_kf)s
+    </div>
   </div>
 </section>
 '''
@@ -1451,6 +1483,7 @@ KF_ABSCHNITT = '''<section class="band karma" id="karma-farmer" data-name="Karma
 # Freelancerito, solange die App in keinem Store ist, nur in der Vorschau (siehe OFFLINE).
 FL_ABSCHNITT = '''<section class="band freel" id="freelancerito" data-name="Freelancerito">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
 %(symbol_fl)s
       <div>
@@ -1459,7 +1492,11 @@ FL_ABSCHNITT = '''<section class="band freel" id="freelancerito" data-name="Free
     </div>
     <p>%(fl_text)s</p>
     <p class="mehr"><a href="%(pfad)sfreelancerito/product/">%(mehr_fl)s</a></p>
-%(unten_fl)s
+    </div>
+%(shots_fl)s
+    <div class="kaufen">
+%(knoepfe_fl)s
+    </div>
   </div>
 </section>
 '''
@@ -1467,6 +1504,7 @@ FL_ABSCHNITT = '''<section class="band freel" id="freelancerito" data-name="Free
 
 WHERE_ABSCHNITT = '''<section class="band where" id="wheresome" data-name="Wheresome">
   <div class="wrap">
+    <div class="info">
     <div class="kopf">
 %(symbol_where)s
       <div>
@@ -1476,7 +1514,10 @@ WHERE_ABSCHNITT = '''<section class="band where" id="wheresome" data-name="Where
     </div>
     <p>%(where_text)s</p>
     <p class="mehr"><a href="%(pfad)swheresome/product/">%(mehr_where)s</a></p>
+    </div>
+    <div class="kaufen">
     <p class="soon">%(where_bald)s</p>
+    </div>
   </div>
 </section>
 '''
