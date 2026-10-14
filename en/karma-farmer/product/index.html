@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Karma Farmer | One good deed a day</title>
-<meta name="description" content="Karma Farmer gives you one small mission every day. You do it, and your plant grows with you. No account, no ads, for iPhone.">
+<meta name="description" content="Karma Farmer gives you one small mission every day. You do it, and your plant grows with you. No account, no ads, for iPhone and Android.">
 <link rel="canonical" href="https://hollowspoon.app/en/karma-farmer/product/">
 <link rel="alternate" hreflang="de" href="https://hollowspoon.app/karma-farmer/product/">
 <link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/karma-farmer/product/">
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Hollow Spoon">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Karma Farmer | One good deed a day">
-<meta property="og:description" content="Karma Farmer gives you one small mission every day. You do it, and your plant grows with you. No account, no ads, for iPhone.">
+<meta property="og:description" content="Karma Farmer gives you one small mission every day. You do it, and your plant grows with you. No account, no ads, for iPhone and Android.">
 <meta property="og:url" content="https://hollowspoon.app/en/karma-farmer/product/">
 <meta property="og:image" content="https://hollowspoon.app/assets/img/og-karma-farmer.png">
 <meta property="og:image:width" content="1200">
@@ -104,6 +104,8 @@
   .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
   .badge img { height: 44px; width: auto; }
   .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
+  .play { font-size: 15px; font-weight: 600; margin: 0; }
+  .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
@@ -144,6 +146,56 @@
     .band .kopf { gap: 16px; }
     nav .rechts a { margin-left: 18px; font-size: 13px; }
   }
+  .rechts .menue { position: relative; display: inline-block; margin-left: 24px; }
+  .menue summary { list-style: none; cursor: pointer; color: #5C6270; white-space: nowrap; }
+  .menue summary::-webkit-details-marker { display: none; }
+  .menue summary::after { content: ''; display: inline-block; width: 6px; height: 6px;
+                          margin: 0 0 3px 7px; border-right: 1.5px solid currentColor;
+                          border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
+  .menue[open] summary::after { transform: rotate(-135deg); margin-bottom: -1px; }
+  .menue summary:hover, .menue[open] summary { color: #14161A; }
+  .menue .liste { position: absolute; right: 0; top: calc(100% + 12px); z-index: 20;
+                  min-width: 210px; padding: 8px; background: #fff; border: 1px solid #E7E9ED;
+                  border-radius: 14px; box-shadow: 0 12px 32px rgba(20,22,26,.12); }
+  nav .rechts .menue .liste a { display: flex; align-items: center; gap: 12px; margin: 0;
+                                padding: 8px 12px; border-radius: 9px; color: #14161A;
+                                font-size: 15px; }
+  .menue .liste a:hover { background: #F2F3F5; }
+  .menue .liste img { width: 28px; height: 28px; border-radius: 7px; }
+  @media (max-width: 720px) {
+    .rechts .menue { margin-left: 18px; font-size: 13px; }
+  }
+
+  .apps { position: relative; }
+  .apps-reihe { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+                scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .apps-reihe::-webkit-scrollbar { display: none; }
+  .apps-reihe > .band { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  /* Wer durch die Bildschirmfotos wischt, blaettert nicht aus Versehen die App weiter. */
+  .apps .carousel { overscroll-behavior-x: contain; }
+  /* Die Pfeile auf Hoehe von Symbol und Name: sichtbar, sobald die App anfaengt, und am
+     Rechner neben der Textspalte statt darauf. */
+  .apps-pfeil { position: absolute; top: 130px; transform: translateY(-50%); z-index: 2;
+                width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+                background: rgba(255,255,255,.9); color: #14161A; cursor: pointer;
+                box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  .apps-pfeil:hover { background: #fff; }
+  .apps-pfeil::before { content: ''; position: absolute; top: 50%; left: 50%; width: 11px; height: 11px;
+                        border-top: 2.5px solid currentColor; border-right: 2.5px solid currentColor; }
+  .apps-pfeil.zurueck { left: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.zurueck::before { transform: translate(-35%, -50%) rotate(-135deg); }
+  .apps-pfeil.weiter { right: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.weiter::before { transform: translate(-65%, -50%) rotate(45deg); }
+  .punkte.apps-punkte { display: flex; gap: 10px; justify-content: center; padding: 22px 0 8px; }
+  .apps-punkte button { width: 10px; height: 10px; background: #D3D6DC; }
+  .apps-punkte button[aria-current="true"] { background: #14161A; }
+  @media (min-width: 721px) and (max-width: 1263px) {
+    .apps .band .wrap { padding: 0 76px; }
+  }
+  @media (max-width: 720px) {
+    .apps-pfeil { display: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -151,7 +203,16 @@
 <div class="wrap">
   <nav>
     <span class="mark"><a href="/en/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="/en/#apps">Apps</a><a href="/en/support/">Support</a></span>
+    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/en/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a><a href="/en/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/en/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a></div></details><script>
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details.menue[open]').forEach(function (m) {
+      if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('details.menue[open]').forEach(function (m) { m.removeAttribute('open'); });
+  });
+</script><a href="/en/support/">Support</a></div>
   </nav>
 </div>
 
@@ -194,7 +255,10 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots"></div>
-    <p class="soon">Coming soon to the App Store.</p>
+    <a class="badge" href="https://apps.apple.com/app/karma-farmer/id6818803808">
+      <img src="/assets/img/appstore-en.svg" alt="Download on the App Store" width="120" height="40">
+    </a>
+    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.karmafarmer">Also on Google Play</a></p>
     <p class="recht"><a href="/karma-farmer#en">Support and privacy policy</a></p>
   </div>
 </section>
@@ -208,7 +272,7 @@
     <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
   </footer>
   <p class="sprachen"><a href="/karma-farmer/product/" hreflang="de">Deutsch</a><span class="hier">English</span><a href="/fr/karma-farmer/product/" hreflang="fr">Fran&ccedil;ais</a><a href="/es/karma-farmer/product/" hreflang="es">Espa&ntilde;ol</a></p>
-  <p class="marken">Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc.</p>
+  <p class="marken">Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Google Play and the Google Play logo are trademarks of Google LLC.</p>
 </div>
 <script>
   // Die Punkte unter der Bilderreihe, wie auf der Startseite.

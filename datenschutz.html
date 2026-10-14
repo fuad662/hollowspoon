@@ -52,6 +52,26 @@
               display: flex; gap: 16px; flex-wrap: wrap; }
   .sprachen a { color: #5C6270; text-decoration: none; }
   .sprachen .hier { color: #14161A; font-weight: 600; }
+  .rechts .menue { position: relative; display: inline-block; margin-left: 24px; }
+  .menue summary { list-style: none; cursor: pointer; color: #5C6270; white-space: nowrap; }
+  .menue summary::-webkit-details-marker { display: none; }
+  .menue summary::after { content: ''; display: inline-block; width: 6px; height: 6px;
+                          margin: 0 0 3px 7px; border-right: 1.5px solid currentColor;
+                          border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
+  .menue[open] summary::after { transform: rotate(-135deg); margin-bottom: -1px; }
+  .menue summary:hover, .menue[open] summary { color: #14161A; }
+  .menue .liste { position: absolute; right: 0; top: calc(100% + 12px); z-index: 20;
+                  min-width: 210px; padding: 8px; background: #fff; border: 1px solid #E7E9ED;
+                  border-radius: 14px; box-shadow: 0 12px 32px rgba(20,22,26,.12); }
+  nav .rechts .menue .liste a { display: flex; align-items: center; gap: 12px; margin: 0;
+                                padding: 8px 12px; border-radius: 9px; color: #14161A;
+                                font-size: 15px; }
+  .menue .liste a:hover { background: #F2F3F5; }
+  .menue .liste img { width: 28px; height: 28px; border-radius: 7px; }
+  @media (max-width: 720px) {
+    .rechts .menue { margin-left: 18px; font-size: 13px; }
+  }
+
   h1 { font-size: 34px; margin: 48px 0 6px; }
   h2 { font-size: 13px; margin: 34px 0 8px; }
   .zeile { font-size: 15px; color: #8A909E; margin: 0 0 32px; }

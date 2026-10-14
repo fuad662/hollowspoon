@@ -91,15 +91,20 @@ NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run'}
 MITR_APPSTORE = {s: 'https://apps.apple.com/app/mitrechner/id6818615754' for s in ('de', 'en', 'fr', 'es')}
 # Bis Apple die App freigibt, zeigt die Seite statt des Knopfes „Bald im App Store.“: ein
 # Knopf, der ins Leere fuehrt, verwirrt (User 3.10.2026). Nach der Freigabe auf True.
-MITR_IM_STORE = False
+MITR_IM_STORE = True
 MITR_BALD = {'de': 'Bald im App Store.', 'en': 'Coming soon to the App Store.',
              'fr': 'Bient&ocirc;t sur l&rsquo;App Store.', 'es': 'Muy pronto en el App Store.'}
-MITR_PLAY = None
+# Seit 14.10.2026 bei Apple und bei Google Play (User: "mitrechner und karma farmer sind
+# nun sowohl im appstore als auch bei google play"), beide Eintraege an dem Tag geprueft.
+MITR_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner'
 # Karma Farmer (3.10.2026: "lade ... die datenschutzseite hoch sowie die marketing seite").
 # Wie Mitrechner: online, bevor Apple die App freigibt, mit „Bald im App Store." statt
 # Knopf. Nach der Freigabe die Apple-ID eintragen und KF_IM_STORE auf True.
-KF_APPSTORE = None
-KF_IM_STORE = False
+# Apple-ID 6818803808 (iTunes-Lookup ueber die Bundle-ID, 14.10.2026), ohne Land wie bei
+# Mitrechner.
+KF_APPSTORE = 'https://apps.apple.com/app/karma-farmer/id6818803808'
+KF_IM_STORE = True
+KF_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.karmafarmer'
 # Capyroo Run (11.10.2026, "baue sofort eine produktseite"): noch nicht im Store, also
 # "Bald im App Store." statt Knopf. Nach der Freigabe die Apple-ID eintragen und CR_IM_STORE
 # auf True. Die Seite steht NICHT auf der Startseite und nicht im Support (nur unter
@@ -120,7 +125,7 @@ FL_PLAY = None
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-12'
+STAND = '2026-10-14'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -152,8 +157,8 @@ T = {
         h1='Ein L&ouml;ffel reicht.',
         lead='Wir bauen Apps, die eine Sache k&ouml;nnen. Und die richtig.',
         studio='Hollow Spoon ist ein unabh&auml;ngiges Studio aus Bremen. Wir '
-               'entwickeln eigene Apps und Spiele f&uuml;r iPhone, bald auch '
-               'f&uuml;r Android.',
+               'entwickeln eigene Apps und Spiele f&uuml;r iPhone und '
+               'Android.',
         mehr={'shlayolotl': 'Mehr zu Shlayolotl', 'wheresome': 'Mehr zu Wheresome'},
         shlay_text='Tic Tac Toe mit Axolotln. Schnelle Runden gegen den '
                    'Computer, gegen jemanden neben dir oder online.',
@@ -193,7 +198,7 @@ T = {
         h1='One spoon is enough.',
         lead='We build apps that do one thing. And do it properly.',
         studio='Hollow Spoon is an independent studio in Bremen. We make our '
-               'own apps and games for iPhone, soon for Android too.',
+               'own apps and games for iPhone and Android.',
         mehr={'shlayolotl': 'More about Shlayolotl', 'wheresome': 'More about Wheresome'},
         shlay_text='Tic tac toe with axolotls. Quick rounds against the '
                    'computer, against someone sitting next to you, or online.',
@@ -238,7 +243,7 @@ T = {
              'la font bien.',
         studio='Hollow Spoon est un studio ind&eacute;pendant de Br&ecirc;me. '
                'Nous cr&eacute;ons nos propres applications et jeux pour '
-               'iPhone, et bient&ocirc;t pour Android.',
+               'iPhone et Android.',
         mehr={'shlayolotl': 'En savoir plus sur Shlayolotl',
               'wheresome': 'En savoir plus sur Wheresome'},
         shlay_text='Le morpion avec des axolotls. Des parties rapides contre '
@@ -282,8 +287,8 @@ T = {
         h1='Basta una cuchara.',
         lead='Creamos apps que hacen una cosa. Y la hacen bien.',
         studio='Hollow Spoon es un estudio independiente de Bremen. Creamos '
-               'nuestras propias apps y juegos para iPhone, y pronto '
-               'tambi&eacute;n para Android.',
+               'nuestras propias apps y juegos para iPhone '
+               'y Android.',
         mehr={'shlayolotl': 'M&aacute;s sobre Shlayolotl',
               'wheresome': 'M&aacute;s sobre Wheresome'},
         shlay_text='Tres en raya con ajolotes. Partidas r&aacute;pidas contra '
@@ -446,6 +451,68 @@ P = {
  },
 }
 
+# Das Menue "Apps" oben rechts (14.10.2026: "oben ist dann ein dropdown reiter 'apps' wo
+# alle apps stehen"). Ein <details>, also auch ohne Skript bedienbar; das Skript schliesst
+# es nur beim Klick daneben.
+MENUE_STIL = '''
+  .rechts .menue { position: relative; display: inline-block; margin-left: 24px; }
+  .menue summary { list-style: none; cursor: pointer; color: #5C6270; white-space: nowrap; }
+  .menue summary::-webkit-details-marker { display: none; }
+  .menue summary::after { content: ''; display: inline-block; width: 6px; height: 6px;
+                          margin: 0 0 3px 7px; border-right: 1.5px solid currentColor;
+                          border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
+  .menue[open] summary::after { transform: rotate(-135deg); margin-bottom: -1px; }
+  .menue summary:hover, .menue[open] summary { color: #14161A; }
+  .menue .liste { position: absolute; right: 0; top: calc(100% + 12px); z-index: 20;
+                  min-width: 210px; padding: 8px; background: #fff; border: 1px solid #E7E9ED;
+                  border-radius: 14px; box-shadow: 0 12px 32px rgba(20,22,26,.12); }
+  nav .rechts .menue .liste a { display: flex; align-items: center; gap: 12px; margin: 0;
+                                padding: 8px 12px; border-radius: 9px; color: #14161A;
+                                font-size: 15px; }
+  .menue .liste a:hover { background: #F2F3F5; }
+  .menue .liste img { width: 28px; height: 28px; border-radius: 7px; }
+  @media (max-width: 720px) {
+    .rechts .menue { margin-left: 18px; font-size: 13px; }
+  }
+'''
+
+# Die Apps stehen auf der Startseite nebeneinander statt untereinander (14.10.2026: "ich
+# will nicht, dass man immer tiefer scrollen muss"). Weiter geht es mit den Pfeilen, den
+# Punkten darunter oder per Wischen. Die Baender sind gleich hoch, damit beim Blaettern
+# nichts springt.
+APPS_STIL = '''
+  .apps { position: relative; }
+  .apps-reihe { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+                scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .apps-reihe::-webkit-scrollbar { display: none; }
+  .apps-reihe > .band { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  /* Wer durch die Bildschirmfotos wischt, blaettert nicht aus Versehen die App weiter. */
+  .apps .carousel { overscroll-behavior-x: contain; }
+  /* Die Pfeile auf Hoehe von Symbol und Name: sichtbar, sobald die App anfaengt, und am
+     Rechner neben der Textspalte statt darauf. */
+  .apps-pfeil { position: absolute; top: 130px; transform: translateY(-50%); z-index: 2;
+                width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+                background: rgba(255,255,255,.9); color: #14161A; cursor: pointer;
+                box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  .apps-pfeil:hover { background: #fff; }
+  .apps-pfeil::before { content: ''; position: absolute; top: 50%; left: 50%; width: 11px; height: 11px;
+                        border-top: 2.5px solid currentColor; border-right: 2.5px solid currentColor; }
+  .apps-pfeil.zurueck { left: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.zurueck::before { transform: translate(-35%, -50%) rotate(-135deg); }
+  .apps-pfeil.weiter { right: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.weiter::before { transform: translate(-65%, -50%) rotate(45deg); }
+  .punkte.apps-punkte { display: flex; gap: 10px; justify-content: center; padding: 22px 0 8px; }
+  .apps-punkte button { width: 10px; height: 10px; background: #D3D6DC; }
+  .apps-punkte button[aria-current="true"] { background: #14161A; }
+  @media (min-width: 721px) and (max-width: 1263px) {
+    .apps .band .wrap { padding: 0 76px; }
+  }
+  @media (max-width: 720px) {
+    .apps-pfeil { display: none; }
+  }
+'''
+
+
 STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background: #fff; color: #14161A;
          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -525,6 +592,8 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
   .badge img { height: 44px; width: auto; }
   .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
+  .play { font-size: 15px; font-weight: 600; margin: 0; }
+  .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
@@ -564,7 +633,7 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
     .band .icon { width: 84px; border-radius: 19px; }
     .band .kopf { gap: 16px; }
     nav .rechts a { margin-left: 18px; font-size: 13px; }
-  }'''
+  }''' + MENUE_STIL + APPS_STIL
 
 
 # ---------------------------------------------------------------------------
@@ -578,19 +647,19 @@ for _s, (_og, _mehr, _text, _play, _start) in {
     'de': ('Symbol der App Mitrechner', 'Mehr zu Mitrechner',
            'Die Einkaufsliste mit &Uuml;berblick. Du wei&szlig;t beim Einkaufen immer, was alles zusammen kostet.',
            'Jetzt bei Google Play',
-           ' Mitrechner, die Einkaufsliste mit &Uuml;berblick, f&uuml;r iPhone.'),
+           ' Mitrechner, die Einkaufsliste mit &Uuml;berblick, f&uuml;r iPhone und Android.'),
     'en': ('Mitrechner app icon', 'More about Mitrechner',
            'The shopping list that keeps track. You always know what your shopping costs while you are still in the store.',
            'Get it on Google Play',
-           ' Mitrechner, the shopping list that keeps track of your total, for iPhone.'),
+           ' Mitrechner, the shopping list that keeps track of your total, for iPhone and Android.'),
     'fr': ('Ic&ocirc;ne de l&rsquo;application Mitrechner', 'En savoir plus sur Mitrechner',
            'La liste de courses qui affiche ton total. Tu sais toujours combien co&ucirc;tent tes courses, d&eacute;j&agrave; dans le magasin.',
            'Disponible sur Google Play',
-           ' Mitrechner, la liste de courses qui affiche ton total, pour iPhone.'),
+           ' Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android.'),
     'es': ('Icono de la app Mitrechner', 'M&aacute;s sobre Mitrechner',
            'La lista de compras que te dice cu&aacute;nto llevas. Siempre sabes cu&aacute;nto vas a pagar, desde que est&aacute;s en la tienda.',
            'Disponible en Google Play',
-           ' Mitrechner, la lista de compras que te dice cu&aacute;nto llevas, para iPhone.'),
+           ' Mitrechner, la lista de compras que te dice cu&aacute;nto llevas, para iPhone y Android.'),
 }.items():
     T[_s]['og_alt']['mitrechner'] = _og
     T[_s]['mehr']['mitrechner'] = _mehr
@@ -606,7 +675,7 @@ for _s, (_og, _mehr, _text, _play, _start) in {
 P['mitrechner'] = {
   'de': dict(
    titel='Mitrechner | Einkaufsliste mit &Uuml;berblick',
-   beschreibung='Mitrechner zeigt dir beim Einkaufen sofort, was alles zusammen kostet. So beh&auml;ltst du den &Uuml;berblick. Kein Konto, keine Werbung, f&uuml;r iPhone.',
+   beschreibung='Mitrechner zeigt dir beim Einkaufen sofort, was alles zusammen kostet. So beh&auml;ltst du den &Uuml;berblick. Kein Konto, keine Werbung, f&uuml;r iPhone und Android.',
    erster='Du tippst ein, was du kaufst, wie viel davon und was es kostet. Mitrechner rechnet sofort mit und zeigt oben die Summe. Du siehst schon im Laden, wenn es zu viel wird, und kannst noch etwas zur&uuml;cklegen. Vielleicht sparst du so sogar Geld.',
    h2a='Mitrechner Plus',
    pa='Setz dir ein Budget, dann siehst du immer, wie viel noch &uuml;brig ist. Schreib deine Listen schon zu Hause. Und schau dir sp&auml;ter an, was du in jedem Monat ausgegeben hast und was du am meisten kaufst. Plus kaufst du einmal, ein Abo gibt es nicht.',
@@ -616,7 +685,7 @@ P['mitrechner'] = {
    shots=['Mitrechner: eine Einkaufsliste mit Gesamtsumme und Budget', 'Mitrechner: Ausgaben je Monat und die teuersten Artikel', 'Mitrechner: vorbereitete Einkaufslisten']),
   'en': dict(
    titel='Mitrechner | Know your total as you shop',
-   beschreibung='Mitrechner shows you right away what your shopping costs, so you keep track of your spending. No account, no ads, for iPhone.',
+   beschreibung='Mitrechner shows you right away what your shopping costs, so you keep track of your spending. No account, no ads, for iPhone and Android.',
    erster='Type in what you buy, how many and what it costs. Mitrechner does the math right away and shows the total at the top. You can see in the store when it is getting to be too much, and still put something back. You might even save some money that way.',
    h2a='Mitrechner Plus',
    pa='Set a budget and always see how much is left. Write your lists at home. And later, see what you spent each month and what you buy most. You buy Plus once, there is no subscription.',
@@ -626,7 +695,7 @@ P['mitrechner'] = {
    shots=['Mitrechner: a shopping list with total and budget', 'Mitrechner: spending per month and the priciest items', 'Mitrechner: shopping lists written ahead of time']),
   'fr': dict(
    titel='Mitrechner | Ton total pendant tes courses',
-   beschreibung='Mitrechner te montre tout de suite combien co&ucirc;tent tes courses, pour garder le contr&ocirc;le. Sans compte, sans pub, pour iPhone.',
+   beschreibung='Mitrechner te montre tout de suite combien co&ucirc;tent tes courses, pour garder le contr&ocirc;le. Sans compte, sans pub, pour iPhone et Android.',
    erster='Tu notes ce que tu ach&egrave;tes, combien et le prix. Mitrechner calcule tout de suite et affiche le total en haut. Tu vois au magasin quand &ccedil;a fait trop, et tu peux encore reposer quelque chose. Tu peux m&ecirc;me faire des &eacute;conomies.',
    h2a='Mitrechner Plus',
    pa='Fixe-toi un budget et vois toujours ce qu&rsquo;il te reste. Pr&eacute;pare tes listes &agrave; la maison. Et ensuite, regarde ce que tu as d&eacute;pens&eacute; chaque mois et ce que tu ach&egrave;tes le plus. Plus, tu l&rsquo;ach&egrave;tes une fois, il n&rsquo;y a pas d&rsquo;abonnement.',
@@ -636,7 +705,7 @@ P['mitrechner'] = {
    shots=['Mitrechner&nbsp;: une liste de courses avec total et budget', 'Mitrechner&nbsp;: d&eacute;penses par mois et articles les plus chers', 'Mitrechner&nbsp;: listes de courses pr&eacute;par&eacute;es']),
   'es': dict(
    titel='Mitrechner | Sabe cu&aacute;nto llevas al comprar',
-   beschreibung='Mitrechner te dice al momento cu&aacute;nto cuesta todo lo que compras, as&iacute; no pierdes la cuenta. Sin registro, sin anuncios, para iPhone.',
+   beschreibung='Mitrechner te dice al momento cu&aacute;nto cuesta todo lo que compras, as&iacute; no pierdes la cuenta. Sin registro, sin anuncios, para iPhone y Android.',
    erster='Anotas lo que compras, cu&aacute;ntos y cu&aacute;nto cuesta. Mitrechner hace las cuentas al momento y arriba ves el total. Ves en la tienda cuando ya es mucho, y todav&iacute;a puedes regresar algo. As&iacute; hasta puedes ahorrar un poco.',
    h2a='Mitrechner Plus',
    pa='Ponte un presupuesto y siempre ves cu&aacute;nto te queda. Escribe tus listas desde la casa. Y despu&eacute;s ves cu&aacute;nto gastaste cada mes y qu&eacute; compras m&aacute;s. Plus lo pagas una vez, no hay suscripci&oacute;n.',
@@ -658,19 +727,19 @@ for _s, (_og, _mehr, _text, _start) in {
     'de': ('Symbol der App Karma Farmer', 'Mehr zu Karma Farmer',
            'Jeden Tag eine kleine Mission: mal f&uuml;rs Klima, mal f&uuml;r andere, mal f&uuml;r dich. '
            'Du machst sie, und deine Pflanze w&auml;chst mit.',
-           ' Karma Farmer, jeden Tag eine gute Tat, f&uuml;r iPhone.'),
+           ' Karma Farmer, jeden Tag eine gute Tat, f&uuml;r iPhone und Android.'),
     'en': ('Karma Farmer app icon', 'More about Karma Farmer',
            'One small mission a day: something for the planet, for others or for yourself. '
            'You do it, and your plant grows with you.',
-           ' Karma Farmer, one good deed a day, for iPhone.'),
+           ' Karma Farmer, one good deed a day, for iPhone and Android.'),
     'fr': ('Ic&ocirc;ne de l&rsquo;application Karma Farmer', 'En savoir plus sur Karma Farmer',
            'Une petite mission par jour&nbsp;: pour la plan&egrave;te, pour les autres ou pour toi. '
            'Tu la fais, et ta plante grandit avec toi.',
-           ' Karma Farmer, une bonne action par jour, pour iPhone.'),
+           ' Karma Farmer, une bonne action par jour, pour iPhone et Android.'),
     'es': ('Icono de la app Karma Farmer', 'M&aacute;s sobre Karma Farmer',
            'Una peque&ntilde;a misi&oacute;n al d&iacute;a: algo por el planeta, por los dem&aacute;s o por ti. '
            'La haces y tu planta crece contigo.',
-           ' Karma Farmer, una buena acci&oacute;n al d&iacute;a, para iPhone.'),
+           ' Karma Farmer, una buena acci&oacute;n al d&iacute;a, para iPhone y Android.'),
 }.items():
     T[_s]['og_alt']['karma-farmer'] = _og
     T[_s]['mehr']['karma-farmer'] = _mehr
@@ -682,7 +751,7 @@ P['karma-farmer'] = {
   'de': dict(
    titel='Karma Farmer | Jeden Tag eine gute Tat',
    beschreibung='Karma Farmer gibt dir jeden Tag eine kleine Mission. Du machst sie, und deine '
-                'Pflanze w&auml;chst mit. Ohne Konto, ohne Werbung, f&uuml;r iPhone.',
+                'Pflanze w&auml;chst mit. Ohne Konto, ohne Werbung, f&uuml;r iPhone und Android.',
    erster='Du schaust, was heute dran ist, machst es und tippst auf &bdquo;Mission '
           'abschlie&szlig;en&ldquo;. Daf&uuml;r gibt&rsquo;s Karma. Es gibt 20 Stufen, vom kleinen '
           'Samen bis zum Weltbaum, und 200 Missionen in f&uuml;nf Bereichen. Du suchst dir aus, '
@@ -701,7 +770,7 @@ P['karma-farmer'] = {
   'en': dict(
    titel='Karma Farmer | One good deed a day',
    beschreibung='Karma Farmer gives you one small mission every day. You do it, and your plant '
-                'grows with you. No account, no ads, for iPhone.',
+                'grows with you. No account, no ads, for iPhone and Android.',
    erster='You check what&rsquo;s up today, do it and tap &ldquo;Complete '
           'mission&rdquo;. You get Karma for it. There are 20 levels, from a tiny seed to the '
           'World Tree, and 200 missions in five areas. You pick what matters to you.',
@@ -719,7 +788,7 @@ P['karma-farmer'] = {
   'fr': dict(
    titel='Karma Farmer | Une bonne action par jour',
    beschreibung='Karma Farmer te donne une petite mission chaque jour. Tu la fais, et ta plante '
-                'grandit avec toi. Sans compte, sans publicit&eacute;, pour iPhone.',
+                'grandit avec toi. Sans compte, sans publicit&eacute;, pour iPhone et Android.',
    erster='Tu regardes ce qu&rsquo;il y a aujourd&rsquo;hui, tu le fais et tu touches '
           '&laquo;&nbsp;Terminer la mission&nbsp;&raquo;. Tu gagnes du Karma. Il y a 20 niveaux, '
           'de la petite graine &agrave; l&rsquo;Arbre monde, et 200 missions dans cinq domaines. '
@@ -739,7 +808,7 @@ P['karma-farmer'] = {
   'es': dict(
    titel='Karma Farmer | Una buena acci&oacute;n al d&iacute;a',
    beschreibung='Karma Farmer te da una peque&ntilde;a misi&oacute;n cada d&iacute;a. La haces '
-                'y tu planta crece contigo. Sin cuenta, sin anuncios, para iPhone.',
+                'y tu planta crece contigo. Sin cuenta, sin anuncios, para iPhone y Android.',
    erster='Ves qu&eacute; toca hoy, lo haces y tocas &laquo;Completar misi&oacute;n&raquo;. Ganas Karma. Hay '
           '20 niveles, de una semillita al &Aacute;rbol del mundo, y 200 misiones en cinco '
           '&aacute;reas. T&uacute; eliges lo que te importa.',
@@ -1157,6 +1226,39 @@ def sprachleiste(sprache, pfade):
         for s in SPRACHEN)
 
 
+# Reihenfolge der Apps auf der Startseite und im Menue "Apps". Capyroo Run fehlt mit
+# Absicht: die Seite steht nur unter /capyroo-run/product/ (siehe CR_APPSTORE).
+START_APPS = [a for a in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'wheresome')
+              if a not in AUS]
+
+MENUE_SKRIPT = '''<script>
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details.menue[open]').forEach(function (m) {
+      if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('details.menue[open]').forEach(function (m) { m.removeAttribute('open'); });
+  });
+</script>'''
+
+
+for _s, (_z, _w) in {'de': ('Vorige App', 'N&auml;chste App'), 'en': ('Previous app', 'Next app'),
+                     'fr': ('Application pr&eacute;c&eacute;dente', 'Application suivante'),
+                     'es': ('App anterior', 'App siguiente')}.items():
+    T[_s]['app_zurueck'] = _z
+    T[_s]['app_weiter'] = _w
+
+
+def apps_menue(sprache):
+    """Das Menue "Apps": jede App der Startseite mit Symbol, der Link fuehrt dort zu ihr."""
+    eintraege = ''.join(
+        '<a href="%s#%s"><img src="/assets/img/%s-256.webp" alt="" width="28" height="28">%s</a>'
+        % (PFAD[sprache], app, app, NAME.get(app, app.capitalize())) for app in START_APPS)
+    return ('<details class="menue"><summary>%s</summary><div class="liste">%s</div></details>%s'
+            % (T[sprache]['nav_apps'], eintraege, MENUE_SKRIPT))
+
+
 def seite(sprache):
     t = T[sprache]
     shots = '\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3))
@@ -1177,7 +1279,7 @@ def seite(sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(pfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="#apps">%(nav_apps)s</a><a href="%(pfad)ssupport/">%(nav_support)s</a></span>
+    <div class="rechts">%(menue)s<a href="%(pfad)ssupport/">%(nav_support)s</a></div>
   </nav>
 </div>
 
@@ -1190,7 +1292,9 @@ def seite(sprache):
   </div>
 </div>
 
-<section class="band shlay" id="apps">
+<div class="apps" id="apps">
+<div class="apps-reihe" id="apps-reihe">
+<section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
   <div class="wrap">
     <div class="kopf">
 %(symbol_shlay)s
@@ -1210,7 +1314,12 @@ def seite(sprache):
   </div>
 </section>
 
-%(mitr_abschnitt)s%(kf_abschnitt)s%(fl_abschnitt)s%(where_abschnitt)s</main>
+%(mitr_abschnitt)s%(kf_abschnitt)s%(fl_abschnitt)s%(where_abschnitt)s</div>
+<button class="apps-pfeil zurueck" type="button" aria-label="%(app_zurueck)s"></button>
+<button class="apps-pfeil weiter" type="button" aria-label="%(app_weiter)s"></button>
+</div>
+<div class="punkte apps-punkte" data-fuer="apps-reihe"></div>
+</main>
 
 <div class="wrap">
   <footer>
@@ -1234,7 +1343,7 @@ def seite(sprache):
     var knoepfe = bilder.map(function (bild, i) {
       var k = document.createElement('button');
       k.type = 'button';
-      k.setAttribute('aria-label', String(i + 1));
+      k.setAttribute('aria-label', bild.dataset.name || String(i + 1));
       k.addEventListener('click', function () {
         reihe.scrollTo({ left: bild.offsetLeft - reihe.offsetLeft, behavior: 'smooth' });
       });
@@ -1253,6 +1362,30 @@ def seite(sprache):
     reihe.addEventListener('scroll', markiere, { passive: true });
     markiere();
   });
+</script>
+<script>
+  // Pfeile blaettern zur naechsten App (nach der letzten wieder zur ersten), und ein
+  // Sprungziel wie /#mitrechner aus dem Menue zeigt gleich die richtige App.
+  (function () {
+    var reihe = document.getElementById('apps-reihe');
+    if (!reihe) return;
+    var apps = Array.prototype.slice.call(reihe.children);
+    var pfeile = document.querySelectorAll('.apps-pfeil');
+    if (apps.length < 2) { pfeile.forEach(function (p) { p.hidden = true; }); return; }
+    function jetzt() { return Math.round(reihe.scrollLeft / reihe.clientWidth); }
+    function zeige(i, sanft) {
+      i = (i + apps.length) %% apps.length;
+      reihe.scrollTo({ left: apps[i].offsetLeft - reihe.offsetLeft, behavior: sanft ? 'smooth' : 'auto' });
+    }
+    pfeile[0].addEventListener('click', function () { zeige(jetzt() - 1, true); });
+    pfeile[1].addEventListener('click', function () { zeige(jetzt() + 1, true); });
+    function ausSprungziel() {
+      var i = apps.indexOf(document.getElementById(decodeURIComponent(location.hash.slice(1))));
+      if (i >= 0) zeige(i, false);
+    }
+    window.addEventListener('hashchange', ausSprungziel);
+    ausSprungziel();
+  })();
 </script>
 </body>
 </html>
@@ -1276,12 +1409,12 @@ def seite(sprache):
            where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
                mehr_where=t['mehr']['wheresome']),
-           ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache])
+           ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache], menue=apps_menue(sprache))
 
 
 # Die Wheresome-Karte der Startseite, solange die App noch nicht im Store ist
 # ausgeblendet (siehe OFFLINE).
-MITR_ABSCHNITT = '''<section class="band mitr">
+MITR_ABSCHNITT = '''<section class="band mitr" id="mitrechner" data-name="Mitrechner">
   <div class="wrap">
     <div class="kopf">
 %(symbol_mitr)s
@@ -1298,7 +1431,7 @@ MITR_ABSCHNITT = '''<section class="band mitr">
 '''
 
 
-KF_ABSCHNITT = '''<section class="band karma">
+KF_ABSCHNITT = '''<section class="band karma" id="karma-farmer" data-name="Karma Farmer">
   <div class="wrap">
     <div class="kopf">
 %(symbol_kf)s
@@ -1316,7 +1449,7 @@ KF_ABSCHNITT = '''<section class="band karma">
 
 
 # Freelancerito, solange die App in keinem Store ist, nur in der Vorschau (siehe OFFLINE).
-FL_ABSCHNITT = '''<section class="band freel">
+FL_ABSCHNITT = '''<section class="band freel" id="freelancerito" data-name="Freelancerito">
   <div class="wrap">
     <div class="kopf">
 %(symbol_fl)s
@@ -1332,7 +1465,7 @@ FL_ABSCHNITT = '''<section class="band freel">
 '''
 
 
-WHERE_ABSCHNITT = '''<section class="band where">
+WHERE_ABSCHNITT = '''<section class="band where" id="wheresome" data-name="Wheresome">
   <div class="wrap">
     <div class="kopf">
 %(symbol_where)s
@@ -1422,8 +1555,19 @@ PLAY_MARKEN = {
 }
 
 
+PLAY_URL = {'mitrechner': MITR_PLAY, 'karma-farmer': KF_PLAY, 'freelancerito': FL_PLAY}
+# Solange das offizielle Abzeichen fehlt, ein schlichter Textlink (den Namen im Text zu
+# nennen erlaubt Google ohne Abzeichen-Bedingungen).
+PLAY_TEXT = {'de': 'Auch bei Google Play', 'en': 'Also on Google Play',
+             'fr': 'Aussi sur Google Play', 'es': 'Tambi&eacute;n en Google Play'}
+
+
+def im_play(app):
+    return bool(PLAY_URL.get(app))
+
+
 def play_abzeichen(app, sprache):
-    return app == 'mitrechner' and os.path.exists(
+    return im_play(app) and os.path.exists(
         os.path.join(ROOT, 'assets', 'img', 'googleplay-%s.png' % sprache))
 
 
@@ -1453,7 +1597,9 @@ def knoepfe(app, sprache):
     if play_abzeichen(app, sprache):
         html += ('\n    <a class="badge" href="%s">\n'
                  '      <img src="/assets/img/googleplay-%s.png" alt="%s" width="135" height="40">\n'
-                 '    </a>' % (MITR_PLAY or '#', sprache, t['badge_play_alt']))
+                 '    </a>' % (PLAY_URL[app], sprache, t['badge_play_alt']))
+    elif im_play(app):
+        html += '\n    <p class="play"><a href="%s">%s</a></p>' % (PLAY_URL[app], PLAY_TEXT[sprache])
     return html
 
 
@@ -1509,7 +1655,7 @@ def produkt_seite(app, sprache):
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <span class="rechts"><a href="%(startpfad)s#apps">%(nav_apps)s</a><a href="%(startpfad)ssupport/">%(nav_support)s</a></span>
+    <div class="rechts">%(menue)s<a href="%(startpfad)ssupport/">%(nav_support)s</a></div>
   </nav>
 </div>
 
@@ -1553,8 +1699,8 @@ def produkt_seite(app, sprache):
            symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
            text=text, unten=unten, recht_href=recht_link(app, sprache)[0], recht_text=recht_link(app, sprache)[1],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
-           skript=skript,
-           marken=t['marken'] + (' ' + PLAY_MARKEN[sprache] if play_abzeichen(app, sprache) else ''))
+           skript=skript, menue=apps_menue(sprache),
+           marken=t['marken'] + (' ' + PLAY_MARKEN[sprache] if im_play(app) else ''))
 
 
 
@@ -1581,6 +1727,9 @@ SUPPORT_STIL = """  body { margin: 0; background: #fff; color: #14161A;
   .sprachen a { color: #5C6270; text-decoration: none; }
   .sprachen .hier { color: #14161A; font-weight: 600; }"""
 
+SUPPORT_STIL += MENUE_STIL
+
+
 def support_seite(sprache):
     """Support je Sprache statt einer Seite, auf der dieselbe Adresse viermal
     untereinander steht. Die Rechtsseiten der Apps tragen ohnehin alle vier."""
@@ -1592,7 +1741,7 @@ def support_seite(sprache):
         kopf=kopf(sprache, pfade, t['support_titel'],
                   t['support_beschreibung']),
         sprachen=sprachleiste(sprache, pfade), stil=SUPPORT_STIL,
-        ds_pfad=DS_PFAD[sprache],
+        ds_pfad=DS_PFAD[sprache], menue=apps_menue(sprache),
         support_wheresome='' if 'wheresome' in AUS else
         '  <h2>Wheresome</h2>\n  <p><a href="/wheresome#%s">%s</a></p>\n' % (sprache, t['support_recht']),
         support_freelancerito=
@@ -1613,7 +1762,7 @@ VORLAGE_SUPPORT = """<!DOCTYPE html>
 <div class="wrap">
   <nav>
     <span class="mark"><a href="%(startpfad)s"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158"></a></span>
-    <span class="rechts"><a href="%(startpfad)s#apps">%(nav_apps)s</a></span>
+    <div class="rechts">%(menue)s</div>
   </nav>
 
   <h1>%(nav_support)s</h1>
