@@ -511,23 +511,24 @@ APPS_STIL = '''
     .apps-pfeil { display: none; }
     .apps .carousel img { height: 48vh; }
   }
-  /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch"): weniger Rand, kleineres
-     Symbol, kleinere Bilder, und am Rechner Text links, Bilder rechts, damit eine App auf
-     einen Bildschirm passt. */
-  .apps .band { padding: 52px 0; }
-  .apps .band .icon { width: 84px; border-radius: 19px; }
-  .apps .band h2 { font-size: clamp(30px, 3.6vw, 42px); }
+  /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch", dann "der bereich ist einfach
+     zu hoch ... nur zwei bilder nutzen und die nach rechts"): auf der Startseite zwei
+     kleine Bilder rechts neben dem Text, schon ab Tablet-Breite. Die Produktseiten zeigen
+     weiter alle drei. */
+  .apps .band { padding: 40px 0; }
+  .apps .band .icon { width: 64px; border-radius: 15px; }
+  .apps .band .kopf { gap: 16px; margin-bottom: 14px; }
+  .apps .band h2 { font-size: clamp(28px, 3vw, 36px); }
+  .apps .band p { margin-bottom: 18px; }
+  .apps-pfeil { top: 50%; }
   @media (min-width: 721px) {
-    .apps .carousel img { width: 150px; }
-  }
-  @media (min-width: 1000px) {
     .apps .band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto;
-                        grid-template-rows: auto 1fr; column-gap: 48px; align-items: start; }
+                        grid-template-rows: auto 1fr; column-gap: 40px; align-items: start; }
     .apps .band .info { grid-column: 1; grid-row: 1; }
     .apps .band .kaufen { grid-column: 1; grid-row: 2; }
-    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; padding-bottom: 0; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 12px; margin-top: 0; padding-bottom: 0; }
+    .apps .carousel img { width: 130px; }
     .apps .band .kaufen .badge { margin-top: 0; }
-    .apps-pfeil { top: 50%; }
   }
 '''
 
@@ -1141,17 +1142,17 @@ P['freelancerito'] = {
 }
 
 
-def bild(sprache, nr, alt, app='shlayolotl'):
+def bild(sprache, nr, alt, app='shlayolotl', faul=True, breite=212):
     """Ein Bildschirmfoto in drei Fassungen: AVIF, WebP, und das WebP als
     Rueckfall. Der Browser nimmt das erste Format, das er kann, und von den
     zwei Breiten die, die zu seinem Bildschirm passt."""
     b = '%s-%d' % (app + '-' + sprache, nr)
     return (
         '        <picture>\n'
-        '          <source type="image/avif" srcset="/assets/shots/%s-420.avif 420w, /assets/shots/%s-840.avif 840w" sizes="212px">\n'
-        '          <source type="image/webp" srcset="/assets/shots/%s-420.webp 420w, /assets/shots/%s-840.webp 840w" sizes="212px">\n'
-        '          <img src="/assets/shots/%s-420.webp" width="420" height="910" alt="%s" loading="lazy" decoding="async">\n'
-        '        </picture>' % (b, b, b, b, b, alt)
+        '          <source type="image/avif" srcset="/assets/shots/%s-420.avif 420w, /assets/shots/%s-840.avif 840w" sizes="%dpx">\n'
+        '          <source type="image/webp" srcset="/assets/shots/%s-420.webp 420w, /assets/shots/%s-840.webp 840w" sizes="%dpx">\n'
+        '          <img src="/assets/shots/%s-420.webp" width="420" height="910" alt="%s"%s decoding="async">\n'
+        '        </picture>' % (b, b, breite, b, b, breite, b, alt, ' loading="lazy"' if faul else '')
     )
 
 
@@ -1280,7 +1281,8 @@ def apps_menue(sprache):
 
 def seite(sprache):
     t = T[sprache]
-    shots = '\n'.join(bild(sprache, i + 1, t['shots'][i]) for i in range(3))
+    shots = '\n'.join(bild(sprache, n, t['shots'][n - 1], faul=False, breite=130)
+                      for n in START_BILDER['shlayolotl'])
 
     return '''<!DOCTYPE html>
 <html lang="%(sprache)s">
@@ -1420,15 +1422,15 @@ def seite(sprache):
            mehr_shlay=t['mehr']['shlayolotl'],
            mitr_abschnitt='' if 'mitrechner' in AUS else MITR_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_mitr=symbol('mitrechner'),
-               mehr_mitr=t['mehr']['mitrechner'], shots_mitr=galerie_html('mitrechner', sprache, 'shots-mitr'),
+               mehr_mitr=t['mehr']['mitrechner'], shots_mitr=galerie_html('mitrechner', sprache, 'shots-mitr', start=True),
                knoepfe_mitr=knoepfe('mitrechner', sprache)),
            kf_abschnitt='' if 'karma-farmer' in AUS else KF_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_kf=symbol('karma-farmer'),
-               mehr_kf=t['mehr']['karma-farmer'], shots_kf=galerie_html('karma-farmer', sprache, 'shots-kf'),
+               mehr_kf=t['mehr']['karma-farmer'], shots_kf=galerie_html('karma-farmer', sprache, 'shots-kf', start=True),
                knoepfe_kf=knoepfe('karma-farmer', sprache)),
            fl_abschnitt='' if 'freelancerito' in AUS else FL_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_fl=symbol('freelancerito'),
-               mehr_fl=t['mehr']['freelancerito'], shots_fl=galerie_html('freelancerito', sprache, 'shots-fl'),
+               mehr_fl=t['mehr']['freelancerito'], shots_fl=galerie_html('freelancerito', sprache, 'shots-fl', start=True),
                knoepfe_fl=knoepfe('freelancerito', sprache)),
            where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
@@ -1567,7 +1569,12 @@ def recht_link(app, sprache):
     return '%s#%s' % (RECHT[app], s), text
 
 
-def galerie_html(app, sprache, kennung):
+# Welche zwei Bilder auf der Startseite stehen (Nummern 1 bis 3). Bei Shlayolotl das
+# Spielfeld und der Sieg statt zweimal Spielfeld.
+START_BILDER = {'shlayolotl': (1, 3)}
+
+
+def galerie_html(app, sprache, kennung, start=False):
     """Die drei Bildschirmfotos einer App als Bilderreihe mit Punkten darunter.
     Die Fotos sind in der Sprache, in der die App dem Besucher begegnet (app_sprache).
     Leer, solange es die Fotos noch nicht gibt (Freelancerito, 4.10.2026): lieber keine
@@ -1579,7 +1586,11 @@ def galerie_html(app, sprache, kennung):
         return ''
     return ('    <div class="carousel" id="%s">\n%s\n    </div>\n'
             '    <div class="punkte" data-fuer="%s"></div>'
-            % (kennung, '\n'.join(bild(foto, i + 1, alts[i], app) for i in range(3)), kennung))
+            % (kennung, '\n'.join(bild(foto, i + 1, alts[i], app) for i in range(3)) if not start else
+               # Auf der Startseite sofort laden: faul geladen blieb die Karte nach dem
+               # Weiterblaettern kurz leer.
+               '\n'.join(bild(foto, n, alts[n - 1], app, faul=False, breite=130)
+                         for n in START_BILDER.get(app, (1, 2))), kennung))
 
 
 def unten_html(app, sprache, kennung):
