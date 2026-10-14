@@ -216,7 +216,8 @@
   }
   /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch", dann "der bereich ist einfach
      zu hoch ... nur zwei bilder nutzen und die nach rechts"): auf der Startseite zwei
-     kleine Bilder rechts neben dem Text, schon ab Tablet-Breite. Die Produktseiten zeigen
+     Bilder rechts neben dem Text, schon ab Tablet-Breite (130 px waren
+     dann "etwas zu klein", jetzt 170). Die Produktseiten zeigen
      weiter alle drei. */
   .apps .band { padding: 40px 0; }
   .apps .band .icon { width: 64px; border-radius: 15px; }
@@ -229,8 +230,8 @@
                         grid-template-rows: auto 1fr; column-gap: 40px; align-items: start; }
     .apps .band .info { grid-column: 1; grid-row: 1; }
     .apps .band .kaufen { grid-column: 1; grid-row: 2; }
-    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 12px; margin-top: 0; padding-bottom: 0; }
-    .apps .carousel img { width: 130px; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 14px; margin-top: 0; padding-bottom: 0; }
+    .apps .carousel img { width: 170px; }
     .apps .band .kaufen .badge { margin-top: 0; }
   }
 
@@ -282,13 +283,13 @@
     </div>
     <div class="carousel" id="shots">
         <picture>
-          <source type="image/avif" srcset="/assets/shots/shlayolotl-es-1-420.avif 420w, /assets/shots/shlayolotl-es-1-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/shlayolotl-es-1-420.webp 420w, /assets/shots/shlayolotl-es-1-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/shlayolotl-es-1-420.avif 420w, /assets/shots/shlayolotl-es-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/shlayolotl-es-1-420.webp 420w, /assets/shots/shlayolotl-es-1-840.webp 840w" sizes="170px">
           <img src="/assets/shots/shlayolotl-es-1-420.webp" width="420" height="910" alt="Shlayolotl: un tablero de tres por tres con ajolotes rosas y verdes" decoding="async">
         </picture>
         <picture>
-          <source type="image/avif" srcset="/assets/shots/shlayolotl-es-3-420.avif 420w, /assets/shots/shlayolotl-es-3-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/shlayolotl-es-3-420.webp 420w, /assets/shots/shlayolotl-es-3-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/shlayolotl-es-3-420.avif 420w, /assets/shots/shlayolotl-es-3-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/shlayolotl-es-3-420.webp 420w, /assets/shots/shlayolotl-es-3-840.webp 840w" sizes="170px">
           <img src="/assets/shots/shlayolotl-es-3-420.webp" width="420" height="910" alt="Shlayolotl: la pantalla despu&eacute;s de ganar una partida" decoding="async">
         </picture>
     </div>
@@ -318,13 +319,13 @@
     </div>
     <div class="carousel" id="shots-mitr">
         <picture>
-          <source type="image/avif" srcset="/assets/shots/mitrechner-es-1-420.avif 420w, /assets/shots/mitrechner-es-1-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/mitrechner-es-1-420.webp 420w, /assets/shots/mitrechner-es-1-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/mitrechner-es-1-420.avif 420w, /assets/shots/mitrechner-es-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/mitrechner-es-1-420.webp 420w, /assets/shots/mitrechner-es-1-840.webp 840w" sizes="170px">
           <img src="/assets/shots/mitrechner-es-1-420.webp" width="420" height="910" alt="Mitrechner: una lista de compras con total y presupuesto" decoding="async">
         </picture>
         <picture>
-          <source type="image/avif" srcset="/assets/shots/mitrechner-es-2-420.avif 420w, /assets/shots/mitrechner-es-2-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/mitrechner-es-2-420.webp 420w, /assets/shots/mitrechner-es-2-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/mitrechner-es-2-420.avif 420w, /assets/shots/mitrechner-es-2-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/mitrechner-es-2-420.webp 420w, /assets/shots/mitrechner-es-2-840.webp 840w" sizes="170px">
           <img src="/assets/shots/mitrechner-es-2-420.webp" width="420" height="910" alt="Mitrechner: gastos por mes y los art&iacute;culos m&aacute;s caros" decoding="async">
         </picture>
     </div>
@@ -354,13 +355,13 @@
     </div>
     <div class="carousel" id="shots-kf">
         <picture>
-          <source type="image/avif" srcset="/assets/shots/karma-farmer-es-1-420.avif 420w, /assets/shots/karma-farmer-es-1-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/karma-farmer-es-1-420.webp 420w, /assets/shots/karma-farmer-es-1-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/karma-farmer-es-1-420.avif 420w, /assets/shots/karma-farmer-es-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/karma-farmer-es-1-420.webp 420w, /assets/shots/karma-farmer-es-1-840.webp 840w" sizes="170px">
           <img src="/assets/shots/karma-farmer-es-1-420.webp" width="420" height="910" alt="Karma Farmer: la misi&oacute;n del d&iacute;a y tu planta" decoding="async">
         </picture>
         <picture>
-          <source type="image/avif" srcset="/assets/shots/karma-farmer-es-2-420.avif 420w, /assets/shots/karma-farmer-es-2-840.avif 840w" sizes="130px">
-          <source type="image/webp" srcset="/assets/shots/karma-farmer-es-2-420.webp 420w, /assets/shots/karma-farmer-es-2-840.webp 840w" sizes="130px">
+          <source type="image/avif" srcset="/assets/shots/karma-farmer-es-2-420.avif 420w, /assets/shots/karma-farmer-es-2-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/karma-farmer-es-2-420.webp 420w, /assets/shots/karma-farmer-es-2-840.webp 840w" sizes="170px">
           <img src="/assets/shots/karma-farmer-es-2-420.webp" width="420" height="910" alt="Karma Farmer: un nivel nuevo" decoding="async">
         </picture>
     </div>

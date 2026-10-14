@@ -513,7 +513,8 @@ APPS_STIL = '''
   }
   /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch", dann "der bereich ist einfach
      zu hoch ... nur zwei bilder nutzen und die nach rechts"): auf der Startseite zwei
-     kleine Bilder rechts neben dem Text, schon ab Tablet-Breite. Die Produktseiten zeigen
+     Bilder rechts neben dem Text, schon ab Tablet-Breite (130 px waren
+     dann "etwas zu klein", jetzt 170). Die Produktseiten zeigen
      weiter alle drei. */
   .apps .band { padding: 40px 0; }
   .apps .band .icon { width: 64px; border-radius: 15px; }
@@ -526,8 +527,8 @@ APPS_STIL = '''
                         grid-template-rows: auto 1fr; column-gap: 40px; align-items: start; }
     .apps .band .info { grid-column: 1; grid-row: 1; }
     .apps .band .kaufen { grid-column: 1; grid-row: 2; }
-    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 12px; margin-top: 0; padding-bottom: 0; }
-    .apps .carousel img { width: 130px; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 14px; margin-top: 0; padding-bottom: 0; }
+    .apps .carousel img { width: 170px; }
     .apps .band .kaufen .badge { margin-top: 0; }
   }
 '''
@@ -1281,7 +1282,7 @@ def apps_menue(sprache):
 
 def seite(sprache):
     t = T[sprache]
-    shots = '\n'.join(bild(sprache, n, t['shots'][n - 1], faul=False, breite=130)
+    shots = '\n'.join(bild(sprache, n, t['shots'][n - 1], faul=False, breite=170)
                       for n in START_BILDER['shlayolotl'])
 
     return '''<!DOCTYPE html>
@@ -1589,7 +1590,7 @@ def galerie_html(app, sprache, kennung, start=False):
             % (kennung, '\n'.join(bild(foto, i + 1, alts[i], app) for i in range(3)) if not start else
                # Auf der Startseite sofort laden: faul geladen blieb die Karte nach dem
                # Weiterblaettern kurz leer.
-               '\n'.join(bild(foto, n, alts[n - 1], app, faul=False, breite=130)
+               '\n'.join(bild(foto, n, alts[n - 1], app, faul=False, breite=170)
                          for n in START_BILDER.get(app, (1, 2))), kennung))
 
 
