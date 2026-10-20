@@ -67,11 +67,11 @@ OFFLINE = {'wheresome', 'freelancerito'}
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
-APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'wheresome']
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon', 'wheresome']
         if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
          'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito',
-         'capyroo-run': '/capyroo-run'}
+         'capyroo-run': '/capyroo-run', 'fumuon': '/fumuon'}
 # Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gab es am
 # 4.10.2026 zuerst nur auf Deutsch und Englisch; noch am selben Tag kamen Spanisch und
 # Franzoesisch dazu (Englisch ist dort Hauptsprache und Rueckfall). Seitdem spricht jede App
@@ -83,7 +83,7 @@ APP_SPRACHEN = {}
 # (app_sprache und recht_link, weiter unten bei galerie_html).
 AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
 # Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
-NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run'}
+NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run', 'fumuon': 'Fumuon'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
 # Adresse leitet Apple in den Store des Besuchers weiter; das passt, weil die spanische
 # Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
@@ -121,11 +121,18 @@ CR_IM_STORE = False
 FL_APPSTORE = None
 FL_IM_STORE = False
 FL_PLAY = None
+# Fumuon (20.10.2026, "kannst du ... ne seite auf meiner webseite erstellen fuer fumuon?"): seit
+# Oktober bei Google Play (Eintrag am 20.10. geprueft), bei Apple noch in der Pruefung. Wie Capyroo
+# Run nur als eigene Seite unter /fumuon/product/ und in der Sitemap, nicht auf der Startseite.
+# Nach Apples Freigabe die Apple-ID in FU_APPSTORE eintragen und FU_IM_STORE auf True.
+FU_APPSTORE = None
+FU_IM_STORE = False
+FU_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon'
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-14'
+STAND = '2026-10-20'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -134,7 +141,8 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'mitrechner': '/assets/img/og-mitrechner.png',
            'karma-farmer': '/assets/img/og-karma-farmer.png',
            'freelancerito': '/assets/img/og-freelancerito.png',
-           'capyroo-run': '/assets/img/og-capyroo-run.png'}
+           'capyroo-run': '/assets/img/og-capyroo-run.png',
+           'fumuon': '/assets/img/og-fumuon.png'}
 
 T = {
     'de': dict(
@@ -967,6 +975,127 @@ CAPY_STIL = """
 
 
 # ---------------------------------------------------------------------------
+# Fumuon (20.10.2026). Dieselben Aussagen wie im Store (rhythm_game/tools/store/store.py), nur,
+# was das Spiel wirklich kann: vier Bahnen, jede Note sitzt auf einem Ton, verpasst fehlt der Ton
+# kurz (abschaltbar), 116 eigene Songs, 20 gratis, 96 in zehn Paketen (Einmalkauf, vorher
+# anhoeren), drei Stufen, auf Schwer zwei Haende, Einzaehlen, Klopftest, kein Konto, keine
+# Werbung, Spielstand bleibt auf dem Geraet. Die Bilder sind die Store-Bilder 1, 3 und 4.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _text) in {
+    'de': ('Symbol der App Fumuon',
+           'Bei Fumuon spielst du die Melodie. Triffst du die Note, h&ouml;rst du den Ton.'),
+    'en': ('Fumuon app icon',
+           'In Fumuon you play the melody. Hit the note and you hear it.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Fumuon',
+           'Dans Fumuon, tu joues la m&eacute;lodie. Tu touches la note, tu l&rsquo;entends.'),
+    'es': ('Icono de la app Fumuon',
+           'En Fumuon tocas la melod&iacute;a. Si aciertas la nota, la oyes.'),
+}.items():
+    T[_s]['og_alt']['fumuon'] = _og
+    T[_s]['fu_text'] = _text
+
+P['fumuon'] = {
+  'de': dict(
+   titel='Fumuon | Du spielst die Melodie',
+   beschreibung='Ein Rhythmusspiel, bei dem du die Melodie selbst spielst: Triffst du die Note, '
+                'h&ouml;rst du den Ton. 116 eigene Songs, ohne Konto, ohne Werbung.',
+   erster='Die Noten fallen auf vier Bahnen herunter, und jede sitzt genau auf einem Ton des Songs. '
+          'Triffst du, h&ouml;rst du ihn. Verpasst du eine, fehlt der Ton kurz (das kannst du auch '
+          'abschalten). So h&ouml;rst du sofort, wie gut du gerade spielst.',
+   h2a='116 Songs, alle von uns',
+   pa='Alle Songs haben wir extra f&uuml;r Fumuon gemacht. 20 davon sind gratis dabei: Synthwave, '
+      'Future Bass, Drum &amp; Bass, Trance und mehr. Die anderen 96 gibt es in zehn Songpaketen, von '
+      'Pop &uuml;ber Jazz und Klassik bis Post-Hardcore und Hip-Hop. Jedes Paket kannst du vorher '
+      'anh&ouml;ren und dann einmal kaufen, ohne Abo.',
+   h2b='Drei Stufen, auf Schwer mit zwei H&auml;nden',
+   pb='Tippen, halten, zwei Bahnen auf einmal, wischen. Jeder Song hat drei Stufen, und auf jeder '
+      'spielst du die ganze Melodie. Auf Schwer kommen beide H&auml;nde dazu, rechts die Melodie, '
+      'links das Schlagzeug. Vor jedem Song z&auml;hlt dir das Spiel vier Schl&auml;ge ein, und '
+      'f&uuml;r Kopfh&ouml;rer mit Verz&ouml;gerung gibt es einen kurzen Klopftest.',
+   letzter='Kein Konto, keine Werbung. Dein Spielstand bleibt auf deinem Handy. Fumuon gibt es auf '
+           'Deutsch, Englisch, Franz&ouml;sisch und Spanisch, f&uuml;r iPhone und Android.',
+   shots=['Fumuon: du spielst die Melodie',
+          'Fumuon: auf Schwer mit zwei H&auml;nden',
+          'Fumuon: die Songliste zum Anh&ouml;ren']),
+  'en': dict(
+   titel='Fumuon | You play the melody',
+   beschreibung='A rhythm game where you play the melody yourself: hit the note and you hear it. '
+                '116 original songs, no account, no ads.',
+   erster='Notes fall down four lanes, and each one sits exactly on a note of the song. Hit it and '
+          'you hear it. Miss one and that note drops out for a moment (you can turn that off too). '
+          'So you always hear how well you&rsquo;re playing.',
+   h2a='116 songs, all made by us',
+   pa='We made every song just for Fumuon. 20 of them are free: synthwave, future bass, drum &amp; '
+      'bass, trance and more. The other 96 come in ten song packs, from pop to jazz and classical to '
+      'post-hardcore and hip-hop. You can listen to every pack first and then buy it once, no '
+      'subscription.',
+   h2b='Three levels, on Hard with both hands',
+   pb='Tap, hold, two lanes at once, swipe. Every song has three levels, and on each one you play '
+      'the whole melody. On Hard you use both hands, the melody on the right, the drums on the left. '
+      'Before every song the game counts you in with four beats, and for headphones with a delay '
+      'there&rsquo;s a quick tap test.',
+   letzter='No account, no ads. Your progress stays on your phone. Fumuon is available in English, '
+           'German, French and Spanish, for iPhone and Android.',
+   shots=['Fumuon: you play the melody',
+          'Fumuon: on Hard with both hands',
+          'Fumuon: the song list, ready to listen']),
+  'fr': dict(
+   titel='Fumuon | Tu joues la m&eacute;lodie',
+   beschreibung='Un jeu de rythme o&ugrave; tu joues toi-m&ecirc;me la m&eacute;lodie&nbsp;: tu '
+                'touches la note, tu l&rsquo;entends. 116 morceaux maison, sans compte, sans pub.',
+   erster='Les notes descendent sur quatre pistes, et chacune tombe pile sur un son du morceau. Tu '
+          'la touches, tu l&rsquo;entends. Tu en rates une&nbsp;: ce son dispara&icirc;t un instant '
+          '(tu peux aussi d&eacute;sactiver &ccedil;a). Comme &ccedil;a, tu entends tout de suite si '
+          'tu joues bien.',
+   h2a='116 morceaux, tous faits maison',
+   pa='Tous les morceaux, on les a faits rien que pour Fumuon. 20 sont gratuits&nbsp;: synthwave, '
+      'future bass, drum &amp; bass, trance et plus encore. Les 96 autres sont dans dix packs, de la '
+      'pop au jazz et au classique jusqu&rsquo;au post-hardcore et au hip-hop. Tu peux &eacute;couter '
+      'chaque pack avant, puis l&rsquo;acheter une fois, sans abonnement.',
+   h2b='Trois niveaux, en Difficile &agrave; deux mains',
+   pb='Taper, maintenir, deux pistes &agrave; la fois, glisser. Chaque morceau a trois niveaux, et '
+      'sur chacun tu joues toute la m&eacute;lodie. En Difficile, tu joues &agrave; deux mains, la '
+      'm&eacute;lodie &agrave; droite, la batterie &agrave; gauche. Avant chaque morceau, le jeu te '
+      'compte quatre temps, et pour les &eacute;couteurs avec un d&eacute;calage, il y a un petit '
+      'test de tapotement.',
+   letzter='Pas de compte, pas de pub. Ta progression reste sur ton t&eacute;l&eacute;phone. Fumuon '
+           'est disponible en fran&ccedil;ais, anglais, allemand et espagnol, pour iPhone et Android.',
+   shots=['Fumuon&nbsp;: tu joues la m&eacute;lodie',
+          'Fumuon&nbsp;: en Difficile &agrave; deux mains',
+          'Fumuon&nbsp;: la liste des morceaux &agrave; &eacute;couter']),
+  'es': dict(
+   titel='Fumuon | T&uacute; tocas la melod&iacute;a',
+   beschreibung='Un juego de ritmo en el que t&uacute; tocas la melod&iacute;a: si aciertas la nota, '
+                'la oyes. 116 canciones originales, sin cuenta, sin anuncios.',
+   erster='Las notas caen por cuatro carriles, y cada una cae justo en un tono de la canci&oacute;n. '
+          'Si aciertas, lo oyes. Si fallas una, ese tono se calla un momento (tambi&eacute;n puedes '
+          'desactivarlo). As&iacute; oyes al instante qu&eacute; tan bien est&aacute;s tocando.',
+   h2a='116 canciones, todas hechas por nosotros',
+   pa='Hicimos todas las canciones solo para Fumuon. 20 son gratis: synthwave, future bass, drum '
+      '&amp; bass, trance y m&aacute;s. Las otras 96 vienen en diez packs, del pop al jazz y la '
+      'cl&aacute;sica hasta el post-hardcore y el hip-hop. Puedes escuchar cada pack antes y comprarlo '
+      'una sola vez, sin suscripci&oacute;n.',
+   h2b='Tres niveles, en Dif&iacute;cil con las dos manos',
+   pb='Tocar, mantener, dos carriles a la vez, deslizar. Cada canci&oacute;n tiene tres niveles, y en '
+      'cada uno tocas la melod&iacute;a entera. En Dif&iacute;cil usas las dos manos, la melod&iacute;a '
+      'a la derecha y la bater&iacute;a a la izquierda. Antes de cada canci&oacute;n el juego te '
+      'cuenta cuatro tiempos, y para auriculares con retardo hay una prueba r&aacute;pida de toques.',
+   letzter='Sin cuenta, sin anuncios. Tu progreso se queda en tu celular. Fumuon est&aacute; en '
+           'espa&ntilde;ol, ingl&eacute;s, alem&aacute;n y franc&eacute;s, para iPhone y Android.',
+   shots=['Fumuon: t&uacute; tocas la melod&iacute;a',
+          'Fumuon: en Dif&iacute;cil con las dos manos',
+          'Fumuon: la lista de canciones para escuchar']),
+}
+
+# Der Stil der Fumuon-Seite gehoert nur zu dieser Seite: so aendert sich keine andere.
+FUMU_STIL = """
+  /* Fumuon: der Nachthimmel hinter den Bahnen, hell auf tiefem Blau und Violett. */
+  .band.fumu { background: linear-gradient(180deg, #060A1E 0%, #15184A 55%, #34195E 100%); color: #F3F1FF; }
+"""
+
+
+# ---------------------------------------------------------------------------
 # Freelancerito (4.10.2026). Nur, was die App wirklich kann (lib/l10n/app_de.arb und README im
 # App-Projekt): Stundenwert, Aufwand in fuenf Teilen, direkte Kosten, Puffer, daraus
 # Mindestpreis, Zielpreis und Premium, alles aus den eigenen Werten und ausdruecklich keine
@@ -1611,7 +1740,7 @@ PLAY_MARKEN = {
 }
 
 
-PLAY_URL = {'mitrechner': MITR_PLAY, 'karma-farmer': KF_PLAY, 'freelancerito': FL_PLAY}
+PLAY_URL = {'mitrechner': MITR_PLAY, 'karma-farmer': KF_PLAY, 'freelancerito': FL_PLAY, 'fumuon': FU_PLAY}
 # Solange das offizielle Abzeichen fehlt, ein schlichter Textlink (den Namen im Text zu
 # nennen erlaubt Google ohne Abzeichen-Bedingungen).
 PLAY_TEXT = {'de': 'Auch bei Google Play', 'en': 'Also on Google Play',
@@ -1642,11 +1771,15 @@ def knoepfe(app, sprache):
     t = T[sprache]
     if ((app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE)
             or (app == 'freelancerito' and not FL_IM_STORE)
-            or (app == 'capyroo-run' and not CR_IM_STORE)):
-        return '    <p class="soon">%s</p>' % MITR_BALD[sprache]
+            or (app == 'capyroo-run' and not CR_IM_STORE) or (app == 'fumuon' and not FU_IM_STORE)):
+        html = '    <p class="soon">%s</p>' % MITR_BALD[sprache]
+        # Schon bei Google Play, aber noch nicht bei Apple (Fumuon): der Play-Link steht trotzdem da.
+        if im_play(app):
+            html += '\n    <p class="play"><a href="%s">%s</a></p>' % (PLAY_URL[app], PLAY_TEXT[sprache])
+        return html
     ziel = {'shlayolotl': SHLAY_URL[sprache], 'mitrechner': MITR_APPSTORE[sprache],
             'karma-farmer': KF_APPSTORE, 'freelancerito': FL_APPSTORE,
-            'capyroo-run': CR_APPSTORE}.get(app) or '#'
+            'capyroo-run': CR_APPSTORE, 'fumuon': FU_APPSTORE}.get(app) or '#'
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
             '    </a>' % (ziel, sprache, t['badge_alt']))
@@ -1672,7 +1805,7 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run'):
+    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
                 + ('      <h2>%(h2sim)s</h2>\n'
@@ -1685,7 +1818,7 @@ def produkt_seite(app, sprache):
         reihe = galerie_html(app, sprache, 'shots')
         unten = unten_html(app, sprache, 'shots')
         lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text'],
-                'freelancerito': t['fl_text'], 'capyroo-run': t['cr_text']}[app]
+                'freelancerito': t['fl_text'], 'capyroo-run': t['cr_text'], 'fumuon': t['fu_text']}[app]
         # Ohne Bilderreihe keine Punkte, also auch kein Skript dafuer.
         skript = PUNKTE_SKRIPT if reihe else ''
     else:
@@ -1749,9 +1882,9 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL + (CAPY_STIL if app == 'capyroo-run' else ''),
+           stil=STIL + {'capyroo-run': CAPY_STIL, 'fumuon': FUMU_STIL}.get(app, ''),
            klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma',
-                   'freelancerito': 'freel', 'capyroo-run': 'capy'}.get(app, 'where'),
+                   'freelancerito': 'freel', 'capyroo-run': 'capy', 'fumuon': 'fumu'}.get(app, 'where'),
            symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
            text=text, unten=unten, recht_href=recht_link(app, sprache)[0], recht_text=recht_link(app, sprache)[1],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
@@ -2184,7 +2317,7 @@ if __name__ == '__main__':
     ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
     if VORSCHAU:
         os.makedirs(ZIEL, exist_ok=True)
-        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'capyroo-run.html', 'shlayolotl.html',
+        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'capyroo-run.html', 'fumuon.html', 'shlayolotl.html',
                      'wheresome.html', 'impressum.html'):
             verweis = os.path.join(ZIEL, teil)
             if not os.path.lexists(verweis):

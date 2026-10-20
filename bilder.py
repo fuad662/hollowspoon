@@ -114,3 +114,14 @@ fl = Image.open(os.path.join(IMG, 'freelancerito.png')).convert('RGB')
 karte('freelancerito', FL_BAND, rund(fl, 112), 380)
 klein('freelancerito', (256, 512))
 galerie('freelancerito')
+
+
+# Fumuon (20.10.2026): Symbol aus dem Spiel (~/rhythm_game/assets/icon/icon_1024.png, auf 512 px
+# verkleinert wie die anderen Symbole hier), Karte im tiefen Nachtblau der Spielfelder. Die Fotos
+# sind die Store-Bilder 1, 3 und 4 (rhythm_game/store/app_store/<de-DE|en-US|fr-FR|es-MX>/),
+# hier als bilder_original/fumuon-<de|en|fr|es>-1.png bis -3.png.
+FU_BAND = '#0E1030'
+fu = Image.open(os.path.join(IMG, 'fumuon.png')).convert('RGB')
+karte('fumuon', FU_BAND, rund(fu, 112), 380)
+klein('fumuon', (256, 512))
+galerie('fumuon')
