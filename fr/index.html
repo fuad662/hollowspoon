@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hollow Spoon | Applications et jeux</title>
-<meta name="description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android.">
+<meta name="description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie.">
 <link rel="canonical" href="https://hollowspoon.app/fr/">
 <link rel="alternate" hreflang="de" href="https://hollowspoon.app/">
 <link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/">
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Hollow Spoon">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hollow Spoon | Applications et jeux">
-<meta property="og:description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android.">
+<meta property="og:description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie.">
 <meta property="og:url" content="https://hollowspoon.app/fr/">
 <meta property="og:image" content="https://hollowspoon.app/assets/img/og-hollow-spoon.png">
 <meta property="og:image:width" content="1200">
@@ -235,6 +235,9 @@
     .apps .band .kaufen .badge { margin-top: 0; }
   }
 
+  /* Fumuon: der Nachthimmel hinter den Bahnen, hell auf tiefem Blau und Violett. */
+  .band.fumu { background: linear-gradient(180deg, #060A1E 0%, #15184A 55%, #34195E 100%); color: #F3F1FF; }
+
 </style>
 </head>
 <body>
@@ -242,7 +245,7 @@
 <div class="wrap">
   <nav>
     <span class="mark"><a href="/fr/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts"><details class="menue"><summary>Applications</summary><div class="liste"><a href="/fr/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a><a href="/fr/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/fr/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a></div></details><script>
+    <div class="rechts"><details class="menue"><summary>Applications</summary><div class="liste"><a href="/fr/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/fr/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/fr/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/fr/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
   document.addEventListener('click', function (e) {
     document.querySelectorAll('details.menue[open]').forEach(function (m) {
       if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
@@ -266,75 +269,37 @@
 
 <div class="apps" id="apps">
 <div class="apps-reihe" id="apps-reihe">
-<section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
+<section class="band fumu" id="fumuon" data-name="Fumuon">
   <div class="wrap">
     <div class="info">
     <div class="kopf">
       <picture>
-        <source type="image/webp" srcset="/assets/img/shlayolotl-256.webp 256w, /assets/img/shlayolotl-512.webp 512w" sizes="112px">
-        <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
+        <source type="image/webp" srcset="/assets/img/fumuon-256.webp 256w, /assets/img/fumuon-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/fumuon.png" alt="" width="256" height="256">
       </picture>
       <div>
-        <h2><a href="/fr/shlayolotl/product/">Shlayolotl</a></h2>
+        <h2><a href="/fr/fumuon/product/">Fumuon</a></h2>
       </div>
     </div>
-    <p>Le morpion avec des axolotls. Des parties rapides contre l&rsquo;ordinateur, contre quelqu&rsquo;un &agrave; c&ocirc;t&eacute; de toi, ou en ligne.</p>
-    <p class="mehr"><a href="/fr/shlayolotl/product/">En savoir plus sur Shlayolotl</a></p>
+    <p>Dans Fumuon, tu joues la m&eacute;lodie. Tu touches la note, tu l&rsquo;entends.</p>
+    <p class="mehr"><a href="/fr/fumuon/product/">En savoir plus sur Fumuon</a></p>
     </div>
-    <div class="carousel" id="shots">
+    <div class="carousel" id="shots-fu">
         <picture>
-          <source type="image/avif" srcset="/assets/shots/shlayolotl-fr-1-420.avif 420w, /assets/shots/shlayolotl-fr-1-840.avif 840w" sizes="170px">
-          <source type="image/webp" srcset="/assets/shots/shlayolotl-fr-1-420.webp 420w, /assets/shots/shlayolotl-fr-1-840.webp 840w" sizes="170px">
-          <img src="/assets/shots/shlayolotl-fr-1-420.webp" width="420" height="910" alt="Shlayolotl&nbsp;: une grille de trois sur trois avec des axolotls roses et verts" decoding="async">
+          <source type="image/avif" srcset="/assets/shots/fumuon-fr-1-420.avif 420w, /assets/shots/fumuon-fr-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/fumuon-fr-1-420.webp 420w, /assets/shots/fumuon-fr-1-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/fumuon-fr-1-420.webp" width="420" height="910" alt="Fumuon&nbsp;: tu joues la m&eacute;lodie" decoding="async">
         </picture>
         <picture>
-          <source type="image/avif" srcset="/assets/shots/shlayolotl-fr-3-420.avif 420w, /assets/shots/shlayolotl-fr-3-840.avif 840w" sizes="170px">
-          <source type="image/webp" srcset="/assets/shots/shlayolotl-fr-3-420.webp 420w, /assets/shots/shlayolotl-fr-3-840.webp 840w" sizes="170px">
-          <img src="/assets/shots/shlayolotl-fr-3-420.webp" width="420" height="910" alt="Shlayolotl&nbsp;: l&rsquo;&eacute;cran apr&egrave;s une partie gagn&eacute;e" decoding="async">
+          <source type="image/avif" srcset="/assets/shots/fumuon-fr-2-420.avif 420w, /assets/shots/fumuon-fr-2-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/fumuon-fr-2-420.webp 420w, /assets/shots/fumuon-fr-2-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/fumuon-fr-2-420.webp" width="420" height="910" alt="Fumuon&nbsp;: en Difficile &agrave; deux mains" decoding="async">
         </picture>
     </div>
-    <div class="punkte" data-fuer="shots"></div>
+    <div class="punkte" data-fuer="shots-fu"></div>
     <div class="kaufen">
-    <a class="badge" href="https://apps.apple.com/fr/app/shlayolotl/id6805653548">
-      <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
-    </a>
-    </div>
-  </div>
-</section>
-
-<section class="band mitr" id="mitrechner" data-name="Mitrechner">
-  <div class="wrap">
-    <div class="info">
-    <div class="kopf">
-      <picture>
-        <source type="image/webp" srcset="/assets/img/mitrechner-256.webp 256w, /assets/img/mitrechner-512.webp 512w" sizes="112px">
-        <img class="icon" src="/assets/img/mitrechner.png" alt="" width="256" height="256">
-      </picture>
-      <div>
-        <h2><a href="/fr/mitrechner/product/">Mitrechner</a></h2>
-      </div>
-    </div>
-    <p>La liste de courses qui affiche ton total. Tu sais toujours combien co&ucirc;tent tes courses, d&eacute;j&agrave; dans le magasin.</p>
-    <p class="mehr"><a href="/fr/mitrechner/product/">En savoir plus sur Mitrechner</a></p>
-    </div>
-    <div class="carousel" id="shots-mitr">
-        <picture>
-          <source type="image/avif" srcset="/assets/shots/mitrechner-fr-1-420.avif 420w, /assets/shots/mitrechner-fr-1-840.avif 840w" sizes="170px">
-          <source type="image/webp" srcset="/assets/shots/mitrechner-fr-1-420.webp 420w, /assets/shots/mitrechner-fr-1-840.webp 840w" sizes="170px">
-          <img src="/assets/shots/mitrechner-fr-1-420.webp" width="420" height="910" alt="Mitrechner&nbsp;: une liste de courses avec total et budget" decoding="async">
-        </picture>
-        <picture>
-          <source type="image/avif" srcset="/assets/shots/mitrechner-fr-2-420.avif 420w, /assets/shots/mitrechner-fr-2-840.avif 840w" sizes="170px">
-          <source type="image/webp" srcset="/assets/shots/mitrechner-fr-2-420.webp 420w, /assets/shots/mitrechner-fr-2-840.webp 840w" sizes="170px">
-          <img src="/assets/shots/mitrechner-fr-2-420.webp" width="420" height="910" alt="Mitrechner&nbsp;: d&eacute;penses par mois et articles les plus chers" decoding="async">
-        </picture>
-    </div>
-    <div class="punkte" data-fuer="shots-mitr"></div>
-    <div class="kaufen">
-    <a class="badge" href="https://apps.apple.com/app/mitrechner/id6818615754">
-      <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
-    </a>
-    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner">Aussi sur Google Play</a></p>
+    <p class="soon">Bient&ocirc;t sur l&rsquo;App Store.</p>
+    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon">Aussi sur Google Play</a></p>
     </div>
   </div>
 </section>
@@ -374,6 +339,78 @@
     </div>
   </div>
 </section>
+<section class="band mitr" id="mitrechner" data-name="Mitrechner">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/mitrechner-256.webp 256w, /assets/img/mitrechner-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/mitrechner.png" alt="" width="256" height="256">
+      </picture>
+      <div>
+        <h2><a href="/fr/mitrechner/product/">Mitrechner</a></h2>
+      </div>
+    </div>
+    <p>La liste de courses qui affiche ton total. Tu sais toujours combien co&ucirc;tent tes courses, d&eacute;j&agrave; dans le magasin.</p>
+    <p class="mehr"><a href="/fr/mitrechner/product/">En savoir plus sur Mitrechner</a></p>
+    </div>
+    <div class="carousel" id="shots-mitr">
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/mitrechner-fr-1-420.avif 420w, /assets/shots/mitrechner-fr-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/mitrechner-fr-1-420.webp 420w, /assets/shots/mitrechner-fr-1-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/mitrechner-fr-1-420.webp" width="420" height="910" alt="Mitrechner&nbsp;: une liste de courses avec total et budget" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/mitrechner-fr-2-420.avif 420w, /assets/shots/mitrechner-fr-2-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/mitrechner-fr-2-420.webp 420w, /assets/shots/mitrechner-fr-2-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/mitrechner-fr-2-420.webp" width="420" height="910" alt="Mitrechner&nbsp;: d&eacute;penses par mois et articles les plus chers" decoding="async">
+        </picture>
+    </div>
+    <div class="punkte" data-fuer="shots-mitr"></div>
+    <div class="kaufen">
+    <a class="badge" href="https://apps.apple.com/app/mitrechner/id6818615754">
+      <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
+    </a>
+    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner">Aussi sur Google Play</a></p>
+    </div>
+  </div>
+</section>
+<section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/shlayolotl-256.webp 256w, /assets/img/shlayolotl-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/shlayolotl.png" alt="" width="256" height="256">
+      </picture>
+      <div>
+        <h2><a href="/fr/shlayolotl/product/">Shlayolotl</a></h2>
+      </div>
+    </div>
+    <p>Le morpion avec des axolotls. Des parties rapides contre l&rsquo;ordinateur, contre quelqu&rsquo;un &agrave; c&ocirc;t&eacute; de toi, ou en ligne.</p>
+    <p class="mehr"><a href="/fr/shlayolotl/product/">En savoir plus sur Shlayolotl</a></p>
+    </div>
+    <div class="carousel" id="shots">
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/shlayolotl-fr-1-420.avif 420w, /assets/shots/shlayolotl-fr-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/shlayolotl-fr-1-420.webp 420w, /assets/shots/shlayolotl-fr-1-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/shlayolotl-fr-1-420.webp" width="420" height="910" alt="Shlayolotl&nbsp;: une grille de trois sur trois avec des axolotls roses et verts" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/shlayolotl-fr-3-420.avif 420w, /assets/shots/shlayolotl-fr-3-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/shlayolotl-fr-3-420.webp 420w, /assets/shots/shlayolotl-fr-3-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/shlayolotl-fr-3-420.webp" width="420" height="910" alt="Shlayolotl&nbsp;: l&rsquo;&eacute;cran apr&egrave;s une partie gagn&eacute;e" decoding="async">
+        </picture>
+    </div>
+    <div class="punkte" data-fuer="shots"></div>
+    <div class="kaufen">
+    <a class="badge" href="https://apps.apple.com/fr/app/shlayolotl/id6805653548">
+      <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
+    </a>
+    </div>
+  </div>
+</section>
+
 </div>
 <button class="apps-pfeil zurueck" type="button" aria-label="Application pr&eacute;c&eacute;dente"></button>
 <button class="apps-pfeil weiter" type="button" aria-label="Application suivante"></button>

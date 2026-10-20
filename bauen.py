@@ -995,6 +995,16 @@ for _s, (_og, _text) in {
     T[_s]['og_alt']['fumuon'] = _og
     T[_s]['fu_text'] = _text
 
+for _s, (_mehr, _start) in {
+    'de': ('Mehr zu Fumuon', ''),
+    'en': ('More about Fumuon', ' Fumuon, the rhythm game where you play the melody.'),
+    'fr': ('En savoir plus sur Fumuon', ' Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie.'),
+    'es': ('M&aacute;s sobre Fumuon', ' Fumuon, el juego de ritmo en el que t&uacute; tocas la melod&iacute;a.'),
+}.items():
+    T[_s]['mehr']['fumuon'] = _mehr
+    if 'fumuon' not in AUS:
+        T[_s]['beschreibung'] += _start
+
 P['fumuon'] = {
   'de': dict(
    titel='Fumuon | Du spielst die Melodie',
@@ -1300,8 +1310,8 @@ def symbol(app):
 
 # Startseite deutsch: eigene kurze Beschreibung (max. ca. 155 Zeichen), ohne die je App
 # angehaengten Saetze oben. Die Namen der Apps stehen drin, damit man sie findet.
-T['de']['beschreibung'] = ('Kleine Apps mit Charakter: Shlayolotl, Mitrechner, Karma Farmer und '
-                           'Capyroo Run. Axolotl zocken, Capybara h&uuml;pfen, Pflanze wachsen lassen.')
+T['de']['beschreibung'] = ('Kleine Apps mit Charakter: Fumuon, Karma Farmer, Mitrechner, Shlayolotl und '
+                           'Capyroo Run. Melodie spielen, Axolotl zocken, Pflanze wachsen lassen.')
 
 
 def kopf(sprache, pfade, titel, beschreibung, bild='start'):
@@ -1378,7 +1388,10 @@ def sprachleiste(sprache, pfade):
 
 # Reihenfolge der Apps auf der Startseite und im Menue "Apps". Capyroo Run fehlt mit
 # Absicht: die Seite steht nur unter /capyroo-run/product/ (siehe CR_APPSTORE).
-START_APPS = [a for a in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'wheresome')
+# Seit 20.10.2026 steht die neueste App immer zuerst (User: "und die neuste app immer zu erst"),
+# auf der Startseite und im Menue. Wer neu online geht, kommt also nach vorn; Freelancerito und
+# Wheresome stehen deshalb schon vorn, solange sie offline (und damit ausgeblendet) sind.
+START_APPS = [a for a in ('wheresome', 'freelancerito', 'fumuon', 'karma-farmer', 'mitrechner', 'shlayolotl')
               if a not in AUS]
 
 MENUE_SKRIPT = '''<script>
@@ -1414,8 +1427,6 @@ def apps_menue(sprache):
 
 def seite(sprache):
     t = T[sprache]
-    shots = '\n'.join(bild(sprache, n, t['shots'][n - 1], faul=False, breite=170)
-                      for n in START_BILDER['shlayolotl'])
 
     return '''<!DOCTYPE html>
 <html lang="%(sprache)s">
@@ -1448,31 +1459,7 @@ def seite(sprache):
 
 <div class="apps" id="apps">
 <div class="apps-reihe" id="apps-reihe">
-<section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
-  <div class="wrap">
-    <div class="info">
-    <div class="kopf">
-%(symbol_shlay)s
-      <div>
-        <h2><a href="%(pfad)sshlayolotl/product/">Shlayolotl</a></h2>
-      </div>
-    </div>
-    <p>%(shlay_text)s</p>
-    <p class="mehr"><a href="%(pfad)sshlayolotl/product/">%(mehr_shlay)s</a></p>
-    </div>
-    <div class="carousel" id="shots">
-%(shots)s
-    </div>
-    <div class="punkte" data-fuer="shots"></div>
-    <div class="kaufen">
-    <a class="badge" href="%(shlay_url)s">
-      <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
-    </a>
-    </div>
-  </div>
-</section>
-
-%(mitr_abschnitt)s%(kf_abschnitt)s%(fl_abschnitt)s%(where_abschnitt)s</div>
+%(abschnitte)s</div>
 <button class="apps-pfeil zurueck" type="button" aria-label="%(app_zurueck)s"></button>
 <button class="apps-pfeil weiter" type="button" aria-label="%(app_weiter)s"></button>
 </div>
@@ -1550,25 +1537,86 @@ def seite(sprache):
 ''' % dict(t, sprache=sprache, pfad=PFAD[sprache],
            kopf=kopf(sprache, PFAD, t['titel'], t['beschreibung']),
            organisation=ORGANISATION,
-           sprachen=sprachleiste(sprache, PFAD), shots=shots, stil=STIL,
-           symbol_shlay=symbol('shlayolotl'), symbol_where=symbol('wheresome'),
-           mehr_shlay=t['mehr']['shlayolotl'],
-           mitr_abschnitt='' if 'mitrechner' in AUS else MITR_ABSCHNITT % dict(
+           sprachen=sprachleiste(sprache, PFAD), stil=STIL + FUMU_STIL,
+           abschnitte=''.join(start_abschnitte(sprache)[app] for app in START_APPS),
+           ds_pfad=DS_PFAD[sprache], menue=apps_menue(sprache))
+
+
+def start_abschnitte(sprache):
+    """Die Karte jeder App auf der Startseite, als Woerterbuch; die Reihenfolge bestimmt START_APPS."""
+    t = T[sprache]
+    shots = '\n'.join(bild(sprache, n, t['shots'][n - 1], faul=False, breite=170)
+                      for n in START_BILDER['shlayolotl'])
+    return dict(
+           shlayolotl=SHLAY_ABSCHNITT % dict(
+               t, sprache=sprache, pfad=PFAD[sprache], symbol_shlay=symbol('shlayolotl'),
+               mehr_shlay=t['mehr']['shlayolotl'], shots=shots, shlay_url=SHLAY_URL[sprache]),
+           fumuon='' if 'fumuon' in AUS else FU_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_fu=symbol('fumuon'),
+               mehr_fu=t['mehr']['fumuon'], shots_fu=galerie_html('fumuon', sprache, 'shots-fu', start=True),
+               knoepfe_fu=knoepfe('fumuon', sprache)),
+           mitrechner='' if 'mitrechner' in AUS else MITR_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_mitr=symbol('mitrechner'),
                mehr_mitr=t['mehr']['mitrechner'], shots_mitr=galerie_html('mitrechner', sprache, 'shots-mitr', start=True),
                knoepfe_mitr=knoepfe('mitrechner', sprache)),
-           kf_abschnitt='' if 'karma-farmer' in AUS else KF_ABSCHNITT % dict(
+           **{'karma-farmer': '' if 'karma-farmer' in AUS else KF_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_kf=symbol('karma-farmer'),
                mehr_kf=t['mehr']['karma-farmer'], shots_kf=galerie_html('karma-farmer', sprache, 'shots-kf', start=True),
-               knoepfe_kf=knoepfe('karma-farmer', sprache)),
-           fl_abschnitt='' if 'freelancerito' in AUS else FL_ABSCHNITT % dict(
+               knoepfe_kf=knoepfe('karma-farmer', sprache))},
+           freelancerito='' if 'freelancerito' in AUS else FL_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_fl=symbol('freelancerito'),
                mehr_fl=t['mehr']['freelancerito'], shots_fl=galerie_html('freelancerito', sprache, 'shots-fl', start=True),
                knoepfe_fl=knoepfe('freelancerito', sprache)),
-           where_abschnitt='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
+           wheresome='' if 'wheresome' in AUS else WHERE_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_where=symbol('wheresome'),
-               mehr_where=t['mehr']['wheresome']),
-           ds_pfad=DS_PFAD[sprache], shlay_url=SHLAY_URL[sprache], menue=apps_menue(sprache))
+               mehr_where=t['mehr']['wheresome']))
+
+
+SHLAY_ABSCHNITT = '''<section class="band shlay" id="shlayolotl" data-name="Shlayolotl">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+%(symbol_shlay)s
+      <div>
+        <h2><a href="%(pfad)sshlayolotl/product/">Shlayolotl</a></h2>
+      </div>
+    </div>
+    <p>%(shlay_text)s</p>
+    <p class="mehr"><a href="%(pfad)sshlayolotl/product/">%(mehr_shlay)s</a></p>
+    </div>
+    <div class="carousel" id="shots">
+%(shots)s
+    </div>
+    <div class="punkte" data-fuer="shots"></div>
+    <div class="kaufen">
+    <a class="badge" href="%(shlay_url)s">
+      <img src="/assets/img/appstore-%(sprache)s.svg" alt="%(badge_alt)s" width="120" height="40">
+    </a>
+    </div>
+  </div>
+</section>
+
+'''
+
+FU_ABSCHNITT = '''<section class="band fumu" id="fumuon" data-name="Fumuon">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+%(symbol_fu)s
+      <div>
+        <h2><a href="%(pfad)sfumuon/product/">Fumuon</a></h2>
+      </div>
+    </div>
+    <p>%(fu_text)s</p>
+    <p class="mehr"><a href="%(pfad)sfumuon/product/">%(mehr_fu)s</a></p>
+    </div>
+%(shots_fu)s
+    <div class="kaufen">
+%(knoepfe_fu)s
+    </div>
+  </div>
+</section>
+'''
 
 
 # Die Wheresome-Karte der Startseite, solange die App noch nicht im Store ist
