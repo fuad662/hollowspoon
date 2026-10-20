@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capyroo World | Your capybara at home</title>
+<meta name="description" content="Bring Capyroo into your room: in AR he walks across your floor, hops onto the sofa and hides behind furniture. No account, no ads.">
+<link rel="canonical" href="https://hollowspoon.app/en/capyroo-world/product/">
+<link rel="alternate" hreflang="de" href="https://hollowspoon.app/capyroo-world/product/">
+<link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/capyroo-world/product/">
+<link rel="alternate" hreflang="fr" href="https://hollowspoon.app/fr/capyroo-world/product/">
+<link rel="alternate" hreflang="es" href="https://hollowspoon.app/es/capyroo-world/product/">
+<link rel="alternate" hreflang="x-default" href="https://hollowspoon.app/en/capyroo-world/product/">
+<meta property="og:site_name" content="Hollow Spoon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Capyroo World | Your capybara at home">
+<meta property="og:description" content="Bring Capyroo into your room: in AR he walks across your floor, hops onto the sofa and hides behind furniture. No account, no ads.">
+<meta property="og:url" content="https://hollowspoon.app/en/capyroo-world/product/">
+<meta property="og:image" content="https://hollowspoon.app/assets/img/og-capyroo-world.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Capyroo World app icon">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: #14161A;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 20px;
+        padding: 26px 0; font-size: 14px; }
+  /* flex-shrink 0 und max-width none: sonst quetscht der Kopf den Schriftzug
+     schmal, waehrend die feste Hoehe stehen bleibt. Auf dem Telefon sah er
+     deshalb zusammengedrueckt aus. */
+  nav .mark { flex: 0 0 auto; }
+  nav .mark img { height: 22px; width: auto; max-width: none; display: block; }
+  nav .rechts a { color: #5C6270; text-decoration: none; margin-left: 24px; white-space: nowrap; }
+  nav .rechts a:hover { color: #14161A; }
+
+  /* Die Sprachen stehen unten, nicht oben. Vier Kuerzel neben Apps und
+     Support waren auf dem Telefon nicht zu verstehen und brachen um. */
+  .sprachen { padding: 22px 0 0; font-size: 13px; color: #8A909E;
+              display: flex; gap: 16px; flex-wrap: wrap; }
+  .sprachen a { color: #5C6270; text-decoration: none; }
+  .sprachen a:hover { color: #14161A; }
+  .sprachen .hier { color: #14161A; font-weight: 600; }
+
+  .hero { padding: 84px 0 68px; }
+  h1 { font-size: clamp(52px, 12vw, 132px); line-height: .92; letter-spacing: -.05em;
+       margin: 0 0 26px; font-weight: 800; max-width: 9em; }
+  .lead { font-size: 21px; line-height: 1.55; color: #5C6270; max-width: 26em; margin: 0; }
+  /* Ein Satz mehr unter dem Claim, leiser gesetzt: wer wir sind und wofuer
+     wir bauen. Der Claim allein sagt einer Suchmaschine nichts. */
+  .studio { font-size: 17px; line-height: 1.6; color: #8A909E; max-width: 32em; margin: 22px 0 0; }
+
+  .band { padding: 74px 0; }
+  .band.shlay { background: #0A0E24; color: #E7EAF6; }
+  .band.where { background: #176F7A; color: #F0EDE4; }
+  /* Mitrechner: ein dunkles Gruen aus dem App-Symbol, weisse Schrift darauf liest sich. */
+  .band.mitr { background: #146B4E; color: #F2FBF6; }
+  /* Karma Farmer: der Morgenhimmel der App (lib/himmel.dart), dunkle Schrift darauf. */
+  .band.karma { background: linear-gradient(180deg, #F7C9A6 0%, #FBE3C8 40%, #F6F1E4 100%); color: #3D2C1E; }
+  /* Symbol neben dem Namen statt schraeg darueber. Das kennt jeder aus dem
+     App Store, und es sieht auf jeder Breite gleich gewollt aus.
+     height:auto ist dabei nicht kosmetisch: ohne sie gewinnt das
+     height-Attribut aus dem Markup und das Symbol steht gequetscht da. */
+  .band .kopf { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; }
+  .band .kopf picture { flex: 0 0 auto; display: block; }
+  .band .icon { width: 112px; height: auto; border-radius: 25px; flex: 0 0 auto; }
+  .band .kopf .tag { margin: 0 0 6px; }
+  .band .kopf h2 { margin: 0; }
+  .band .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; margin: 0 0 14px; }
+  .band h2 { font-size: clamp(32px, 5vw, 50px); letter-spacing: -.025em; margin: 0 0 16px; font-weight: 800; }
+  .band h2 a { color: inherit; text-decoration: none; }
+  .band h2 a:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  .band p { font-size: 17px; line-height: 1.65; margin: 0 0 24px; max-width: 30em; opacity: .88; }
+  /* Der Weg zur Seite der App: ein Textlink, kein Knopf. */
+  .band .mehr { margin-top: -8px; }
+  .band .mehr a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+  /* Die Seite einer App: dasselbe Band wie auf der Startseite, nur traegt es
+     hier die H1 und den ganzen Text. */
+  .produkt .kopf { margin-bottom: 28px; }
+  .produkt .kopf h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1; letter-spacing: -.035em;
+                      margin: 0; max-width: none; }
+  .produkt h2 { font-size: 22px; letter-spacing: -.01em; margin: 34px 0 10px; }
+  .produkt .text p { max-width: 34em; }
+  .produkt .recht { margin: 30px 0 0; font-size: 15px; opacity: .8; }
+  .produkt .recht a { color: inherit; }
+
+  /* Der Knopf von Apple, unveraendert. Apples Richtlinien: nicht umfaerben,
+     nicht drehen, nicht animieren, mindestens 40 px hoch, ringsum ein
+     Viertel der Hoehe frei. */
+  /* Der Knopf steht unter den Bildern: erst sehen, was es ist, dann laden. */
+  .badge { display: inline-block; line-height: 0; padding: 12px; margin: 26px 0 0 -12px; }
+  .badge img { height: 44px; width: auto; }
+  .soon { font-size: 15px; font-weight: 600; opacity: .8; margin: 0; }
+  .play { font-size: 15px; font-weight: 600; margin: 0; }
+  .play a { color: inherit; }
+  .punkte + .soon { margin-top: 26px; }
+  .punkte + .knoepfe .soon, .text + .knoepfe .soon { margin-top: 26px; }
+
+  /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
+     Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
+  .carousel { display: flex; gap: 14px; margin-top: 30px; padding-bottom: 14px;
+              overflow-x: auto; scroll-snap-type: x mandatory;
+              -webkit-overflow-scrolling: touch;
+              scrollbar-color: rgba(255,255,255,.35) transparent; scrollbar-width: thin; }
+  .carousel::-webkit-scrollbar { height: 6px; }
+  .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 99px; }
+  .carousel picture { flex: 0 0 auto; scroll-snap-align: center; }
+  .carousel img { width: 212px; height: auto; border-radius: 18px; }
+
+  /* Die Punkte zeichnen wir selbst. ::scroll-marker waere schoener, aber
+     Safari auf dem iPhone kennt es noch nicht, und dort fehlten sie ganz. */
+  .punkte { display: none; }
+  .punkte button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%;
+                   background: rgba(255,255,255,.28); cursor: pointer; }
+  .punkte button[aria-current="true"] { background: #fff; }
+
+
+  footer { padding: 34px 0 14px; font-size: 13px; color: #8A909E;
+           display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid #E7E9ED; }
+  footer a { color: #5C6270; text-decoration: none; }
+  .marken { padding: 0 0 64px; font-size: 12px; line-height: 1.6; color: #A4AAB6; max-width: 46em; }
+
+  @media (max-width: 720px) {
+    .band .inner { grid-template-columns: 1fr; gap: 20px; }
+    .band .icon { width: 132px; justify-self: start; }
+    /* Auf dem Telefon passt ohnehin nur eines nebeneinander. Also gleich
+       eines je Seite, mit den Punkten darunter. */
+    .carousel { gap: 0; scrollbar-width: none; padding-bottom: 0; }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel picture { flex: 0 0 100%; display: flex; justify-content: center; }
+    .carousel img { width: auto; height: 58vh; max-width: 100%; }
+    .punkte { display: flex; gap: 9px; justify-content: center; padding-top: 18px; }
+    .band .icon { width: 84px; border-radius: 19px; }
+    .band .kopf { gap: 16px; }
+    nav .rechts a { margin-left: 18px; font-size: 13px; }
+  }
+
+  /* Die Seite einer App auf breiten Bildschirmen (User 20.10.2026: "aufm pc ist die seite
+     scheisse ... nicht nur eine haelfte"): Text links, die drei Bilder rechts gross und
+     aufgefaechert, beim Lesen mitlaufend. Nur auf den Produktseiten (.produkt), die Startseite
+     bleibt, wie sie ist; Seiten ohne Bilder (Wheresome) haben nur die Textspalte. */
+  @media (min-width: 980px) {
+    .produkt .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 470px; column-gap: 64px;
+                     align-items: start; }
+    .produkt .wrap > * { grid-column: 1; }
+    .produkt .wrap > .carousel { grid-column: 2; grid-row: 1 / span 12; position: sticky; top: 48px;
+                                 display: block; height: 640px; margin: 0; padding: 0; overflow: visible; }
+    .produkt .carousel picture { position: absolute; top: 56px; transition: transform .3s ease; }
+    .produkt .carousel img { width: 250px; border-radius: 22px;
+                             box-shadow: 0 28px 60px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.12); }
+    .produkt .carousel picture:nth-child(1) { left: 110px; top: 0; z-index: 3; }
+    .produkt .carousel picture:nth-child(2) { left: 0; transform: rotate(-7deg); z-index: 2; }
+    .produkt .carousel picture:nth-child(3) { left: 220px; transform: rotate(7deg); z-index: 1; }
+    .produkt .carousel:hover picture:nth-child(2) { transform: rotate(-9deg) translateX(-14px); }
+    .produkt .carousel:hover picture:nth-child(3) { transform: rotate(9deg) translateX(14px); }
+  }
+  .rechts .menue { position: relative; display: inline-block; margin-left: 24px; }
+  .menue summary { list-style: none; cursor: pointer; color: #5C6270; white-space: nowrap; }
+  .menue summary::-webkit-details-marker { display: none; }
+  .menue summary::after { content: ''; display: inline-block; width: 6px; height: 6px;
+                          margin: 0 0 3px 7px; border-right: 1.5px solid currentColor;
+                          border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
+  .menue[open] summary::after { transform: rotate(-135deg); margin-bottom: -1px; }
+  .menue summary:hover, .menue[open] summary { color: #14161A; }
+  .menue .liste { position: absolute; right: 0; top: calc(100% + 12px); z-index: 20;
+                  min-width: 210px; padding: 8px; background: #fff; border: 1px solid #E7E9ED;
+                  border-radius: 14px; box-shadow: 0 12px 32px rgba(20,22,26,.12); }
+  nav .rechts .menue .liste a { display: flex; align-items: center; gap: 12px; margin: 0;
+                                padding: 8px 12px; border-radius: 9px; color: #14161A;
+                                font-size: 15px; }
+  .menue .liste a:hover { background: #F2F3F5; }
+  .menue .liste img { width: 28px; height: 28px; border-radius: 7px; }
+  @media (max-width: 720px) {
+    .rechts .menue { margin-left: 18px; font-size: 13px; }
+  }
+
+  .apps { position: relative; }
+  .apps-reihe { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+                scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .apps-reihe::-webkit-scrollbar { display: none; }
+  .apps-reihe > .band { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  /* Wer durch die Bildschirmfotos wischt, blaettert nicht aus Versehen die App weiter. */
+  .apps .carousel { overscroll-behavior-x: contain; }
+  /* Die Pfeile auf Hoehe von Symbol und Name: sichtbar, sobald die App anfaengt, und am
+     Rechner neben der Textspalte statt darauf. */
+  .apps-pfeil { position: absolute; top: 94px; transform: translateY(-50%); z-index: 2;
+                width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+                background: rgba(255,255,255,.9); color: #14161A; cursor: pointer;
+                box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  .apps-pfeil:hover { background: #fff; }
+  .apps-pfeil::before { content: ''; position: absolute; top: 50%; left: 50%; width: 11px; height: 11px;
+                        border-top: 2.5px solid currentColor; border-right: 2.5px solid currentColor; }
+  .apps-pfeil.zurueck { left: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.zurueck::before { transform: translate(-35%, -50%) rotate(-135deg); }
+  .apps-pfeil.weiter { right: max(12px, calc(50% - 620px)); }
+  .apps-pfeil.weiter::before { transform: translate(-65%, -50%) rotate(45deg); }
+  .punkte.apps-punkte { display: flex; gap: 10px; justify-content: center; padding: 22px 0 8px; }
+  .apps-punkte button { width: 10px; height: 10px; background: #D3D6DC; }
+  .apps-punkte button[aria-current="true"] { background: #14161A; }
+  @media (min-width: 721px) and (max-width: 1263px) {
+    .apps .band .wrap { padding: 0 76px; }
+  }
+  @media (max-width: 720px) {
+    .apps-pfeil { display: none; }
+    .apps .carousel img { height: 48vh; }
+  }
+  /* Kompakt (14.10.2026: "irgendwie ist das zu gigantisch", dann "der bereich ist einfach
+     zu hoch ... nur zwei bilder nutzen und die nach rechts"): auf der Startseite zwei
+     Bilder rechts neben dem Text, schon ab Tablet-Breite (130 px waren
+     dann "etwas zu klein", jetzt 170). Die Produktseiten zeigen
+     weiter alle drei. */
+  .apps .band { padding: 40px 0; }
+  .apps .band .icon { width: 64px; border-radius: 15px; }
+  .apps .band .kopf { gap: 16px; margin-bottom: 14px; }
+  .apps .band h2 { font-size: clamp(28px, 3vw, 36px); }
+  .apps .band p { margin-bottom: 18px; }
+  .apps-pfeil { top: 50%; }
+  @media (min-width: 721px) {
+    .apps .band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto;
+                        grid-template-rows: auto 1fr; column-gap: 40px; align-items: start; }
+    .apps .band .info { grid-column: 1; grid-row: 1; }
+    .apps .band .kaufen { grid-column: 1; grid-row: 2; }
+    .apps .band .carousel { grid-column: 2; grid-row: 1 / span 2; gap: 14px; margin-top: 0; padding-bottom: 0; }
+    .apps .carousel img { width: 170px; }
+    .apps .band .kaufen .badge { margin-top: 0; }
+  }
+
+  /* Capyroo World: der Abendhimmel der Store-Bilder, hell auf warmem Violett. */
+  .band.cwld { background: linear-gradient(180deg, #1E0F33 0%, #3B1C57 55%, #5E2A78 100%); color: #F7F1FF; }
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <span class="mark"><a href="/en/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
+    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/en/#wimmelino"><img src="/assets/img/wimmelino-256.webp" alt="" width="28" height="28">Wimmelino</a><a href="/en/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/en/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/en/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/en/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details.menue[open]').forEach(function (m) {
+      if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('details.menue[open]').forEach(function (m) { m.removeAttribute('open'); });
+  });
+</script></div>
+  </nav>
+</div>
+
+<main>
+<section class="band cwld produkt">
+  <div class="wrap">
+    <div class="kopf">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/capyroo-world-256.webp 256w, /assets/img/capyroo-world-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/capyroo-world.png" alt="" width="256" height="256">
+      </picture>
+      <div>
+        <h1>Capyroo World</h1>
+      </div>
+    </div>
+    <p>Bring Capyroo into your room. In AR he stands on your floor, as big as you like.</p>
+    <div class="text">
+      <p>You tap the floor and he walks over. You tap the sofa and he hops up. He fetches balls, gives you a high five and hides behind furniture (with LiDAR). You also furnish his room: place decor, turn it, move it. Now and then he goes for a walk on his own and brings you something back.</p>
+      <h2>Not into AR?</h2>
+      <p>No problem, Capyroo also lives in a cozy studio. There you can pet him, tickle him, dress him up, play with him and feed him (there are loads of treats, some with an effect). Every day he has a wish, and the Capyroo Oracle is new every day too.</p>
+      <h2>Small games and new things</h2>
+      <p>For in between there are a few small games, like a retro adventure with Granny Turtle. Capyroo levels up and unlocks new things, like hats and backgrounds. Packs with decor, costumes and backgrounds are optional one-time purchases (no subscription), and they are only for looks.</p>
+      <p>No account, no ads, no tracking. What you do stays on your phone, and the app never saves a camera image. Capyroo World is available in English, German, Spanish and French, for iPhone.</p>
+    </div>
+    <div class="carousel" id="shots">
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/capyroo-world-en-1-420.avif 420w, /assets/shots/capyroo-world-en-1-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/capyroo-world-en-1-420.webp 420w, /assets/shots/capyroo-world-en-1-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/capyroo-world-en-1-420.webp" width="420" height="910" alt="Capyroo World: Capyroo in your living room" loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/capyroo-world-en-2-420.avif 420w, /assets/shots/capyroo-world-en-2-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/capyroo-world-en-2-420.webp 420w, /assets/shots/capyroo-world-en-2-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/capyroo-world-en-2-420.webp" width="420" height="910" alt="Capyroo World: furnishing his room" loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/capyroo-world-en-3-420.avif 420w, /assets/shots/capyroo-world-en-3-840.avif 840w" sizes="212px">
+          <source type="image/webp" srcset="/assets/shots/capyroo-world-en-3-420.webp 420w, /assets/shots/capyroo-world-en-3-840.webp 840w" sizes="212px">
+          <img src="/assets/shots/capyroo-world-en-3-420.webp" width="420" height="910" alt="Capyroo World: a retro adventure with Granny Turtle" loading="lazy" decoding="async">
+        </picture>
+    </div>
+    <div class="punkte" data-fuer="shots"></div>
+    <div class="knoepfe">
+    <p class="soon">Coming soon to the App Store.</p>
+    </div>
+    <p class="recht"><a href="/capyroo-world#en">Support and privacy policy</a></p>
+  </div>
+</section>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span>&copy; 2026 Hollow Spoon UG (haftungsbeschr&auml;nkt)</span>
+    <a href="/impressum">Legal notice</a>
+    <a href="/en/privacy/">Privacy</a>
+    <a href="mailto:contact@hollowspoon.app">contact@hollowspoon.app</a>
+  </footer>
+  <p class="sprachen"><a href="/capyroo-world/product/" hreflang="de">Deutsch</a><span class="hier">English</span><a href="/fr/capyroo-world/product/" hreflang="fr">Fran&ccedil;ais</a><a href="/es/capyroo-world/product/" hreflang="es">Espa&ntilde;ol</a></p>
+  <p class="marken">Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc.</p>
+</div>
+<script>
+  // Die Punkte unter der Bilderreihe, wie auf der Startseite.
+  document.querySelectorAll('.punkte').forEach(function (leiste) {
+    var reihe = document.getElementById(leiste.dataset.fuer);
+    if (!reihe) return;
+    var bilder = Array.prototype.slice.call(reihe.children);
+    var knoepfe = bilder.map(function (bild, i) {
+      var k = document.createElement('button');
+      k.type = 'button';
+      k.setAttribute('aria-label', String(i + 1));
+      k.addEventListener('click', function () {
+        reihe.scrollTo({ left: bild.offsetLeft - reihe.offsetLeft, behavior: 'smooth' });
+      });
+      leiste.appendChild(k);
+      return k;
+    });
+    function markiere() {
+      var mitte = reihe.scrollLeft + reihe.clientWidth / 2;
+      var naechster = 0, kleinster = Infinity;
+      bilder.forEach(function (bild, i) {
+        var d = Math.abs(bild.offsetLeft - reihe.offsetLeft + bild.offsetWidth / 2 - mitte);
+        if (d < kleinster) { kleinster = d; naechster = i; }
+      });
+      knoepfe.forEach(function (k, i) { k.setAttribute('aria-current', String(i === naechster)); });
+    }
+    reihe.addEventListener('scroll', markiere, { passive: true });
+    markiere();
+  });
+</script>
+</body>
+</html>

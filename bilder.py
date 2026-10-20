@@ -125,3 +125,23 @@ fu = Image.open(os.path.join(IMG, 'fumuon.png')).convert('RGB')
 karte('fumuon', FU_BAND, rund(fu, 112), 380)
 klein('fumuon', (256, 512))
 galerie('fumuon')
+
+
+# Wimmelino (20.10.2026): Symbol aus dem App-Projekt (~/wimmelbild/ios/Runner/Assets.xcassets/
+# AppIcon.appiconset, das 1024er, auf 512 px), Karte im Hafenblau. Fotos: die Google-Play-Bilder 1, 3
+# und 4 (wimmelbild/store/google_play/<de-DE|en-US|fr-FR|es-419>/), hier wimmelino-<sprache>-1 bis -3.
+WI_BAND = '#155A8C'
+wi = Image.open(os.path.join(IMG, 'wimmelino.png')).convert('RGB')
+karte('wimmelino', WI_BAND, rund(wi, 112), 380)
+klein('wimmelino', (256, 512))
+galerie('wimmelino')
+
+
+# Capyroo World (20.10.2026): Symbol aus dem App-Projekt (~/anime_ar_companion/ios/Runner/
+# Assets.xcassets/AppIcon.appiconset), Karte im Violett der Store-Bilder. Fotos: Store-Bilder 1, 2
+# und 5 (anime_ar_companion/store/bilder/<sprache>/<sprache>_N.png), hier capyroo-world-<sprache>-1 bis -3.
+CW_BAND = '#3B1C57'
+cw = Image.open(os.path.join(IMG, 'capyroo-world.png')).convert('RGB')
+karte('capyroo-world', CW_BAND, rund(cw, 112), 380)
+klein('capyroo-world', (256, 512))
+galerie('capyroo-world')

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hollow Spoon | Applications et jeux</title>
-<meta name="description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie.">
+<meta name="description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie. Wimmelino, des objets cach&eacute;s dans 14 villes illustr&eacute;es, pour iPhone.">
 <link rel="canonical" href="https://hollowspoon.app/fr/">
 <link rel="alternate" hreflang="de" href="https://hollowspoon.app/">
 <link rel="alternate" hreflang="en" href="https://hollowspoon.app/en/">
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Hollow Spoon">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hollow Spoon | Applications et jeux">
-<meta property="og:description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie.">
+<meta property="og:description" content="Hollow Spoon cr&eacute;e des applications qui font une chose&nbsp;: Shlayolotl, le morpion avec des axolotls, sur l&rsquo;App Store. Mitrechner, la liste de courses qui affiche ton total, pour iPhone et Android. Karma Farmer, une bonne action par jour, pour iPhone et Android. Fumuon, le jeu de rythme o&ugrave; tu joues la m&eacute;lodie. Wimmelino, des objets cach&eacute;s dans 14 villes illustr&eacute;es, pour iPhone.">
 <meta property="og:url" content="https://hollowspoon.app/fr/">
 <meta property="og:image" content="https://hollowspoon.app/assets/img/og-hollow-spoon.png">
 <meta property="og:image:width" content="1200">
@@ -125,6 +125,7 @@
   .play { font-size: 15px; font-weight: 600; margin: 0; }
   .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
+  .punkte + .knoepfe .soon, .text + .knoepfe .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
      Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
@@ -258,6 +259,28 @@
   /* Fumuon: der Nachthimmel hinter den Bahnen, hell auf tiefem Blau und Violett. */
   .band.fumu { background: linear-gradient(180deg, #060A1E 0%, #15184A 55%, #34195E 100%); color: #F3F1FF; }
 
+  /* Wimmelino: das Hafenwasser der Staedte, hell auf tiefem Blau. */
+  .band.wimm { background: linear-gradient(180deg, #0C3F66 0%, #155A8C 55%, #1F72A8 100%); color: #F2F8FC; }
+
+  /* Der Capyroo-Abschnitt unter der App-Reihe: Abendhimmel wie in den Spielen, zwei Karten. */
+  .band.capyhaus { background: linear-gradient(180deg, #1B1646 0%, #3C2A74 60%, #5E2A78 100%); color: #F6F1FF;
+                   margin-top: 56px; }
+  .capyhaus .zeile { font-size: 19px; margin: 0 0 34px; opacity: .9; }
+  .capyhaus .karten { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+  .capyhaus .karte { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+                     border-radius: 26px; padding: 28px; }
+  .capyhaus .karte-kopf { display: flex; align-items: center; gap: 18px; color: inherit; text-decoration: none;
+                          margin-bottom: 16px; }
+  .capyhaus .karte-kopf img { width: 84px; height: 84px; border-radius: 19px; }
+  .capyhaus .karte-kopf h3 { font-size: 28px; letter-spacing: -.02em; margin: 0; }
+  .capyhaus .karte p { margin-bottom: 16px; }
+  .capyhaus .karte .soon { margin: 6px 0 0; }
+  .capyhaus .karte .badge { margin-top: 4px; }
+  @media (max-width: 720px) {
+    .capyhaus .karten { grid-template-columns: 1fr; }
+    .capyhaus .karte { padding: 22px; }
+  }
+
 </style>
 </head>
 <body>
@@ -265,7 +288,7 @@
 <div class="wrap">
   <nav>
     <span class="mark"><a href="/fr/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts"><details class="menue"><summary>Applications</summary><div class="liste"><a href="/fr/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/fr/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/fr/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/fr/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
+    <div class="rechts"><details class="menue"><summary>Applications</summary><div class="liste"><a href="/fr/#wimmelino"><img src="/assets/img/wimmelino-256.webp" alt="" width="28" height="28">Wimmelino</a><a href="/fr/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/fr/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/fr/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/fr/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
   document.addEventListener('click', function (e) {
     document.querySelectorAll('details.menue[open]').forEach(function (m) {
       if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
@@ -289,6 +312,41 @@
 
 <div class="apps" id="apps">
 <div class="apps-reihe" id="apps-reihe">
+<section class="band wimm" id="wimmelino" data-name="Wimmelino">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/wimmelino-256.webp 256w, /assets/img/wimmelino-512.webp 512w" sizes="112px">
+        <img class="icon" src="/assets/img/wimmelino.png" alt="" width="256" height="256">
+      </picture>
+      <div>
+        <h2><a href="/fr/wimmelino/product/">Wimmelino</a></h2>
+      </div>
+    </div>
+    <p>Tu te souviens des cherche et trouve d&rsquo;avant&nbsp;? Wimmelino, c&rsquo;est la version en grand&nbsp;: 14 villes illustr&eacute;es, et chacune cache plein de choses.</p>
+    <p class="mehr"><a href="/fr/wimmelino/product/">En savoir plus sur Wimmelino</a></p>
+    </div>
+    <div class="carousel" id="shots-wi">
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/wimmelino-fr-1-420.avif 420w, /assets/shots/wimmelino-fr-1-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/wimmelino-fr-1-420.webp 420w, /assets/shots/wimmelino-fr-1-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/wimmelino-fr-1-420.webp" width="420" height="910" alt="Wimmelino&#160;: Hambourg, la liste en bas" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="/assets/shots/wimmelino-fr-2-420.avif 420w, /assets/shots/wimmelino-fr-2-840.avif 840w" sizes="170px">
+          <source type="image/webp" srcset="/assets/shots/wimmelino-fr-2-420.webp 420w, /assets/shots/wimmelino-fr-2-840.webp 840w" sizes="170px">
+          <img src="/assets/shots/wimmelino-fr-2-420.webp" width="420" height="910" alt="Wimmelino&#160;: Tokyo, la liste en bas" decoding="async">
+        </picture>
+    </div>
+    <div class="punkte" data-fuer="shots-wi"></div>
+    <div class="kaufen">
+    <a class="badge" href="https://apps.apple.com/app/wimmelino-find-hidden-things/id6821570689">
+      <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
+    </a>
+    </div>
+  </div>
+</section>
 <section class="band fumu" id="fumuon" data-name="Fumuon">
   <div class="wrap">
     <div class="info">
@@ -319,7 +377,9 @@
     <div class="punkte" data-fuer="shots-fu"></div>
     <div class="kaufen">
     <p class="soon">Bient&ocirc;t sur l&rsquo;App Store.</p>
-    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon">Aussi sur Google Play</a></p>
+    <a class="badge" href="https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon">
+      <img src="/assets/img/googleplay-fr.png" alt="Disponible sur Google Play" width="135" height="40">
+    </a>
     </div>
   </div>
 </section>
@@ -355,7 +415,9 @@
     <a class="badge" href="https://apps.apple.com/app/karma-farmer/id6818803808">
       <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
     </a>
-    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.karmafarmer">Aussi sur Google Play</a></p>
+    <a class="badge" href="https://play.google.com/store/apps/details?id=app.hollowspoon.karmafarmer">
+      <img src="/assets/img/googleplay-fr.png" alt="Disponible sur Google Play" width="135" height="40">
+    </a>
     </div>
   </div>
 </section>
@@ -391,7 +453,9 @@
     <a class="badge" href="https://apps.apple.com/app/mitrechner/id6818615754">
       <img src="/assets/img/appstore-fr.svg" alt="T&eacute;l&eacute;charger dans l&rsquo;App Store" width="120" height="40">
     </a>
-    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner">Aussi sur Google Play</a></p>
+    <a class="badge" href="https://play.google.com/store/apps/details?id=app.hollowspoon.mitrechner">
+      <img src="/assets/img/googleplay-fr.png" alt="Disponible sur Google Play" width="135" height="40">
+    </a>
     </div>
   </div>
 </section>
@@ -436,6 +500,36 @@
 <button class="apps-pfeil weiter" type="button" aria-label="Application suivante"></button>
 </div>
 <div class="punkte apps-punkte" data-fuer="apps-reihe"></div>
+<section class="band capyhaus" id="capyroo">
+  <div class="wrap">
+    <h2>Capyroo</h2>
+    <p class="zeile">Notre capybara a bient&ocirc;t ses propres jeux. Tu les vois ici en premier.</p>
+    <div class="karten">
+      <article class="karte">
+        <a class="karte-kopf" href="/fr/capyroo-world/product/">
+          <img src="/assets/img/capyroo-world-256.webp" alt="" width="84" height="84">
+          <h3>Capyroo World</h3>
+        </a>
+        <p>Fais venir Capyroo dans ta chambre. En RA, il se tient sur ton sol, de la taille que tu veux.</p>
+        <p class="mehr"><a href="/fr/capyroo-world/product/">En savoir plus sur Capyroo World</a></p>
+        <div class="knoepfe">
+    <p class="soon">Bient&ocirc;t sur l&rsquo;App Store.</p>
+        </div>
+      </article>
+      <article class="karte">
+        <a class="karte-kopf" href="/fr/capyroo-run/product/">
+          <img src="/assets/img/capyroo-run-256.webp" alt="" width="84" height="84">
+          <h3>Capyroo Run</h3>
+        </a>
+        <p>Un capybara, une petite plan&egrave;te, un doigt. Jusqu&rsquo;o&ugrave; iras-tu&nbsp;?</p>
+        <p class="mehr"><a href="/fr/capyroo-run/product/">En savoir plus sur Capyroo Run</a></p>
+        <div class="knoepfe">
+    <p class="soon">Bient&ocirc;t sur l&rsquo;App Store.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 </main>
 
 <div class="wrap">

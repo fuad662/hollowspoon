@@ -67,11 +67,12 @@ OFFLINE = {'wheresome', 'freelancerito'}
 # (nicht im Repository). So laesst sich eine Seite ansehen, bevor sie online geht.
 VORSCHAU = '--vorschau' in sys.argv
 AUS = set() if VORSCHAU else OFFLINE
-APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon', 'wheresome']
+APPS = [app for app in ['shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon', 'wimmelino', 'capyroo-world', 'wheresome']
         if app not in AUS]
 RECHT = {'shlayolotl': '/shlayolotl', 'wheresome': '/wheresome', 'mitrechner': '/mitrechner',
          'karma-farmer': '/karma-farmer', 'freelancerito': '/freelancerito',
-         'capyroo-run': '/capyroo-run', 'fumuon': '/fumuon'}
+         'capyroo-run': '/capyroo-run', 'fumuon': '/fumuon',
+         'wimmelino': '/wimmelino', 'capyroo-world': '/capyroo-world'}
 # Sprachen der App selbst, wo es nicht alle vier der Website sind. Freelancerito gab es am
 # 4.10.2026 zuerst nur auf Deutsch und Englisch; noch am selben Tag kamen Spanisch und
 # Franzoesisch dazu (Englisch ist dort Hauptsprache und Rueckfall). Seitdem spricht jede App
@@ -83,7 +84,8 @@ APP_SPRACHEN = {}
 # (app_sprache und recht_link, weiter unten bei galerie_html).
 AUF_ENGLISCH = {'de': ' (auf Englisch)', 'en': '', 'fr': ' (en anglais)', 'es': ' (en ingl&eacute;s)'}
 # Angezeigter Name je App (die Adresse /karma-farmer/ hat einen Bindestrich, der Name nicht).
-NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run', 'fumuon': 'Fumuon'}
+NAME = {'karma-farmer': 'Karma Farmer', 'capyroo-run': 'Capyroo Run', 'fumuon': 'Fumuon',
+        'wimmelino': 'Wimmelino', 'capyroo-world': 'Capyroo World'}
 # Apple-ID von Mitrechner: 6818615754 (App Store Connect, 2.10.2026). Ohne Land in der
 # Adresse leitet Apple in den Store des Besuchers weiter; das passt, weil die spanische
 # Fassung fuer Mexiko geschrieben ist und eine /es/-Adresse nach Spanien fuehren wuerde.
@@ -128,6 +130,15 @@ FL_PLAY = None
 FU_APPSTORE = None
 FU_IM_STORE = False
 FU_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon'
+# Wimmelino (20.10.2026, "seite fuer wimmelino und capyroo world auch schonmal hochladen"): seit
+# 19.10.2026 im App Store (iTunes-Lookup ueber die Bundle-ID, Apple-ID 6821570689, ohne Land wie
+# bei Mitrechner), noch nicht bei Google Play. Steht als neueste App ganz vorn auf der Startseite.
+WI_APPSTORE = 'https://apps.apple.com/app/wimmelino-find-hidden-things/id6821570689'
+# Capyroo World: noch in keinem Store (Apple prueft noch). Wie Capyroo Run nur als eigene Seite
+# unter /capyroo-world/product/ und in der Sitemap. Nach Apples Freigabe die Adresse in
+# CW_APPSTORE, CW_IM_STORE auf True und die App vorn in START_APPS eintragen.
+CW_APPSTORE = None
+CW_IM_STORE = False
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
@@ -142,7 +153,9 @@ OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
            'karma-farmer': '/assets/img/og-karma-farmer.png',
            'freelancerito': '/assets/img/og-freelancerito.png',
            'capyroo-run': '/assets/img/og-capyroo-run.png',
-           'fumuon': '/assets/img/og-fumuon.png'}
+           'fumuon': '/assets/img/og-fumuon.png',
+           'wimmelino': '/assets/img/og-wimmelino.png',
+           'capyroo-world': '/assets/img/og-capyroo-world.png'}
 
 T = {
     'de': dict(
@@ -624,6 +637,7 @@ STIL = '''  *, *::before, *::after { box-sizing: border-box; }
   .play { font-size: 15px; font-weight: 600; margin: 0; }
   .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
+  .punkte + .knoepfe .soon, .text + .knoepfe .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
      Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
@@ -1125,6 +1139,265 @@ FUMU_STIL = """
 """
 
 
+def _html(s):
+    """Text mit Umlauten und Sonderzeichen als HTML-Zeichenreferenzen, wie im Rest der Datei."""
+    return s.replace('&', '&amp;').encode('ascii', 'xmlcharrefreplace').decode('ascii')
+
+
+def _seite(**felder):
+    return {k: ([_html(x) for x in v] if isinstance(v, list) else _html(v)) for k, v in felder.items()}
+
+
+# ---------------------------------------------------------------------------
+# Wimmelino (20.10.2026). Dieselben Aussagen wie im Store (wimmelbild/store/texte.md): 14 Staedte,
+# 15 Dinge je Stadt, Hinweise, jeder zwanzigste Fehltipp versteckt ein Ding wieder, lebendige
+# Staedte, Musik je Stadt, Hamburg und Tokio gratis, drei Pakete, Werbung nach dem Level (mit Paket
+# weg), kein Konto. Bilder: Google-Play-Fotos 1, 3 und 4 (Hamburg mit Liste, Tokio mit Liste, Tokio).
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _mehr, _text, _start) in {
+    'de': ('Symbol der App Wimmelino', 'Mehr zu Wimmelino',
+           'Wimmelbilder kennst du noch von fr&uuml;her? Wimmelino ist das Ganze in gro&szlig;: 14 '
+           'illustrierte St&auml;dte, und in jeder ist richtig viel versteckt.', ''),
+    'en': ('Wimmelino app icon', 'More about Wimmelino',
+           'Remember seek-and-find pictures from back then? Wimmelino is the big version: 14 '
+           'illustrated cities, and every one of them is packed with hidden things.',
+           ' Wimmelino, hidden objects in 14 illustrated cities, for iPhone.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Wimmelino', 'En savoir plus sur Wimmelino',
+           'Tu te souviens des cherche et trouve d&rsquo;avant&nbsp;? Wimmelino, c&rsquo;est la version '
+           'en grand&nbsp;: 14 villes illustr&eacute;es, et chacune cache plein de choses.',
+           ' Wimmelino, des objets cach&eacute;s dans 14 villes illustr&eacute;es, pour iPhone.'),
+    'es': ('Icono de la app Wimmelino', 'M&aacute;s sobre Wimmelino',
+           '&iquest;Te acuerdas de los dibujos de buscar y encontrar? Wimmelino es la versi&oacute;n en '
+           'grande: 14 ciudades ilustradas, y cada una esconde un mont&oacute;n de cosas.',
+           ' Wimmelino, objetos escondidos en 14 ciudades ilustradas, para iPhone.'),
+}.items():
+    T[_s]['og_alt']['wimmelino'] = _og
+    T[_s]['mehr']['wimmelino'] = _mehr
+    T[_s]['wi_text'] = _text
+    if 'wimmelino' not in AUS:
+        T[_s]['beschreibung'] += _start
+
+P['wimmelino'] = {
+  'de': _seite(
+   titel='Wimmelino | Wimmelbilder aus 14 Städten',
+   beschreibung='Wimmelbilder für alle: 14 riesige illustrierte Städte voller Verstecktem. Reinzoomen, '
+                'suchen, finden. Hamburg und Tokio gratis, für iPhone.',
+   erster='Hamburg, Tokio, Paris, London, Rom, Venedig, New York, Rio, Istanbul, Kairo, Bangkok, Seoul, '
+          'Shanghai und Singapur. Unten steht, was du suchst (15 Dinge pro Stadt, manche gleich mehrmals). '
+          'Reinzoomen, umschauen, antippen. Zoomen und Verschieben geht wie bei den Fotos auf deinem Handy.',
+   h2a='Die Städte leben',
+   pa='Boote fahren, Leute laufen rum und quatschen, Vögel fliegen auf, wenn du sie antippst. Überall '
+      'gibt es kleine Szenen und Sehenswürdigkeiten zu entdecken, und jede Stadt hat ihre eigene Musik. '
+      'Also genau das Richtige für abends auf dem Sofa oder für ein paar Minuten in der Bahn.',
+   h2b='Hilfe, wenn du sie brauchst',
+   pb='Tippst du auf ein Bild in der Liste, sagt dir das Spiel, wo du ungefähr schauen musst. Und wenn '
+      'gar nichts mehr geht, hast du drei Hinweise pro Runde. Wild rumtippen bringt übrigens nichts: '
+      'Jedes zwanzigste Mal daneben wird ein gefundenes Ding wieder versteckt.',
+   letzter='Hamburg und Tokio sind gratis, die anderen zwölf Städte gibt es in drei Paketen (Europa, '
+           'Weltreise, Asien), einmal kaufen, kein Abo. Nach einem geschafften Level kommt Werbung, mit '
+           'einem Paket ist sie weg. Kein Konto, dein Spielstand bleibt auf deinem Gerät. Wimmelino gibt '
+           'es auf Deutsch, Englisch, Französisch und Spanisch, für iPhone.',
+   shots=['Wimmelino: Hamburg, unten die Suchliste',
+          'Wimmelino: Tokio, unten die Suchliste',
+          'Wimmelino: Tokio von oben']),
+  'en': _seite(
+   titel='Wimmelino | Hidden objects in 14 cities',
+   beschreibung='Seek and find for everyone: 14 huge illustrated cities packed with hidden things. Zoom '
+                'in, look, find. Hamburg and Tokyo free, for iPhone.',
+   erster='Hamburg, Tokyo, Paris, London, Rome, Venice, New York, Rio, Istanbul, Cairo, Bangkok, Seoul, '
+          'Shanghai and Singapore. The list at the bottom shows what you’re looking for (15 things per '
+          'city, some of them more than once). Zoom in, look around, tap. Zooming and panning work just '
+          'like the photos on your phone.',
+   h2a='The cities are alive',
+   pa='Boats move, people walk around and chat, birds fly off when you tap them. There are little '
+      'scenes and sights to discover everywhere, and every city has its own music. Just right for the '
+      'couch in the evening or a few minutes on the train.',
+   h2b='Help when you need it',
+   pb='Tap a picture in the list and the game tells you roughly where to look. And if you’re really '
+      'stuck, you get three hints per round. Tapping around wildly won’t help, by the way: every 20 '
+      'misses, one thing you found gets hidden again.',
+   letzter='Hamburg and Tokyo are free, the other twelve cities come in three packs (Europe, World Tour, '
+           'Asia), buy once, no subscription. After a finished level there’s an ad, and with any pack '
+           'it’s gone. No account, your progress stays on your device. Wimmelino is available in '
+           'English, German, French and Spanish, for iPhone.',
+   shots=['Wimmelino: Hamburg, with the list at the bottom',
+          'Wimmelino: Tokyo, with the list at the bottom',
+          'Wimmelino: Tokyo from above']),
+  'fr': _seite(
+   titel='Wimmelino | Objets cachés dans 14 villes',
+   beschreibung='Du cherche et trouve pour tout le monde : 14 immenses villes illustrées pleines '
+                'd’objets cachés. Zoome, cherche, trouve. Hambourg et Tokyo gratuites, pour iPhone.',
+   erster='Hambourg, Tokyo, Paris, Londres, Rome, Venise, New York, Rio, Istanbul, Le Caire, Bangkok, '
+          'Séoul, Shanghai et Singapour. La liste en bas te montre ce que tu cherches (15 objets par '
+          'ville, certains plusieurs fois). Tu zoomes, tu regardes, tu touches. Zoomer et se déplacer '
+          'marche comme avec les photos de ton téléphone.',
+   h2a='Les villes sont vivantes',
+   pa='Les bateaux avancent, les gens se promènent et discutent, les oiseaux s’envolent quand tu les '
+      'touches. Partout, il y a de petites scènes et des monuments à découvrir, et chaque ville a sa '
+      'propre musique. Parfait pour le soir sur le canapé ou quelques minutes dans le train.',
+   h2b='De l’aide quand il en faut',
+   pb='Touche une image de la liste et le jeu te dit à peu près où regarder. Et si tu bloques vraiment, '
+      'tu as trois indices par partie. Toucher partout au hasard ne sert à rien, d’ailleurs : tous '
+      'les 20 ratés, un objet trouvé se cache à nouveau.',
+   letzter='Hambourg et Tokyo sont gratuites, les douze autres villes sont réunies en trois packs '
+           '(Europe, Tour du monde, Asie), un seul achat, sans abonnement. Après un niveau réussi, il y a '
+           'une pub, et avec un pack, elle disparaît. Pas de compte, ta progression reste sur ton '
+           'appareil. Wimmelino est disponible en français, anglais, allemand et espagnol, pour iPhone.',
+   shots=['Wimmelino : Hambourg, la liste en bas',
+          'Wimmelino : Tokyo, la liste en bas',
+          'Wimmelino : Tokyo vu d’en haut']),
+  'es': _seite(
+   titel='Wimmelino | Objetos escondidos en 14 ciudades',
+   beschreibung='Buscar y encontrar para todos: 14 ciudades enormes ilustradas llenas de cosas '
+                'escondidas. Haz zoom, busca, encuentra. Hamburgo y Tokio gratis, para iPhone.',
+   erster='Hamburgo, Tokio, París, Londres, Roma, Venecia, Nueva York, Río, Estambul, El Cairo, Bangkok, '
+          'Seúl, Shanghái y Singapur. La lista de abajo te muestra lo que buscas (15 objetos por ciudad, '
+          'algunos más de una vez). Haces zoom, miras, tocas. Hacer zoom y moverte funciona igual que con '
+          'las fotos de tu celular.',
+   h2a='Las ciudades están vivas',
+   pa='Los barcos se mueven, la gente pasea y charla, los pájaros salen volando cuando los tocas. Por '
+      'todas partes hay pequeñas escenas y monumentos por descubrir, y cada ciudad tiene su propia '
+      'música. Justo lo que necesitas para la noche en el sofá o unos minutos en el tren.',
+   h2b='Ayuda cuando la necesitas',
+   pb='Toca una imagen de la lista y el juego te dice más o menos dónde mirar. Y si te atascas de verdad, '
+      'tienes tres pistas por partida. Por cierto, tocar a lo loco no sirve de nada: cada 20 fallos, un '
+      'objeto encontrado se vuelve a esconder.',
+   letzter='Hamburgo y Tokio son gratis, las otras doce ciudades vienen en tres paquetes (Europa, Vuelta '
+           'al mundo, Asia), una sola compra, sin suscripción. Después de superar un nivel hay un anuncio, '
+           'y con cualquier paquete desaparece. Sin cuenta, tu progreso se queda en tu dispositivo. '
+           'Wimmelino está en español, inglés, alemán y francés, para iPhone.',
+   shots=['Wimmelino: Hamburgo, abajo la lista',
+          'Wimmelino: Tokio, abajo la lista',
+          'Wimmelino: Tokio desde arriba']),
+}
+
+WIMM_STIL = """
+  /* Wimmelino: das Hafenwasser der Staedte, hell auf tiefem Blau. */
+  .band.wimm { background: linear-gradient(180deg, #0C3F66 0%, #155A8C 55%, #1F72A8 100%); color: #F2F8FC; }
+"""
+
+
+# ---------------------------------------------------------------------------
+# Capyroo World (20.10.2026). Dieselben Aussagen wie im Store (anime_ar_companion/store/texte.md):
+# AR auf dem eigenen Boden, Tippen zum Hinlaufen und Aufs-Sofa-Huepfen, Baelle, High Five, Verstecken
+# hinter Moebeln (LiDAR), Zimmer einrichten, Spaziergaenge, Studio ohne AR, Streicheln, Fuettern,
+# Anziehen, Wunsch des Tages, Orakel, kleine Spiele, Level, kosmetische Einmalkaeufe, kein Konto,
+# keine Werbung, kein Tracking, kein gespeichertes Kamerabild. Noch nicht im Store, also nur diese
+# Seite. Bilder: Store-Bilder 1, 2 und 5.
+# ---------------------------------------------------------------------------
+
+for _s, (_og, _text) in {
+    'de': ('Symbol der App Capyroo World',
+           'Hol Capyroo in dein Zimmer. Mit AR steht er auf deinem Boden, so gro&szlig;, wie du ihn haben willst.'),
+    'en': ('Capyroo World app icon',
+           'Bring Capyroo into your room. In AR he stands on your floor, as big as you like.'),
+    'fr': ('Ic&ocirc;ne de l&rsquo;application Capyroo World',
+           'Fais venir Capyroo dans ta chambre. En RA, il se tient sur ton sol, de la taille que tu veux.'),
+    'es': ('Icono de la app Capyroo World',
+           'Trae a Capyroo a tu cuarto. Con la RA est&aacute; de pie en tu suelo, del tama&ntilde;o que quieras.'),
+}.items():
+    T[_s]['og_alt']['capyroo-world'] = _og
+    T[_s]['cw_text'] = _text
+
+P['capyroo-world'] = {
+  'de': _seite(
+   titel='Capyroo World | Dein Capybara zu Hause',
+   beschreibung='Hol Capyroo in dein Zimmer: Mit AR läuft er über deinen Boden, hüpft aufs Sofa und '
+                'versteckt sich hinter Möbeln. Ohne Konto, ohne Werbung.',
+   erster='Du tippst auf den Boden, und er läuft hin. Du tippst aufs Sofa, und er hüpft rauf. Er holt '
+          'Bälle, gibt dir High Five und versteckt sich hinter Möbeln (mit LiDAR). Dazu richtest du sein '
+          'Zimmer ein: Deko hinstellen, drehen, verschieben. Ab und zu geht er von allein spazieren und '
+          'bringt dir was mit.',
+   h2a='Keine Lust auf AR?',
+   pa='Kein Problem, Capyroo wohnt auch in einem gemütlichen Studio. Dort kannst du ihn streicheln, '
+      'kitzeln, anziehen und mit ihm spielen, und füttern (es gibt jede Menge Leckereien, manche haben '
+      'eine Wirkung). Jeden Tag hat er einen Wunsch, und das Capyroo-Orakel ist auch jeden Tag neu.',
+   h2b='Kleine Spiele und neue Sachen',
+   pb='Für zwischendurch gibt es ein paar kleine Spiele, zum Beispiel ein Retro-Abenteuer mit Oma '
+      'Schildkröte. Capyroo steigt im Level auf und schaltet Neues frei, zum Beispiel Hüte und '
+      'Hintergründe. Pakete mit Deko, Kostümen und Hintergründen gibt es einzeln (einmal kaufen, kein '
+      'Abo), das ist nur Optik.',
+   letzter='Kein Konto, keine Werbung, kein Tracking. Was du machst, bleibt auf deinem Handy, und die App '
+           'speichert nie ein Kamerabild. Capyroo World gibt es auf Deutsch, Englisch, Spanisch und '
+           'Französisch, für iPhone.',
+   shots=['Capyroo World: Capyroo in deinem Wohnzimmer',
+          'Capyroo World: sein Zimmer einrichten',
+          'Capyroo World: ein Retro-Abenteuer mit Oma Schildkröte']),
+  'en': _seite(
+   titel='Capyroo World | Your capybara at home',
+   beschreibung='Bring Capyroo into your room: in AR he walks across your floor, hops onto the sofa and '
+                'hides behind furniture. No account, no ads.',
+   erster='You tap the floor and he walks over. You tap the sofa and he hops up. He fetches balls, gives '
+          'you a high five and hides behind furniture (with LiDAR). You also furnish his room: place '
+          'decor, turn it, move it. Now and then he goes for a walk on his own and brings you something '
+          'back.',
+   h2a='Not into AR?',
+   pa='No problem, Capyroo also lives in a cozy studio. There you can pet him, tickle him, dress him up, '
+      'play with him and feed him (there are loads of treats, some with an effect). Every day he has a '
+      'wish, and the Capyroo Oracle is new every day too.',
+   h2b='Small games and new things',
+   pb='For in between there are a few small games, like a retro adventure with Granny Turtle. Capyroo '
+      'levels up and unlocks new things, like hats and backgrounds. Packs with decor, costumes and '
+      'backgrounds are optional one-time purchases (no subscription), and they are only for looks.',
+   letzter='No account, no ads, no tracking. What you do stays on your phone, and the app never saves a '
+           'camera image. Capyroo World is available in English, German, Spanish and French, for iPhone.',
+   shots=['Capyroo World: Capyroo in your living room',
+          'Capyroo World: furnishing his room',
+          'Capyroo World: a retro adventure with Granny Turtle']),
+  'fr': _seite(
+   titel='Capyroo World | Ton capybara à la maison',
+   beschreibung='Fais venir Capyroo dans ta chambre : en RA, il marche sur ton sol, saute sur le '
+                'canapé et se cache derrière les meubles. Sans compte, sans pub.',
+   erster='Tu touches le sol et il y va. Tu touches le canapé et il saute dessus. Il rapporte des balles, '
+          'te tape dans la main et se cache derrière les meubles (avec LiDAR). Tu aménages aussi sa '
+          'chambre : poser la déco, la tourner, la déplacer. De temps en temps, il part se promener '
+          'tout seul et te rapporte quelque chose.',
+   h2a='La RA, ce n’est pas ton truc ?',
+   pa='Pas de souci, Capyroo vit aussi dans un studio tout doux. Là, tu peux le caresser, le chatouiller, '
+      'l’habiller, jouer avec lui et le nourrir (il y a plein de gourmandises, certaines ont un effet). '
+      'Chaque jour, il a un vœu, et l’Oracle de Capyroo change aussi chaque jour.',
+   h2b='Petits jeux et nouveautés',
+   pb='Pour passer le temps, il y a quelques petits jeux, par exemple une aventure rétro avec Mamie '
+      'Tortue. Capyroo monte de niveau et débloque des nouveautés, par exemple des chapeaux et des fonds. '
+      'Les packs de déco, de costumes et de fonds sont des achats uniques facultatifs (sans abonnement), '
+      'c’est seulement de l’apparence.',
+   letzter='Sans compte, sans pub, sans suivi. Ce que tu fais reste sur ton téléphone, et l’app '
+           'n’enregistre jamais d’image de la caméra. Capyroo World existe en français, anglais, allemand '
+           'et espagnol, pour iPhone.',
+   shots=['Capyroo World : Capyroo dans ton salon',
+          'Capyroo World : aménager sa chambre',
+          'Capyroo World : une aventure rétro avec Mamie Tortue']),
+  'es': _seite(
+   titel='Capyroo World | Tu carpincho en casa',
+   beschreibung='Trae a Capyroo a tu cuarto: con la RA camina por tu suelo, salta al sofá y se esconde '
+                'detrás de los muebles. Sin cuenta, sin anuncios.',
+   erster='Tocas el suelo y él va hacia allí. Tocas el sofá y salta encima. Trae pelotas, te choca esos '
+          'cinco y se esconde detrás de los muebles (con LiDAR). Además decoras su cuarto: colocar, girar '
+          'y mover la decoración. De vez en cuando sale a pasear solo y te trae algo.',
+   h2a='¿No te va la RA?',
+   pa='No pasa nada, Capyroo también vive en un estudio acogedor. Allí puedes acariciarlo, hacerle '
+      'cosquillas, vestirlo, jugar con él y darle de comer (hay un montón de chuches, algunas con '
+      'efecto). Cada día tiene un deseo, y el Oráculo de Capyroo también es nuevo cada día.',
+   h2b='Juegos pequeños y cosas nuevas',
+   pb='Para ratos libres hay unos cuantos juegos pequeños, por ejemplo una aventura retro con la abuela '
+      'tortuga. Capyroo sube de nivel y desbloquea cosas nuevas, por ejemplo sombreros y fondos. Los '
+      'paquetes de decoración, disfraces y fondos son compras únicas opcionales (sin suscripción), y son '
+      'solo aspecto.',
+   letzter='Sin cuenta, sin anuncios, sin seguimiento. Lo que haces se queda en tu celular, y la app nunca '
+           'guarda una imagen de la cámara. Capyroo World está en español, inglés, alemán y francés, para '
+           'iPhone.',
+   shots=['Capyroo World: Capyroo en tu sala',
+          'Capyroo World: decorar su cuarto',
+          'Capyroo World: una aventura retro con la abuela tortuga']),
+}
+
+CWLD_STIL = """
+  /* Capyroo World: der Abendhimmel der Store-Bilder, hell auf warmem Violett. */
+  .band.cwld { background: linear-gradient(180deg, #1E0F33 0%, #3B1C57 55%, #5E2A78 100%); color: #F7F1FF; }
+"""
+
+
 # ---------------------------------------------------------------------------
 # Freelancerito (4.10.2026). Nur, was die App wirklich kann (lib/l10n/app_de.arb und README im
 # App-Projekt): Stundenwert, Aufwand in fuenf Teilen, direkte Kosten, Puffer, daraus
@@ -1330,8 +1603,8 @@ def symbol(app):
 
 # Startseite deutsch: eigene kurze Beschreibung (max. ca. 155 Zeichen), ohne die je App
 # angehaengten Saetze oben. Die Namen der Apps stehen drin, damit man sie findet.
-T['de']['beschreibung'] = ('Kleine Apps mit Charakter: Fumuon, Karma Farmer, Mitrechner, Shlayolotl und '
-                           'Capyroo Run. Melodie spielen, Axolotl zocken, Pflanze wachsen lassen.')
+T['de']['beschreibung'] = ('Kleine Apps mit Charakter: Wimmelino, Fumuon, Karma Farmer, Mitrechner und '
+                           'Shlayolotl. St&auml;dte durchsuchen, Melodie spielen, Pflanze wachsen lassen.')
 
 
 def kopf(sprache, pfade, titel, beschreibung, bild='start'):
@@ -1411,7 +1684,8 @@ def sprachleiste(sprache, pfade):
 # Seit 20.10.2026 steht die neueste App immer zuerst (User: "und die neuste app immer zu erst"),
 # auf der Startseite und im Menue. Wer neu online geht, kommt also nach vorn; Freelancerito und
 # Wheresome stehen deshalb schon vorn, solange sie offline (und damit ausgeblendet) sind.
-START_APPS = [a for a in ('wheresome', 'freelancerito', 'fumuon', 'karma-farmer', 'mitrechner', 'shlayolotl')
+START_APPS = [a for a in ('wheresome', 'freelancerito', 'wimmelino', 'fumuon', 'karma-farmer', 'mitrechner',
+                           'shlayolotl')
               if a not in AUS]
 
 MENUE_SKRIPT = '''<script>
@@ -1484,7 +1758,7 @@ def seite(sprache):
 <button class="apps-pfeil weiter" type="button" aria-label="%(app_weiter)s"></button>
 </div>
 <div class="punkte apps-punkte" data-fuer="apps-reihe"></div>
-</main>
+%(capyroo_abschnitt)s</main>
 
 <div class="wrap">
   <footer>
@@ -1557,9 +1831,83 @@ def seite(sprache):
 ''' % dict(t, sprache=sprache, pfad=PFAD[sprache],
            kopf=kopf(sprache, PFAD, t['titel'], t['beschreibung']),
            organisation=ORGANISATION,
-           sprachen=sprachleiste(sprache, PFAD), stil=STIL + FUMU_STIL,
+           sprachen=sprachleiste(sprache, PFAD), stil=STIL + FUMU_STIL + WIMM_STIL + CAPYHAUS_STIL,
+           capyroo_abschnitt=capyroo_abschnitt(sprache),
            abschnitte=''.join(start_abschnitte(sprache)[app] for app in START_APPS),
            ds_pfad=DS_PFAD[sprache], menue=apps_menue(sprache))
+
+
+# Capyroo bekommt unter der App-Reihe einen eigenen Abschnitt (User 20.10.2026: "capyroo bitte als
+# eigene Section, etwas darunter ... wir werden naemlich irgendwann mehrere capy games haben"). Alle
+# Capyroo-Spiele stehen hier und nicht in der App-Reihe, auch wenn sie spaeter im Store sind; die
+# Knoepfe zeigen dann von selbst App Store und Google Play statt "Bald im App Store.". Ein neues
+# Capyroo-Spiel kommt vorn in diese Liste (neueste zuerst, wie in START_APPS), die Karten brechen
+# von selbst in mehrere Reihen um.
+CAPYROO_SPIELE = ('capyroo-world', 'capyroo-run')
+
+for _s, (_titel, _zeile, _mehr_cw, _mehr_cr) in {
+    'de': ('Capyroo', 'Unser Capybara bekommt eigene Spiele. Hier siehst du sie zuerst.',
+           'Mehr zu Capyroo World', 'Mehr zu Capyroo Run'),
+    'en': ('Capyroo', 'Our capybara is getting games of his own. You see them here first.',
+           'More about Capyroo World', 'More about Capyroo Run'),
+    'fr': ('Capyroo', 'Notre capybara a bient&ocirc;t ses propres jeux. Tu les vois ici en premier.',
+           'En savoir plus sur Capyroo World', 'En savoir plus sur Capyroo Run'),
+    'es': ('Capyroo', 'Nuestro carpincho tendr&aacute; sus propios juegos. Aqu&iacute; los ves primero.',
+           'M&aacute;s sobre Capyroo World', 'M&aacute;s sobre Capyroo Run'),
+}.items():
+    T[_s]['capy_titel'] = _titel
+    T[_s]['capy_zeile'] = _zeile
+    T[_s]['mehr']['capyroo-world'] = _mehr_cw
+    T[_s]['mehr']['capyroo-run'] = _mehr_cr
+
+
+def capyroo_abschnitt(sprache):
+    t = T[sprache]
+    text = {'capyroo-world': t['cw_text'], 'capyroo-run': t['cr_text']}
+    karten = ''.join(
+        '      <article class="karte">\n'
+        '        <a class="karte-kopf" href="%(pfad)s%(app)s/product/">\n'
+        '          <img src="/assets/img/%(app)s-256.webp" alt="" width="84" height="84">\n'
+        '          <h3>%(name)s</h3>\n'
+        '        </a>\n'
+        '        <p>%(text)s</p>\n'
+        '        <p class="mehr"><a href="%(pfad)s%(app)s/product/">%(mehr)s</a></p>\n'
+        '        <div class="knoepfe">\n%(knoepfe)s\n        </div>\n'
+        '      </article>\n'
+        % dict(pfad=PFAD[sprache], app=app, name=NAME[app], text=text[app], mehr=t['mehr'][app],
+               knoepfe=knoepfe(app, sprache))
+        for app in CAPYROO_SPIELE if app in APPS)
+    if not karten:
+        return ''
+    return ('<section class="band capyhaus" id="capyroo">\n'
+            '  <div class="wrap">\n'
+            '    <h2>%s</h2>\n'
+            '    <p class="zeile">%s</p>\n'
+            '    <div class="karten">\n%s    </div>\n'
+            '  </div>\n'
+            '</section>\n' % (t['capy_titel'], t['capy_zeile'], karten))
+
+
+CAPYHAUS_STIL = """
+  /* Der Capyroo-Abschnitt unter der App-Reihe: Abendhimmel wie in den Spielen, zwei Karten. */
+  .band.capyhaus { background: linear-gradient(180deg, #1B1646 0%, #3C2A74 60%, #5E2A78 100%); color: #F6F1FF;
+                   margin-top: 56px; }
+  .capyhaus .zeile { font-size: 19px; margin: 0 0 34px; opacity: .9; }
+  .capyhaus .karten { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+  .capyhaus .karte { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+                     border-radius: 26px; padding: 28px; }
+  .capyhaus .karte-kopf { display: flex; align-items: center; gap: 18px; color: inherit; text-decoration: none;
+                          margin-bottom: 16px; }
+  .capyhaus .karte-kopf img { width: 84px; height: 84px; border-radius: 19px; }
+  .capyhaus .karte-kopf h3 { font-size: 28px; letter-spacing: -.02em; margin: 0; }
+  .capyhaus .karte p { margin-bottom: 16px; }
+  .capyhaus .karte .soon { margin: 6px 0 0; }
+  .capyhaus .karte .badge { margin-top: 4px; }
+  @media (max-width: 720px) {
+    .capyhaus .karten { grid-template-columns: 1fr; }
+    .capyhaus .karte { padding: 22px; }
+  }
+"""
 
 
 def start_abschnitte(sprache):
@@ -1571,6 +1919,10 @@ def start_abschnitte(sprache):
            shlayolotl=SHLAY_ABSCHNITT % dict(
                t, sprache=sprache, pfad=PFAD[sprache], symbol_shlay=symbol('shlayolotl'),
                mehr_shlay=t['mehr']['shlayolotl'], shots=shots, shlay_url=SHLAY_URL[sprache]),
+           wimmelino='' if 'wimmelino' in AUS else WI_ABSCHNITT % dict(
+               t, pfad=PFAD[sprache], symbol_wi=symbol('wimmelino'),
+               mehr_wi=t['mehr']['wimmelino'], shots_wi=galerie_html('wimmelino', sprache, 'shots-wi', start=True),
+               knoepfe_wi=knoepfe('wimmelino', sprache)),
            fumuon='' if 'fumuon' in AUS else FU_ABSCHNITT % dict(
                t, pfad=PFAD[sprache], symbol_fu=symbol('fumuon'),
                mehr_fu=t['mehr']['fumuon'], shots_fu=galerie_html('fumuon', sprache, 'shots-fu', start=True),
@@ -1616,6 +1968,26 @@ SHLAY_ABSCHNITT = '''<section class="band shlay" id="shlayolotl" data-name="Shla
   </div>
 </section>
 
+'''
+
+WI_ABSCHNITT = '''<section class="band wimm" id="wimmelino" data-name="Wimmelino">
+  <div class="wrap">
+    <div class="info">
+    <div class="kopf">
+%(symbol_wi)s
+      <div>
+        <h2><a href="%(pfad)swimmelino/product/">Wimmelino</a></h2>
+      </div>
+    </div>
+    <p>%(wi_text)s</p>
+    <p class="mehr"><a href="%(pfad)swimmelino/product/">%(mehr_wi)s</a></p>
+    </div>
+%(shots_wi)s
+    <div class="kaufen">
+%(knoepfe_wi)s
+    </div>
+  </div>
+</section>
 '''
 
 FU_ABSCHNITT = '''<section class="band fumu" id="fumuon" data-name="Fumuon">
@@ -1795,8 +2167,11 @@ def galerie_html(app, sprache, kennung, start=False):
 
 
 def unten_html(app, sprache, kennung):
-    """Bilderreihe und Knopf (oder „Bald im App Store."), ohne Leerzeile, wenn die Bilder fehlen."""
-    return '\n'.join(x for x in (galerie_html(app, sprache, kennung), knoepfe(app, sprache)) if x)
+    """Bilderreihe und Knopf (oder „Bald im App Store."), ohne Leerzeile, wenn die Bilder fehlen.
+    Die Knoepfe stehen in einem eigenen Kasten: im Raster am Rechner waere sonst jeder Knopf eine
+    eigene Zeile, und App Store und Google Play stuenden untereinander statt nebeneinander."""
+    return '\n'.join(x for x in (galerie_html(app, sprache, kennung),
+                                  '    <div class="knoepfe">\n%s\n    </div>' % knoepfe(app, sprache)) if x)
 
 
 # Googles Markenhinweis, nur auf Seiten, die das Abzeichen zeigen.
@@ -1826,7 +2201,11 @@ def play_abzeichen(app, sprache):
 
 def knoepfe(app, sprache):
     """App Store, und fuer Mitrechner auch Google Play, sobald das offizielle
-    Abzeichen unter assets/img/googleplay-<sprache>.png liegt.
+    Abzeichen unter assets/img/googleplay-<sprache>.png liegt. Seit 20.10.2026 liegt es da: der
+    Inhaber hat es im Partner Marketing Hub geladen (GetItOnGooglePlay_Badge_Web_color_<Sprache>,
+    478 x 142, ohne durchsichtigen Rand, Spanisch in der Fassung fuer Lateinamerika), die Dateien
+    sind unveraendert kopiert. Gezeigt mit 44 px Hoehe wie Apples Knopf, also nicht kleiner; der
+    Freiraum ist das Polster von .badge (12 px, mehr als ein Viertel der Hoehe).
 
     Das Abzeichen gibt es nur im Partner Marketing Hub von Google, hinter
     deren Bedingungen; die nimmt der Inhaber selbst an (Stand 2.10.2026).
@@ -1839,15 +2218,22 @@ def knoepfe(app, sprache):
     t = T[sprache]
     if ((app == 'mitrechner' and not MITR_IM_STORE) or (app == 'karma-farmer' and not KF_IM_STORE)
             or (app == 'freelancerito' and not FL_IM_STORE)
-            or (app == 'capyroo-run' and not CR_IM_STORE) or (app == 'fumuon' and not FU_IM_STORE)):
+            or (app == 'capyroo-run' and not CR_IM_STORE) or (app == 'fumuon' and not FU_IM_STORE)
+            or (app == 'capyroo-world' and not CW_IM_STORE)):
         html = '    <p class="soon">%s</p>' % MITR_BALD[sprache]
-        # Schon bei Google Play, aber noch nicht bei Apple (Fumuon): der Play-Link steht trotzdem da.
-        if im_play(app):
+        # Schon bei Google Play, aber noch nicht bei Apple (Fumuon): Google Play steht trotzdem da,
+        # als Abzeichen, sobald es vorliegt, sonst als Textlink.
+        if play_abzeichen(app, sprache):
+            html += ('\n    <a class="badge" href="%s">\n'
+                     '      <img src="/assets/img/googleplay-%s.png" alt="%s" width="135" height="40">\n'
+                     '    </a>' % (PLAY_URL[app], sprache, t['badge_play_alt']))
+        elif im_play(app):
             html += '\n    <p class="play"><a href="%s">%s</a></p>' % (PLAY_URL[app], PLAY_TEXT[sprache])
         return html
     ziel = {'shlayolotl': SHLAY_URL[sprache], 'mitrechner': MITR_APPSTORE[sprache],
             'karma-farmer': KF_APPSTORE, 'freelancerito': FL_APPSTORE,
-            'capyroo-run': CR_APPSTORE, 'fumuon': FU_APPSTORE}.get(app) or '#'
+            'capyroo-run': CR_APPSTORE, 'fumuon': FU_APPSTORE, 'wimmelino': WI_APPSTORE,
+            'capyroo-world': CW_APPSTORE}.get(app) or '#'
     html = ('    <a class="badge" href="%s">\n'
             '      <img src="/assets/img/appstore-%s.svg" alt="%s" width="120" height="40">\n'
             '    </a>' % (ziel, sprache, t['badge_alt']))
@@ -1873,7 +2259,8 @@ def produkt_seite(app, sprache):
     p = P[app][sprache]
     pfade = produkt_pfade(app)
 
-    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon'):
+    if app in ('shlayolotl', 'mitrechner', 'karma-farmer', 'freelancerito', 'capyroo-run', 'fumuon',
+               'wimmelino', 'capyroo-world'):
         oben = ''
         text = ('      <p>%(erster)s</p>\n'
                 + ('      <h2>%(h2sim)s</h2>\n'
@@ -1886,7 +2273,8 @@ def produkt_seite(app, sprache):
         reihe = galerie_html(app, sprache, 'shots')
         unten = unten_html(app, sprache, 'shots')
         lead = {'shlayolotl': t['shlay_text'], 'mitrechner': t['mitr_text'], 'karma-farmer': t['kf_text'],
-                'freelancerito': t['fl_text'], 'capyroo-run': t['cr_text'], 'fumuon': t['fu_text']}[app]
+                'freelancerito': t['fl_text'], 'capyroo-run': t['cr_text'], 'fumuon': t['fu_text'],
+                'wimmelino': t['wi_text'], 'capyroo-world': t['cw_text']}[app]
         # Ohne Bilderreihe keine Punkte, also auch kein Skript dafuer.
         skript = PUNKTE_SKRIPT if reihe else ''
     else:
@@ -1950,9 +2338,11 @@ def produkt_seite(app, sprache):
 </html>
 ''' % dict(t, sprache=sprache, startpfad=PFAD[sprache],
            kopf=kopf(sprache, pfade, p['titel'], p['beschreibung'], bild=app),
-           stil=STIL + {'capyroo-run': CAPY_STIL, 'fumuon': FUMU_STIL}.get(app, ''),
+           stil=STIL + {'capyroo-run': CAPY_STIL, 'fumuon': FUMU_STIL, 'wimmelino': WIMM_STIL,
+                         'capyroo-world': CWLD_STIL}.get(app, ''),
            klasse={'shlayolotl': 'shlay', 'mitrechner': 'mitr', 'karma-farmer': 'karma',
-                   'freelancerito': 'freel', 'capyroo-run': 'capy', 'fumuon': 'fumu'}.get(app, 'where'),
+                   'freelancerito': 'freel', 'capyroo-run': 'capy', 'fumuon': 'fumu',
+                   'wimmelino': 'wimm', 'capyroo-world': 'cwld'}.get(app, 'where'),
            symbol=symbol(app), oben=oben, name=NAME.get(app, app.capitalize()), lead=lead,
            text=text, unten=unten, recht_href=recht_link(app, sprache)[0], recht_text=recht_link(app, sprache)[1],
            sprachen=sprachleiste(sprache, pfade), ds_pfad=DS_PFAD[sprache],
@@ -2385,7 +2775,7 @@ if __name__ == '__main__':
     ZIEL = os.path.join(ROOT, '.vorschau') if VORSCHAU else ROOT
     if VORSCHAU:
         os.makedirs(ZIEL, exist_ok=True)
-        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'capyroo-run.html', 'fumuon.html', 'shlayolotl.html',
+        for teil in ('assets', 'mitrechner.html', 'karma-farmer.html', 'freelancerito.html', 'capyroo-run.html', 'fumuon.html', 'wimmelino.html', 'capyroo-world.html', 'shlayolotl.html',
                      'wheresome.html', 'impressum.html'):
             verweis = os.path.join(ZIEL, teil)
             if not os.path.lexists(verweis):

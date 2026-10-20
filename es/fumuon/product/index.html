@@ -107,6 +107,7 @@
   .play { font-size: 15px; font-weight: 600; margin: 0; }
   .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
+  .punkte + .knoepfe .soon, .text + .knoepfe .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
      Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
@@ -247,7 +248,7 @@
 <div class="wrap">
   <nav>
     <span class="mark"><a href="/es/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/es/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/es/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/es/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/es/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
+    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/es/#wimmelino"><img src="/assets/img/wimmelino-256.webp" alt="" width="28" height="28">Wimmelino</a><a href="/es/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/es/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/es/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/es/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
   document.addEventListener('click', function (e) {
     document.querySelectorAll('details.menue[open]').forEach(function (m) {
       if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
@@ -299,8 +300,12 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots"></div>
+    <div class="knoepfe">
     <p class="soon">Muy pronto en el App Store.</p>
-    <p class="play"><a href="https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon">Tambi&eacute;n en Google Play</a></p>
+    <a class="badge" href="https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon">
+      <img src="/assets/img/googleplay-es.png" alt="Disponible en Google Play" width="135" height="40">
+    </a>
+    </div>
     <p class="recht"><a href="/fumuon#es">Soporte y pol&iacute;tica de privacidad</a></p>
   </div>
 </section>

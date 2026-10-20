@@ -107,6 +107,7 @@
   .play { font-size: 15px; font-weight: 600; margin: 0; }
   .play a { color: inherit; }
   .punkte + .soon { margin-top: 26px; }
+  .punkte + .knoepfe .soon, .text + .knoepfe .soon { margin-top: 26px; }
 
   /* Am Rechner stehen alle drei Bilder nebeneinander. Da braucht es weder
      Punkte noch eine Aufforderung zu wischen: man sieht ja schon alles. */
@@ -244,7 +245,7 @@
 <div class="wrap">
   <nav>
     <span class="mark"><a href="/en/"><img src="/assets/img/wortmarke-schwarz.png" alt="Hollow Spoon" width="1033" height="158" style="height:22px;width:auto"></a></span>
-    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/en/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/en/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/en/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/en/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
+    <div class="rechts"><details class="menue"><summary>Apps</summary><div class="liste"><a href="/en/#wimmelino"><img src="/assets/img/wimmelino-256.webp" alt="" width="28" height="28">Wimmelino</a><a href="/en/#fumuon"><img src="/assets/img/fumuon-256.webp" alt="" width="28" height="28">Fumuon</a><a href="/en/#karma-farmer"><img src="/assets/img/karma-farmer-256.webp" alt="" width="28" height="28">Karma Farmer</a><a href="/en/#mitrechner"><img src="/assets/img/mitrechner-256.webp" alt="" width="28" height="28">Mitrechner</a><a href="/en/#shlayolotl"><img src="/assets/img/shlayolotl-256.webp" alt="" width="28" height="28">Shlayolotl</a></div></details><script>
   document.addEventListener('click', function (e) {
     document.querySelectorAll('details.menue[open]').forEach(function (m) {
       if (!m.contains(e.target) || e.target.closest('.liste a')) m.removeAttribute('open');
@@ -296,9 +297,11 @@
         </picture>
     </div>
     <div class="punkte" data-fuer="shots"></div>
+    <div class="knoepfe">
     <a class="badge" href="https://apps.apple.com/app/shlayolotl/id6805653548">
       <img src="/assets/img/appstore-en.svg" alt="Download on the App Store" width="120" height="40">
     </a>
+    </div>
     <p class="recht"><a href="/shlayolotl#en">Support and privacy policy</a></p>
   </div>
 </section>
