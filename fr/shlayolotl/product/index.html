@@ -146,6 +146,26 @@
     .band .kopf { gap: 16px; }
     nav .rechts a { margin-left: 18px; font-size: 13px; }
   }
+
+  /* Die Seite einer App auf breiten Bildschirmen (User 20.10.2026: "aufm pc ist die seite
+     scheisse ... nicht nur eine haelfte"): Text links, die drei Bilder rechts gross und
+     aufgefaechert, beim Lesen mitlaufend. Nur auf den Produktseiten (.produkt), die Startseite
+     bleibt, wie sie ist; Seiten ohne Bilder (Wheresome) haben nur die Textspalte. */
+  @media (min-width: 980px) {
+    .produkt .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 470px; column-gap: 64px;
+                     align-items: start; }
+    .produkt .wrap > * { grid-column: 1; }
+    .produkt .wrap > .carousel { grid-column: 2; grid-row: 1 / span 12; position: sticky; top: 48px;
+                                 display: block; height: 640px; margin: 0; padding: 0; overflow: visible; }
+    .produkt .carousel picture { position: absolute; top: 56px; transition: transform .3s ease; }
+    .produkt .carousel img { width: 250px; border-radius: 22px;
+                             box-shadow: 0 28px 60px rgba(0,0,0,.42), 0 0 0 1px rgba(255,255,255,.12); }
+    .produkt .carousel picture:nth-child(1) { left: 110px; top: 0; z-index: 3; }
+    .produkt .carousel picture:nth-child(2) { left: 0; transform: rotate(-7deg); z-index: 2; }
+    .produkt .carousel picture:nth-child(3) { left: 220px; transform: rotate(7deg); z-index: 1; }
+    .produkt .carousel:hover picture:nth-child(2) { transform: rotate(-9deg) translateX(-14px); }
+    .produkt .carousel:hover picture:nth-child(3) { transform: rotate(9deg) translateX(14px); }
+  }
   .rechts .menue { position: relative; display: inline-block; margin-left: 24px; }
   .menue summary { list-style: none; cursor: pointer; color: #5C6270; white-space: nowrap; }
   .menue summary::-webkit-details-marker { display: none; }
