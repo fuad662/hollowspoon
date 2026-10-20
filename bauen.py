@@ -1843,7 +1843,9 @@ def seite(sprache):
 # Knoepfe zeigen dann von selbst App Store und Google Play statt "Bald im App Store.". Ein neues
 # Capyroo-Spiel kommt vorn in diese Liste (neueste zuerst, wie in START_APPS), die Karten brechen
 # von selbst in mehrere Reihen um.
-CAPYROO_SPIELE = ('capyroo-world', 'capyroo-run')
+# Capyroo Run steht nicht drin (User 20.10.2026: "nein, capyroo run rausnehmen"); seine Seite
+# /capyroo-run/product/ bleibt, wie sie war.
+CAPYROO_SPIELE = ('capyroo-world',)
 
 for _s, (_titel, _zeile, _mehr_cw, _mehr_cr) in {
     'de': ('Capyroo', 'Unser Capybara bekommt eigene Spiele. Hier siehst du sie zuerst.',
