@@ -124,26 +124,32 @@ FL_APPSTORE = None
 FL_IM_STORE = False
 FL_PLAY = None
 # Fumuon (20.10.2026, "kannst du ... ne seite auf meiner webseite erstellen fuer fumuon?"): seit
-# Oktober bei Google Play (Eintrag am 20.10. geprueft), bei Apple noch in der Pruefung. Wie Capyroo
-# Run nur als eigene Seite unter /fumuon/product/ und in der Sitemap, nicht auf der Startseite.
-# Nach Apples Freigabe die Apple-ID in FU_APPSTORE eintragen und FU_IM_STORE auf True.
-FU_APPSTORE = None
-FU_IM_STORE = False
+# Oktober bei Google Play (Eintrag am 20.10. geprueft). Seit 27.10.2026 auch im App Store (User:
+# "fumuon auch bei appsotre"; Apple-ID 6820941346 per iTunes-Lookup ueber die Bundle-ID, Name dort
+# "Fumuon: Rhythm", ohne Land wie bei Mitrechner).
+FU_APPSTORE = 'https://apps.apple.com/app/fumuon-rhythm/id6820941346'
+FU_IM_STORE = True
 FU_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.fumuon'
 # Wimmelino (20.10.2026, "seite fuer wimmelino und capyroo world auch schonmal hochladen"): seit
 # 19.10.2026 im App Store (iTunes-Lookup ueber die Bundle-ID, Apple-ID 6821570689, ohne Land wie
-# bei Mitrechner), noch nicht bei Google Play. Steht als neueste App ganz vorn auf der Startseite.
+# bei Mitrechner). Seit 27.10.2026 auch bei Google Play (User: "wimmeline auch bei google
+# erhaeltlich"); der Paketname ist app.hollowspoon.wimmelbild (applicationId im App-Repository
+# ~/wimmelbild), NICHT .wimmelino, der Eintrag antwortet nur unter .wimmelbild.
 WI_APPSTORE = 'https://apps.apple.com/app/wimmelino-find-hidden-things/id6821570689'
-# Capyroo World: noch in keinem Store (Apple prueft noch). Wie Capyroo Run nur als eigene Seite
-# unter /capyroo-world/product/ und in der Sitemap. Nach Apples Freigabe die Adresse in
-# CW_APPSTORE, CW_IM_STORE auf True und die App vorn in START_APPS eintragen.
+WI_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.wimmelbild'
+# Capyroo World: seit 27.10.2026 bei Google Play (User: "bei capyroo wolrd kann man nun einen
+# google button auch machen"; Paketname app.hollowspoon.capyrooworld, Eintrag geprueft), bei Apple
+# noch in der Pruefung, also "Bald im App Store." plus Google-Play-Abzeichen wie bei Fumuon vorher.
+# Steht im Capyroo-Abschnitt der Startseite (CAPYROO_SPIELE), nicht in START_APPS. Nach Apples
+# Freigabe die Adresse in CW_APPSTORE und CW_IM_STORE auf True.
 CW_APPSTORE = None
 CW_IM_STORE = False
+CW_PLAY = 'https://play.google.com/store/apps/details?id=app.hollowspoon.capyrooworld'
 
 # Datum fuer <lastmod> in der Sitemap. Bewusst von Hand: wer den Inhalt einer
 # Seite aendert, setzt es hoch. Bei jedem Bau automatisch zu stempeln saehe
 # fleissig aus und sagte Google nichts, weil es dann immer "heute" hiesse.
-STAND = '2026-10-20'
+STAND = '2026-10-27'
 
 OG_LOCALE = {'de': 'de_DE', 'en': 'en_US', 'fr': 'fr_FR', 'es': 'es_ES'}
 OG_BILD = {'start': '/assets/img/og-hollow-spoon.png',
@@ -1162,15 +1168,15 @@ for _s, (_og, _mehr, _text, _start) in {
     'en': ('Wimmelino app icon', 'More about Wimmelino',
            'Remember seek-and-find pictures from back then? Wimmelino is the big version: 14 '
            'illustrated cities, and every one of them is packed with hidden things.',
-           ' Wimmelino, hidden objects in 14 illustrated cities, for iPhone.'),
+           ' Wimmelino, hidden objects in 14 illustrated cities, for iPhone and Android.'),
     'fr': ('Ic&ocirc;ne de l&rsquo;application Wimmelino', 'En savoir plus sur Wimmelino',
            'Tu te souviens des cherche et trouve d&rsquo;avant&nbsp;? Wimmelino, c&rsquo;est la version '
            'en grand&nbsp;: 14 villes illustr&eacute;es, et chacune cache plein de choses.',
-           ' Wimmelino, des objets cach&eacute;s dans 14 villes illustr&eacute;es, pour iPhone.'),
+           ' Wimmelino, des objets cach&eacute;s dans 14 villes illustr&eacute;es, pour iPhone et Android.'),
     'es': ('Icono de la app Wimmelino', 'M&aacute;s sobre Wimmelino',
            '&iquest;Te acuerdas de los dibujos de buscar y encontrar? Wimmelino es la versi&oacute;n en '
            'grande: 14 ciudades ilustradas, y cada una esconde un mont&oacute;n de cosas.',
-           ' Wimmelino, objetos escondidos en 14 ciudades ilustradas, para iPhone.'),
+           ' Wimmelino, objetos escondidos en 14 ciudades ilustradas, para iPhone y Android.'),
 }.items():
     T[_s]['og_alt']['wimmelino'] = _og
     T[_s]['mehr']['wimmelino'] = _mehr
@@ -1197,7 +1203,7 @@ P['wimmelino'] = {
    letzter='Hamburg und Tokio sind gratis, die anderen zwölf Städte gibt es in drei Paketen (Europa, '
            'Weltreise, Asien), einmal kaufen, kein Abo. Nach einem geschafften Level kommt Werbung, mit '
            'einem Paket ist sie weg. Kein Konto, dein Spielstand bleibt auf deinem Gerät. Wimmelino gibt '
-           'es auf Deutsch, Englisch, Französisch und Spanisch, für iPhone.',
+           'es auf Deutsch, Englisch, Französisch und Spanisch, für iPhone und Android.',
    shots=['Wimmelino: Hamburg, unten die Suchliste',
           'Wimmelino: Tokio, unten die Suchliste',
           'Wimmelino: Tokio von oben']),
@@ -1220,7 +1226,7 @@ P['wimmelino'] = {
    letzter='Hamburg and Tokyo are free, the other twelve cities come in three packs (Europe, World Tour, '
            'Asia), buy once, no subscription. After a finished level there’s an ad, and with any pack '
            'it’s gone. No account, your progress stays on your device. Wimmelino is available in '
-           'English, German, French and Spanish, for iPhone.',
+           'English, German, French and Spanish, for iPhone and Android.',
    shots=['Wimmelino: Hamburg, with the list at the bottom',
           'Wimmelino: Tokyo, with the list at the bottom',
           'Wimmelino: Tokyo from above']),
@@ -1243,7 +1249,7 @@ P['wimmelino'] = {
    letzter='Hambourg et Tokyo sont gratuites, les douze autres villes sont réunies en trois packs '
            '(Europe, Tour du monde, Asie), un seul achat, sans abonnement. Après un niveau réussi, il y a '
            'une pub, et avec un pack, elle disparaît. Pas de compte, ta progression reste sur ton '
-           'appareil. Wimmelino est disponible en français, anglais, allemand et espagnol, pour iPhone.',
+           'appareil. Wimmelino est disponible en français, anglais, allemand et espagnol, pour iPhone et Android.',
    shots=['Wimmelino : Hambourg, la liste en bas',
           'Wimmelino : Tokyo, la liste en bas',
           'Wimmelino : Tokyo vu d’en haut']),
@@ -1266,7 +1272,7 @@ P['wimmelino'] = {
    letzter='Hamburgo y Tokio son gratis, las otras doce ciudades vienen en tres paquetes (Europa, Vuelta '
            'al mundo, Asia), una sola compra, sin suscripción. Después de superar un nivel hay un anuncio, '
            'y con cualquier paquete desaparece. Sin cuenta, tu progreso se queda en tu dispositivo. '
-           'Wimmelino está en español, inglés, alemán y francés, para iPhone.',
+           'Wimmelino está en español, inglés, alemán y francés, para iPhone y Android.',
    shots=['Wimmelino: Hamburgo, abajo la lista',
           'Wimmelino: Tokio, abajo la lista',
           'Wimmelino: Tokio desde arriba']),
@@ -1283,8 +1289,8 @@ WIMM_STIL = """
 # AR auf dem eigenen Boden, Tippen zum Hinlaufen und Aufs-Sofa-Huepfen, Baelle, High Five, Verstecken
 # hinter Moebeln (LiDAR), Zimmer einrichten, Spaziergaenge, Studio ohne AR, Streicheln, Fuettern,
 # Anziehen, Wunsch des Tages, Orakel, kleine Spiele, Level, kosmetische Einmalkaeufe, kein Konto,
-# keine Werbung, kein Tracking, kein gespeichertes Kamerabild. Noch nicht im Store, also nur diese
-# Seite. Bilder: Store-Bilder 1, 2 und 5.
+# keine Werbung, kein Tracking, kein gespeichertes Kamerabild. Seit 27.10.2026 bei Google Play,
+# Apple prueft noch. Bilder: Store-Bilder 1, 2 und 5.
 # ---------------------------------------------------------------------------
 
 for _s, (_og, _text) in {
@@ -1320,7 +1326,7 @@ P['capyroo-world'] = {
       'Abo), das ist nur Optik.',
    letzter='Kein Konto, keine Werbung, kein Tracking. Was du machst, bleibt auf deinem Handy, und die App '
            'speichert nie ein Kamerabild. Capyroo World gibt es auf Deutsch, Englisch, Spanisch und '
-           'Französisch, für iPhone.',
+           'Französisch, für iPhone und Android.',
    shots=['Capyroo World: Capyroo in deinem Wohnzimmer',
           'Capyroo World: sein Zimmer einrichten',
           'Capyroo World: ein Retro-Abenteuer mit Oma Schildkröte']),
@@ -1341,7 +1347,7 @@ P['capyroo-world'] = {
       'levels up and unlocks new things, like hats and backgrounds. Packs with decor, costumes and '
       'backgrounds are optional one-time purchases (no subscription), and they are only for looks.',
    letzter='No account, no ads, no tracking. What you do stays on your phone, and the app never saves a '
-           'camera image. Capyroo World is available in English, German, Spanish and French, for iPhone.',
+           'camera image. Capyroo World is available in English, German, Spanish and French, for iPhone and Android.',
    shots=['Capyroo World: Capyroo in your living room',
           'Capyroo World: furnishing his room',
           'Capyroo World: a retro adventure with Granny Turtle']),
@@ -1364,7 +1370,7 @@ P['capyroo-world'] = {
       'c’est seulement de l’apparence.',
    letzter='Sans compte, sans pub, sans suivi. Ce que tu fais reste sur ton téléphone, et l’app '
            'n’enregistre jamais d’image de la caméra. Capyroo World existe en français, anglais, allemand '
-           'et espagnol, pour iPhone.',
+           'et espagnol, pour iPhone et Android.',
    shots=['Capyroo World : Capyroo dans ton salon',
           'Capyroo World : aménager sa chambre',
           'Capyroo World : une aventure rétro avec Mamie Tortue']),
@@ -1386,7 +1392,7 @@ P['capyroo-world'] = {
       'solo aspecto.',
    letzter='Sin cuenta, sin anuncios, sin seguimiento. Lo que haces se queda en tu celular, y la app nunca '
            'guarda una imagen de la cámara. Capyroo World está en español, inglés, alemán y francés, para '
-           'iPhone.',
+           'iPhone y Android.',
    shots=['Capyroo World: Capyroo en tu sala',
           'Capyroo World: decorar su cuarto',
           'Capyroo World: una aventura retro con la abuela tortuga']),
@@ -2185,7 +2191,8 @@ PLAY_MARKEN = {
 }
 
 
-PLAY_URL = {'mitrechner': MITR_PLAY, 'karma-farmer': KF_PLAY, 'freelancerito': FL_PLAY, 'fumuon': FU_PLAY}
+PLAY_URL = {'mitrechner': MITR_PLAY, 'karma-farmer': KF_PLAY, 'freelancerito': FL_PLAY, 'fumuon': FU_PLAY,
+            'wimmelino': WI_PLAY, 'capyroo-world': CW_PLAY}
 # Solange das offizielle Abzeichen fehlt, ein schlichter Textlink (den Namen im Text zu
 # nennen erlaubt Google ohne Abzeichen-Bedingungen).
 PLAY_TEXT = {'de': 'Auch bei Google Play', 'en': 'Also on Google Play',
